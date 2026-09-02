@@ -4,6 +4,8 @@
  * на медленном интернете. Инструмент для разработчика, для работы сайта не нужен.
  *
  *     node scripts/measure-speed.js                  — главная и страница услуги
+ *     BASE=https://tasindunya.vercel.app/ node scripts/measure-speed.js
+ *                                                    — замерить живой сайт
  *     node scripts/measure-speed.js ru/index.html    — конкретные страницы
  *
  * Как это работает: запускается Chrome без окна, ему через протокол отладки
@@ -29,7 +31,11 @@ const CHROME = [
 ].find(p => fs.existsSync(p));
 
 const PORT = Number(process.env.PORT || 8777);
-const BASE = `http://localhost:${PORT}/`;
+/* По умолчанию меряем локальный сервер. Чтобы померить живой сайт:
+   BASE=https://tasindunya.vercel.app/ node scripts/measure-speed.js */
+const BASE = process.env.BASE
+  ? process.env.BASE.replace(/\/?$/, "/")
+  : `http://localhost:${PORT}/`;
 
 /* 400 Кбит/с = 51200 байт/с, задержка 400 мс */
 const NET = { downloadThroughput: 400 * 1024 / 8, uploadThroughput: 400 * 1024 / 8, latency: 400 };
@@ -150,7 +156,10 @@ async function measure(url) {
 async function main() {
   if (!CHROME) { console.error("Не найден Google Chrome."); process.exit(1); }
   try { await fetch(BASE); } catch {
-    console.error(`Не отвечает ${BASE}\nЗапустите в другом окне: python3 -m http.server ${PORT}`);
+    console.error(`Не отвечает ${BASE}\n` +
+      (BASE.startsWith("http://localhost")
+        ? `Запустите в другом окне: node scripts/serve.js`
+        : "Проверьте адрес и подключение к интернету."));
     process.exit(1);
   }
 

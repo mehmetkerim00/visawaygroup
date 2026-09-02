@@ -32,3 +32,4 @@ assets/fonts/full/
 
 # Служебная картинка с проверкой логотипов, на сайте не используется
 assets/0_proverka_assetov.png
+.env*
