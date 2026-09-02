@@ -1,0 +1,82 @@
+  <footer class="site-footer">
+
+    <div class="container site-footer__top">
+
+      <div class="site-footer__brand">
+        <img src="assets/logo-horizontal-light.svg"
+             alt="Täsin Dünýä Syýahat — визовый центр"
+             width="563" height="260" loading="lazy">
+        <p class="site-footer__tagline">
+          От подготовки документов до получения визы — рядом с вами
+          на каждом этапе.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Разделы</h2>
+        <ul class="site-footer__list">
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="wizalar.html">Визы</a></li>
+          <li><a href="wizalar/bilim-maslahaty.html">Студентам</a></li>
+          <li><a href="biz-barada.html">О нас</a></li>
+          <li><a href="habarlasmak.html">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Услуги</h2>
+        <ul class="site-footer__list">
+          <li><a href="wizalar/is-wizasy.html">Рабочая виза</a></li>
+          <li><a href="wizalar/okuw-wizasy.html">Учебная виза</a></li>
+          <li><a href="wizalar/syyahat-wizasy.html">Туристическая виза</a></li>
+          <li><a href="wizalar/myhmancylyk-wizasy.html">Гостевая виза</a></li>
+          <li><a href="wizalar/isewurlik-wizasy.html">Деловая виза</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Контакты</h2>
+
+        <!--
+          Контакты подставляются из data/site.json.
+          Здесь их править НЕ надо — правьте data/site.json
+          и запускайте: node scripts/sync-layout.js
+        -->
+        <address class="site-footer__contacts">
+
+          <div>
+            <span class="site-footer__contact-label">Адрес</span>
+            {{address}}
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Телефон</span>
+            <a class="site-footer__phone" href="{{phoneHref}}">{{phone}}</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Эл. почта</span>
+            <a href="{{emailHref}}">{{email}}</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Часы работы</span>
+            {{hoursHtml}}
+          </div>
+
+        </address>
+      </div>
+
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottom-inner">
+        <p class="site-footer__copyright">
+          &copy; <span data-current-year>2026</span> &laquo;{{name}}&raquo;.
+          Все права защищены.
+        </p>
+        <p class="site-footer__copyright">Визовый центр &middot; Ашхабад, Туркменистан</p>
+      </div>
+    </div>
+
+  </footer>

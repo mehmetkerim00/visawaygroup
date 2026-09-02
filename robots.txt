@@ -1,0 +1,5 @@
+# Обход разрешён полностью: закрывать на этом сайте нечего.
+User-agent: *
+Allow: /
+
+Sitemap: https://tasindunya.com/sitemap.xml

@@ -1,0 +1,29 @@
+{
+  "name": "Täsin Dünýä Syýahat",
+  "short_name": "TDS",
+  "description": "Wiza merkezi",
+  "lang": "tk",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "browser",
+  "background_color": "#FAFAF8",
+  "theme_color": "#AF5F39",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logo-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

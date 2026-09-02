@@ -1,0 +1,63 @@
+# ============================================================================
+#  .htaccess — настройки для хостинга на Apache
+#
+#  Файл кладётся в корень сайта, рядом с index.html. Если ваш хостинг
+#  работает на nginx, этот файл не нужен — смотрите nginx.conf.example.
+#
+#  Здесь настроены три вещи: сжатие, кэширование и страница ошибки.
+# ============================================================================
+
+# --- Кодировка --------------------------------------------------------------
+AddDefaultCharset UTF-8
+
+# --- Страница 404 -----------------------------------------------------------
+ErrorDocument 404 /404.html
+
+# --- Сжатие -----------------------------------------------------------------
+# Текстовые файлы передаются сжатыми: html и css ужимаются примерно вчетверо.
+# Шрифты woff2 и картинки png уже сжаты, их трогать не нужно.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE text/javascript application/javascript
+  AddOutputFilterByType DEFLATE application/json application/manifest+json
+  AddOutputFilterByType DEFLATE image/svg+xml application/xml
+</IfModule>
+
+# --- Кэширование ------------------------------------------------------------
+# Картинки, шрифты и стили не меняются — их можно хранить у посетителя долго.
+# Страницы кэшировать надолго нельзя: правки текста должны появляться сразу.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault                          "access plus 1 week"
+  ExpiresByType text/html                 "access plus 0 seconds"
+  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType text/javascript           "access plus 1 year"
+  ExpiresByType application/javascript    "access plus 1 year"
+  ExpiresByType font/woff2                "access plus 1 year"
+  ExpiresByType image/svg+xml             "access plus 1 year"
+  ExpiresByType image/png                 "access plus 1 year"
+  ExpiresByType application/manifest+json "access plus 1 week"
+  ExpiresByType application/xml           "access plus 1 day"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|woff2|svg|png)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+
+  # Немного безопасности. Ничего лишнего: у сайта нет ни форм на сервере,
+  # ни куки, ни сторонних скриптов.
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# --- Типы файлов ------------------------------------------------------------
+# Некоторые хостинги не знают про woff2 и манифест — подсказываем.
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType application/manifest+json .webmanifest
+  AddType image/svg+xml .svg
+</IfModule>

@@ -1,0 +1,106 @@
+  <!--
+    Способы связи и адрес офиса. Все данные берутся из data/site.json.
+    Здесь править не надо: правьте data/site.json и запускайте
+        node scripts/sync-layout.js
+
+    Блоки, обёрнутые в парные метки "if" и "endif", показываются только
+    когда поле заполнено. Пустое поле в site.json = блока на странице нет.
+    Так на сайте не бывает заголовков без содержимого и ссылок в никуда.
+  -->
+
+        <h2>Позвоните</h2>
+        <p class="text-muted">Самый быстрый способ. В рабочее время на звонки отвечаем всегда. Консультация бесплатная.</p>
+
+        <div class="contact-list contact-list--phones">
+        <!-- for:phones -->
+          <a class="contact-card" href="{{href}}">
+            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-phone"/></svg>
+            <div class="contact-card__body">
+              <span class="contact-card__label">Телефон</span>
+              <span class="contact-card__value">{{display}}</span>
+            </div>
+          </a>
+        <!-- endfor -->
+        </div>
+
+        <!-- if:messengers -->
+        <h2 class="contact-group">Напишите в мессенджер</h2>
+        <p class="text-muted">Если звонить неудобно, напишите — в рабочее время отвечаем.</p>
+
+        <div class="contact-list">
+        <!-- for:messengers -->
+          <div class="contact-card" data-form-url="{{formUrlSafe}}" data-messenger="{{label}}">
+            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-message"/></svg>
+            <div class="contact-card__body">
+              <span class="contact-card__label">{{label}}</span>
+              <span class="contact-card__value">{{valueHtml}}</span>
+              <span class="contact-card__note" {{hasNote}}>{{note}}</span>
+            </div>
+          </div>
+        <!-- endfor -->
+        </div>
+        <!-- endif -->
+
+        <h2 class="contact-group">Напишите</h2>
+        <p class="text-muted">Удобно для длинного вопроса или списка документов.</p>
+
+        <div class="contact-list">
+          <a class="contact-card" href="{{emailHref}}">
+            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-mail"/></svg>
+            <div class="contact-card__body">
+              <span class="contact-card__label">Эл. почта</span>
+              <span class="contact-card__value">{{email}}</span>
+            </div>
+          </a>
+        <!-- for:social -->
+          <a class="contact-card" href="{{url}}" target="_blank" rel="noopener">
+            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-instagram"/></svg>
+            <div class="contact-card__body">
+              <span class="contact-card__label">{{label}}</span>
+              <span class="contact-card__value">{{value}}</span>
+            </div>
+          </a>
+        <!-- endfor -->
+        </div>
+
+        <h2 class="contact-group">Приходите в офис</h2>
+        <p class="text-muted">Документы принимаем в офисе.</p>
+
+        <div class="factlist">
+
+          <div class="fact">
+            <svg class="icon fact__icon" aria-hidden="true"><use href="#i-pin"/></svg>
+            <span class="fact__label">Адрес</span>
+            <p class="fact__value">
+              {{address}}
+              <!-- if:landmark -->
+              <br><span class="text-muted">{{landmark}}</span>
+              <!-- endif -->
+            </p>
+            <!-- if:mapUrl -->
+            <p class="fact__value">
+              <a href="{{mapUrl}}" target="_blank" rel="noopener">Показать на карте</a>
+            </p>
+            <!-- endif -->
+          </div>
+
+          <div class="fact">
+            <svg class="icon fact__icon" aria-hidden="true"><use href="#i-clock"/></svg>
+            <span class="fact__label">Часы работы</span>
+            <p class="fact__value">{{hoursHtml}}</p>
+          </div>
+
+          <div class="fact">
+            <svg class="icon fact__icon" aria-hidden="true"><use href="#i-message"/></svg>
+            <span class="fact__label">Языки обслуживания</span>
+            <p class="fact__value">{{serviceLanguages}}</p>
+          </div>
+
+        </div>
+
+        <div class="note">
+          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+          <div>
+            <p>Позвоните перед визитом — мы запишем вас на время, и ждать не придётся.</p>
+          </div>
+        </div>

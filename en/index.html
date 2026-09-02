@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Täsin Dünýä Syýahat — Visa Centre in Ashgabat</title>
+  <meta name="description" content="A visa centre in Ashgabat. Work, student, tourist, visitor and business visas, plus guidance for students applying to universities abroad.">
+
+  <meta name="theme-color" content="#AF5F39">
+
+  <!-- Ссылки на другие языковые версии. Их расставляет sync-layout.js -->
+  <!-- hreflang:start -->
+  <link rel="canonical" href="https://tasindunya.com/en/index.html">
+  <link rel="alternate" hreflang="tk" href="https://tasindunya.com/index.html">
+  <link rel="alternate" hreflang="ru" href="https://tasindunya.com/ru/index.html">
+  <link rel="alternate" hreflang="en" href="https://tasindunya.com/en/index.html">
+  <link rel="alternate" hreflang="x-default" href="https://tasindunya.com/index.html">
+  <!-- hreflang:end -->
+
+  <!-- Ikonjyk (favicon). Garaňky tema üçin aýratyn görnüş. -->
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="../assets/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+  <!-- Иконка для экрана «Домой» на iPhone и iPad -->
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="manifest" href="../manifest.webmanifest">
+
+  <!--
+    Сети: соцсети и мессенджеры.
+    ВНИМАНИЕ: адрес сайта ниже — заглушка. Когда появится домен,
+    замените https://tasindunya.tm/ на настоящий (в og:url и в og:image).
+  -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Täsin Dünýä Syýahat">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:title" content="Täsin Dünýä Syýahat — Visa Centre in Ashgabat">
+  <meta property="og:description" content="Work, student, tourist, visitor and business visas. Guidance for anyone planning to study abroad.">
+  <meta property="og:url" content="https://tasindunya.com/en/index.html">
+  <meta property="og:image" content="https://tasindunya.com/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Täsin Dünýä Syýahat Visa Centre">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Täsin Dünýä Syýahat — Visa Centre in Ashgabat">
+  <meta name="twitter:description" content="Work, student, tourist, visitor and business visas.">
+  <meta name="twitter:image" content="https://tasindunya.com/assets/og-image.png">
+
+  <!-- Шрифт грузим заранее. Английской версии хватает латиницы:
+       буквы ä ü ý из названия компании тоже в ней. -->
+  <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Стили. Порядок важен: сначала переменные, потом всё остальное. -->
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/home.css">
+</head>
+
+<body>
+
+  <!-- icons:start -->
+  <!--
+    НАБОР ИКОНОК — общий для всех страниц.
+    Он невидим. Ниже по странице значки вставляются короткой строкой:
+        <svg class="icon"><use href="#i-briefcase"/></svg>
+    Чтобы поменять иконку — замените имя после решётки.
+    Правится только здесь; чтобы изменения разошлись по страницам,
+    запустите: node scripts/sync-layout.js
+  -->
+  <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- услуги -->
+    <symbol id="i-briefcase" viewBox="0 0 24 24">
+      <rect x="2.75" y="6.75" width="18.5" height="13.5" rx="2"/>
+      <path d="M8.5 6.75V5.25a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5"/>
+      <path d="M2.75 12.5h18.5"/><path d="M10 12.5h4"/>
+    </symbol>
+
+    <symbol id="i-cap" viewBox="0 0 24 24">
+      <path d="M2.5 8.75 12 4.25l9.5 4.5L12 13.25 2.5 8.75Z"/>
+      <path d="M6.5 10.6V15c0 1.6 2.5 2.9 5.5 2.9s5.5-1.3 5.5-2.9v-4.4"/>
+      <path d="M21.5 8.75v5.25"/>
+    </symbol>
+
+    <symbol id="i-plane" viewBox="0 0 24 24">
+      <path d="M21.5 3 2.75 10.25l7 2.9 2.9 7L21.5 3Z"/>
+      <path d="M9.75 13.15 21.5 3"/>
+    </symbol>
+
+    <symbol id="i-users" viewBox="0 0 24 24">
+      <circle cx="9" cy="8" r="3.25"/>
+      <path d="M2.75 20.25c0-3.45 2.8-5.5 6.25-5.5s6.25 2.05 6.25 5.5"/>
+      <path d="M16.25 5.1a3.25 3.25 0 0 1 0 5.8"/>
+      <path d="M17.5 15.1c2.2.55 3.75 2.1 3.75 4.4"/>
+    </symbol>
+
+    <symbol id="i-buildings" viewBox="0 0 24 24">
+      <path d="M2.75 20.75h18.5"/>
+      <path d="M5.75 20.75V5.25a1 1 0 0 1 1-1h5.5a1 1 0 0 1 1 1v15.5"/>
+      <path d="M13.25 10.75h4.5a1 1 0 0 1 1 1v9"/>
+      <path d="M8.25 8h2.5M8.25 11.5h2.5M8.25 15h2.5"/>
+      <path d="M15.5 14h1.5M15.5 17.5h1.5"/>
+    </symbol>
+
+    <symbol id="i-book" viewBox="0 0 24 24">
+      <path d="M12 6.75v13.5"/>
+      <path d="M12 6.75C10.4 5.15 8.4 4.5 6.25 4.5H3.25v13.25h3c2.15 0 4.15.65 5.75 2.25"/>
+      <path d="M12 6.75c1.6-1.6 3.6-2.25 5.75-2.25h3v13.25h-3c-2.15 0-4.15.65-5.75 2.25"/>
+    </symbol>
+
+    <!-- шаги -->
+    <symbol id="i-chat" viewBox="0 0 24 24">
+      <path d="M4.25 4.75h15.5a1.5 1.5 0 0 1 1.5 1.5v8.5a1.5 1.5 0 0 1-1.5 1.5H10.5l-4.25 3.5v-3.5H4.25a1.5 1.5 0 0 1-1.5-1.5v-8.5a1.5 1.5 0 0 1 1.5-1.5Z"/>
+      <path d="M7 9.25h10"/><path d="M7 12.75h6.5"/>
+    </symbol>
+
+    <symbol id="i-search-check" viewBox="0 0 24 24">
+      <circle cx="10.5" cy="10.5" r="6.75"/>
+      <path d="M15.4 15.4 21 21"/>
+      <path d="m7.75 10.6 2.15 2.15L13.4 9"/>
+    </symbol>
+
+    <symbol id="i-doc" viewBox="0 0 24 24">
+      <path d="M13.25 2.75H6.5A1.25 1.25 0 0 0 5.25 4v16a1.25 1.25 0 0 0 1.25 1.25h11A1.25 1.25 0 0 0 18.75 20V8.25l-5.5-5.5Z"/>
+      <path d="M13.25 2.75v5.5h5.5"/>
+      <path d="M8.5 12.75h7"/><path d="M8.5 16.25h7"/>
+    </symbol>
+
+    <symbol id="i-calendar-check" viewBox="0 0 24 24">
+      <rect x="3.25" y="5.25" width="17.5" height="15.5" rx="1.5"/>
+      <path d="M3.25 10.25h17.5"/>
+      <path d="M8 3.25v4M16 3.25v4"/>
+      <path d="m9.25 15.25 2 2 3.75-3.75"/>
+    </symbol>
+
+    <symbol id="i-badge-check" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.75"/>
+      <path d="m8.25 12.25 2.65 2.65 5-5.5"/>
+    </symbol>
+
+    <!-- преимущества -->
+    <symbol id="i-certificate" viewBox="0 0 24 24">
+      <rect x="3.75" y="3.25" width="16.5" height="11" rx="1.25"/>
+      <path d="M7 7.25h10"/><path d="M7 10.75h6"/>
+      <circle cx="12" cy="17.5" r="3.25"/>
+      <path d="m9.9 19.9-.9 3 3-1.5 3 1.5-.9-3"/>
+    </symbol>
+
+    <symbol id="i-scales" viewBox="0 0 24 24">
+      <path d="M12 4.75v15.5"/>
+      <path d="M8 20.25h8"/>
+      <path d="M4 8h16"/>
+      <path d="M1.5 13.75a3 3 0 0 0 5 0L4 8Z"/>
+      <path d="M17.5 13.75a3 3 0 0 0 5 0L20 8Z"/>
+    </symbol>
+
+    <symbol id="i-tag" viewBox="0 0 24 24">
+      <path d="M11.6 3.25H5A1.75 1.75 0 0 0 3.25 5v6.6a2 2 0 0 0 .6 1.4l7.4 7.4a1.75 1.75 0 0 0 2.5 0l6.6-6.6a1.75 1.75 0 0 0 0-2.5l-7.4-7.4a2 2 0 0 0-1.35-.65Z"/>
+      <circle cx="8" cy="8" r="1.5"/>
+    </symbol>
+
+    <symbol id="i-stairs-flag" viewBox="0 0 24 24">
+      <path d="M2.75 20.25h5v-4.5h5v-4.5h5"/>
+      <path d="M17.75 11.25V3.5"/>
+      <path d="M17.75 4.25H22l-1.4 1.9L22 8.05h-4.25"/>
+    </symbol>
+
+    <!-- служебные -->
+    <symbol id="i-arrow-right" viewBox="0 0 24 24">
+      <path d="M4 12h15"/><path d="m13 6.5 5.5 5.5-5.5 5.5"/>
+    </symbol>
+
+    <symbol id="i-instagram" viewBox="0 0 24 24">
+      <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5"/>
+      <circle cx="12" cy="12" r="4.25"/>
+      <path d="M17.2 6.9h.01"/>
+    </symbol>
+
+    <symbol id="i-user" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="3.75"/>
+      <path d="M4.75 20.5c0-3.9 3.25-6.25 7.25-6.25s7.25 2.35 7.25 6.25"/>
+    </symbol>
+
+    <symbol id="i-message" viewBox="0 0 24 24">
+      <path d="M20.25 12.4c0 3.9-3.7 7.05-8.25 7.05-1 0-1.96-.15-2.84-.43l-4.66 1.63 1.5-3.9c-1.13-1.2-1.8-2.7-1.8-4.35 0-3.9 3.7-7.05 8.25-7.05s7.8 3.15 7.8 6.75Z"/>
+    </symbol>
+
+    <symbol id="i-phone" viewBox="0 0 24 24">
+      <path d="M6.6 3.5h2.6l1.6 4-2 1.4a11.5 11.5 0 0 0 5.3 5.3l1.4-2 4 1.6v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z"/>
+    </symbol>
+
+    <symbol id="i-mail" viewBox="0 0 24 24">
+      <rect x="2.75" y="5" width="18.5" height="14" rx="2"/>
+      <path d="m3.5 6.5 8.5 6 8.5-6"/>
+    </symbol>
+
+    <symbol id="i-pin" viewBox="0 0 24 24">
+      <path d="M12 21.5s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/>
+      <circle cx="12" cy="10.2" r="2.6"/>
+    </symbol>
+
+    <symbol id="i-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.75"/>
+      <path d="M12 7v5.3l3.3 2"/>
+    </symbol>
+
+    <symbol id="i-copy" viewBox="0 0 24 24">
+      <rect x="8.75" y="8.75" width="11.5" height="11.5" rx="2"/>
+      <path d="M15.25 8.75v-2a2 2 0 0 0-2-2h-7.5a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2"/>
+    </symbol>
+
+    <symbol id="i-send" viewBox="0 0 24 24">
+      <path d="M21.5 3 2.75 10.25l7 2.9 2.9 7L21.5 3Z"/>
+      <path d="M9.75 13.15 21.5 3"/>
+    </symbol>
+
+    <symbol id="i-shield" viewBox="0 0 24 24">
+      <path d="M12 2.75 4.75 5.75v6c0 4.3 3 8.3 7.25 9.5 4.25-1.2 7.25-5.2 7.25-9.5v-6L12 2.75Z"/>
+      <path d="m9 11.9 2.1 2.1 4-4.4"/>
+    </symbol>
+
+    <symbol id="i-no" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.75"/>
+      <path d="m6.7 6.7 10.6 10.6"/>
+    </symbol>
+
+    <symbol id="i-arrow-left" viewBox="0 0 24 24">
+      <path d="M20 12H5"/><path d="m11 6.5-5.5 5.5 5.5 5.5"/>
+    </symbol>
+
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.75"/>
+      <path d="M12 11.25v5"/><path d="M12 7.9h.01"/>
+    </symbol>
+
+    <symbol id="i-globe" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"/>
+      <ellipse cx="12" cy="12" rx="3.3" ry="8.5"/>
+      <path d="M3.5 12h17"/>
+      <path d="M5.2 7.4h13.6M5.2 16.6h13.6"/>
+    </symbol>
+
+  </svg>
+  <!-- icons:end -->
+
+
+  <!-- header:start nav="home" -->
+  <!-- Ссылка для клавиатуры и скринридеров: перейти сразу к содержимому -->
+  <a class="skip-link" href="#mazmun">Skip to main content</a>
+
+  <header class="site-header" data-header>
+    <div class="container site-header__inner">
+
+      <a class="site-header__logo" href="../index.html" aria-label="Täsin Dünýä Syýahat — home page">
+        <img src="../assets/logo-horizontal.svg"
+             alt="Täsin Dünýä Syýahat Visa Centre"
+             width="563" height="260">
+      </a>
+
+      <!-- Кнопка-бургер: видна только на телефонах и планшетах -->
+      <button class="burger"
+              type="button"
+              data-nav-toggle
+              aria-expanded="false"
+              aria-controls="site-nav"
+              aria-label="Open or close the menu">
+        <span class="burger__line"></span>
+        <span class="burger__line"></span>
+        <span class="burger__line"></span>
+      </button>
+
+      <div class="site-nav" id="site-nav" data-nav>
+
+        <nav aria-label="Main menu">
+          <ul class="site-nav__list">
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="home" href="../index.html" aria-current="page">Home</a>
+            </li>
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="wizalar" href="../wizalar.html">Visas</a>
+            </li>
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="talyplar" href="../wizalar/bilim-maslahaty.html">Students</a>
+            </li>
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="biz-barada" href="../biz-barada.html">About</a>
+            </li>
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="habarlasmak" href="../habarlasmak.html">Contact</a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="site-nav__actions">
+
+          <!--
+            Переключатель языков. Адреса подставляет sync-layout.js:
+            каждая ссылка ведёт на ЭТУ ЖЕ страницу на другом языке,
+            а если перевода нет — на главную того языка.
+          -->
+          <div class="lang-switch" role="group" aria-label="Site language">
+            <a class="lang-switch__link" href="../index.html" lang="tk" hreflang="tk">TM</a>
+            <a class="lang-switch__link" href="../ru/index.html" lang="ru" hreflang="ru">RU</a>
+            <a class="lang-switch__link" href="index.html" lang="en" hreflang="en" aria-current="true">EN</a>
+          </div>
+
+          <a class="btn btn--primary" href="../habarlasmak.html">Get advice</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Затемнение позади открытого мобильного меню -->
+  <div class="nav-backdrop" data-nav-backdrop></div>
+  <!-- header:end -->
+
+
+  <main class="site-main" id="mazmun">
+
+    <!-- ==================================================================
+         1. HERO
+         ================================================================== -->
+    <section class="hero">
+      <div class="container hero__grid">
+
+        <div class="hero__content">
+          <p class="eyebrow">Visa centre in Ashgabat</p>
+
+          <h1 class="hero__title">We open the way to the world</h1>
+
+          <p class="hero__lead">
+            We prepare the paperwork for work, student, tourist, visitor and business visas, and we stay with you at every step.
+          </p>
+
+          <div class="hero__actions">
+            <a class="btn btn--primary btn--lg" href="habarlasmak.html">Get a consultation</a>
+            <a class="btn btn--secondary btn--lg" href="#hyzmatlar">Types of visa</a>
+            <p class="badge">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-badge-check"/></svg>
+              First consultation is free
+            </p>
+          </div>
+
+          <p class="hero__note">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+            <span>
+              The decision to grant a visa is taken by the consulate alone. What we do is help you prepare a complete and correct set of documents.
+            </span>
+          </p>
+        </div>
+
+        <!-- Композиция из тонких линий вместо фотографии.
+             Мотив взят из логотипа: глобус, меридианы, самолёт. -->
+        <div class="hero__art" aria-hidden="true">
+          <svg viewBox="0 0 480 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+
+            <!-- пунктирная внешняя орбита -->
+            <circle class="globe__orbit" cx="240" cy="240" r="232"
+                    fill="none" stroke-width="1.5" stroke-dasharray="2 10"/>
+
+            <!-- медное кольцо, как в логотипе -->
+            <circle class="globe__ring" cx="240" cy="240" r="208"
+                    fill="none" stroke-width="1.5"/>
+
+            <!-- сам глобус -->
+            <circle class="globe__line" cx="240" cy="240" r="132"
+                    fill="none" stroke-width="1.5"/>
+            <ellipse class="globe__line--soft" cx="240" cy="240" rx="47.5" ry="132"
+                     fill="none" stroke-width="1.5"/>
+            <ellipse class="globe__line--soft" cx="240" cy="240" rx="95" ry="132"
+                     fill="none" stroke-width="1.5"/>
+            <line class="globe__line--soft" x1="108" y1="240" x2="372" y2="240"
+                  stroke-width="1.5"/>
+            <line class="globe__line--soft" x1="129" y1="168.7" x2="351" y2="168.7"
+                  stroke-width="1.5"/>
+            <line class="globe__line--soft" x1="129" y1="311.3" x2="351" y2="311.3"
+                  stroke-width="1.5"/>
+
+            <!-- маршрут между двумя точками -->
+            <path class="globe__orbit" d="M196 196Q244 168 288 222"
+                  fill="none" stroke-width="1.5" stroke-dasharray="4 6"/>
+
+            <!-- точки-направления -->
+            <circle class="globe__dot" cx="196" cy="196" r="3.5"/>
+            <circle class="globe__dot" cx="288" cy="222" r="3.5"/>
+            <circle class="globe__dot" cx="252" cy="292" r="3.5"/>
+            <circle class="globe__dot" cx="186" cy="268" r="3.5"/>
+
+            <!-- самолёт — та же фигура, что в логотипе -->
+            <g transform="translate(240,149) scale(0.448)">
+              <path class="globe__plane" d="M0 -42C4 -42 6 -37 6 -30L6 -13L40 9L40 17L6 6L6 24L15 32L15 38L0 33L-15 38L-15 32L-6 24L-6 6L-40 17L-40 9L-6 -13L-6 -30C-6 -37 -4 -42 0 -42Z"/>
+            </g>
+
+          </svg>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         2. HYZMATLARYMYZ — услуги
+         ================================================================== -->
+    <section class="section" id="hyzmatlar">
+      <div class="container">
+
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">Our services</p>
+          <h2>Visa types and study abroad advice</h2>
+          <p class="lead">
+            Every visa type has its own requirements. We work out together at the consultation which one applies to you.
+          </p>
+        </div>
+
+        <div class="cards">
+
+          <article class="card" data-reveal>
+            <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-briefcase"/></svg>
+            <h3 class="card__title">Work visa</h3>
+            <p class="card__text">
+              For working abroad legally. We bring your job offer, contract and professional documents up to the required standard.
+            </p>
+            <a class="card__link" href="wizalar/is-wizasy.html">
+              Read more
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+          </article>
+
+          <article class="card" data-reveal>
+            <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-cap"/></svg>
+            <h3 class="card__title">Student visa</h3>
+            <p class="card__text">
+              For study at a university, college or language school. We handle your offer letter, proof of funds and translations.
+            </p>
+            <a class="card__link" href="wizalar/okuw-wizasy.html">
+              Read more
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+          </article>
+
+          <article class="card" data-reveal>
+            <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-plane"/></svg>
+            <h3 class="card__title">Tourist visa</h3>
+            <p class="card__text">
+              For holidays and travel. We pull your itinerary, accommodation booking and insurance into one coherent set.
+            </p>
+            <a class="card__link" href="wizalar/syyahat-wizasy.html">
+              Read more
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+          </article>
+
+          <article class="card" data-reveal>
+            <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-users"/></svg>
+            <h3 class="card__title">Visitor visa</h3>
+            <p class="card__text">
+              For visiting relatives or friends. We put the invitation and the documents proving your relationship in order.
+            </p>
+            <a class="card__link" href="wizalar/myhmancylyk-wizasy.html">
+              Read more
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+          </article>
+
+          <article class="card" data-reveal>
+            <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-buildings"/></svg>
+            <h3 class="card__title">Business visa</h3>
+            <p class="card__text">
+              For negotiations, trade fairs and business trips. We prepare the company invitation and the documents that establish the business purpose of the trip.
+            </p>
+            <a class="card__link" href="wizalar/isewurlik-wizasy.html">
+              Read more
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+          </article>
+
+          <article class="card" id="talyplar" data-reveal>
+            <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-book"/></svg>
+            <h3 class="card__title">Study abroad advice</h3>
+            <p class="card__text">
+              From choosing a university abroad to submitting the application. We advise on the field of study, the budget and the language requirements.
+            </p>
+            <a class="card__link" href="wizalar/bilim-maslahaty.html">
+              Read more
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         3. NÄHILI IŞLEÝÄRIS — пять шагов
+         ================================================================== -->
+    <section class="section" id="nahili-isleyaris">
+      <div class="container">
+
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">How we work</p>
+          <h2>How the process runs</h2>
+          <p class="lead">
+            Five stages. You know in advance what happens at each one.
+          </p>
+        </div>
+
+        <ol class="steps">
+
+          <li class="step" data-reveal>
+            <div class="step__marker"><span class="step__num">1</span></div>
+            <div class="step__body">
+              <svg class="icon step__icon" aria-hidden="true"><use href="#i-chat"/></svg>
+              <h3 class="step__title">Consultation</h3>
+              <p class="step__text">
+                We go through the purpose of your trip, your dates and your circumstances in detail. Then we tell you which visa fits.
+              </p>
+            </div>
+          </li>
+
+          <li class="step" data-reveal>
+            <div class="step__marker"><span class="step__num">2</span></div>
+            <div class="step__body">
+              <svg class="icon step__icon" aria-hidden="true"><use href="#i-search-check"/></svg>
+              <h3 class="step__title">Assessing your chances</h3>
+              <p class="step__text">
+                We tell you plainly where your documents are strong and where they are weak. If the chances are poor, we say so.
+              </p>
+            </div>
+          </li>
+
+          <li class="step" data-reveal>
+            <div class="step__marker"><span class="step__num">3</span></div>
+            <div class="step__body">
+              <svg class="icon step__icon" aria-hidden="true"><use href="#i-doc"/></svg>
+              <h3 class="step__title">Preparing the documents</h3>
+              <p class="step__text">
+                We draw up the checklist, complete the application form and bring translations and certificates up to standard.
+              </p>
+            </div>
+          </li>
+
+          <li class="step" data-reveal>
+            <div class="step__marker"><span class="step__num">4</span></div>
+            <div class="step__body">
+              <svg class="icon step__icon" aria-hidden="true"><use href="#i-calendar-check"/></svg>
+              <h3 class="step__title">Booking the appointment and submitting</h3>
+              <p class="step__text">
+                We book your appointment at the consulate or visa centre and prepare you for the submission day and the interview.
+              </p>
+            </div>
+          </li>
+
+          <li class="step" data-reveal>
+            <div class="step__marker"><span class="step__num">5</span></div>
+            <div class="step__body">
+              <svg class="icon step__icon" aria-hidden="true"><use href="#i-badge-check"/></svg>
+              <h3 class="step__title">The decision and what follows</h3>
+              <p class="step__text">
+                We collect the decision together. If it is a refusal, we analyse the reasons and prepare a new submission.
+              </p>
+            </div>
+          </li>
+
+        </ol>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         4. NÄME ÜÇIN BIZ
+         ================================================================== -->
+    <section class="section" id="biz-barada">
+      <div class="container">
+
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">Our approach</p>
+          <h2>Why us</h2>
+          <p class="lead">
+            We are a new centre. So we introduce ourselves through how we work and the rules we hold to, not through numbers.
+          </p>
+        </div>
+
+        <div class="features">
+
+          <div class="feature" data-reveal>
+            <svg class="icon feature__icon" aria-hidden="true"><use href="#i-certificate"/></svg>
+            <h3 class="feature__title">Officially, under contract</h3>
+            <p class="feature__text">
+              A registered company. Every service is provided under a written contract.
+            </p>
+          </div>
+
+          <div class="feature" data-reveal>
+            <svg class="icon feature__icon" aria-hidden="true"><use href="#i-scales"/></svg>
+            <h3 class="feature__title">An honest assessment</h3>
+            <p class="feature__text">
+              Nobody can guarantee that a visa will be issued — the consulate decides. What we can give you is a realistic picture of your chances.
+            </p>
+          </div>
+
+          <div class="feature" data-reveal>
+            <svg class="icon feature__icon" aria-hidden="true"><use href="#i-tag"/></svg>
+            <h3 class="feature__title">Transparent pricing</h3>
+            <p class="feature__text">
+              We quote the full price before starting and write it into the contract. No hidden charges appear along the way.
+            </p>
+          </div>
+
+          <div class="feature" data-reveal>
+            <svg class="icon feature__icon" aria-hidden="true"><use href="#i-stairs-flag"/></svg>
+            <h3 class="feature__title">Support at every step</h3>
+            <p class="feature__text">
+              We are still there after the documents go in. We answer your questions until the decision comes through.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         5. UGURLAR — направления
+         ================================================================== -->
+    <section class="section" id="ugurlar">
+      <div class="container">
+
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">Destinations</p>
+          <h2>The countries we are asked about most</h2>
+          <p class="lead">
+            These are the destinations we work with. If your country is not on the list, ask us and we will check.
+          </p>
+        </div>
+
+        <div data-reveal>
+          <ul class="tags">
+            <li class="tag">Türkiye</li>
+            <li class="tag">Russia</li>
+            <li class="tag">BAE</li>
+            <li class="tag">China</li>
+            <li class="tag">Germany</li>
+            <li class="tag">Italy</li>
+            <li class="tag">Poland</li>
+            <li class="tag">Czechia</li>
+            <li class="tag">Malaysia</li>
+            <li class="tag">South Korea</li>
+            <li class="tag">Kazakhstan</li>
+            <li class="tag">Belarus</li>
+          </ul>
+          <p class="tags__more">and other countries</p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         6. KÖP BERILÝÄN SORAGLAR
+         ================================================================== -->
+    <section class="section" id="soraglar">
+      <div class="container container--narrow">
+
+        <div class="section__head" data-reveal>
+          <p class="eyebrow">Questions</p>
+          <h2>Frequently asked questions</h2>
+        </div>
+
+        <div class="faq" data-faq data-reveal>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <h3>How long does it take to get a visa?</h3>
+              <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+              </svg>
+            </summary>
+            <div class="faq__a">
+              <p>
+                It depends on the country, the visa type and the consulate's queue. Preparing the documents usually takes a few days; the consulate's own processing can run to several weeks. We will give you the specific timeframe for your case at the consultation.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <h3>How much does it cost?</h3>
+              <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+              </svg>
+            </summary>
+            <div class="faq__a">
+              <p>
+                The price depends on the visa type and the amount of work. We quote it in full before we begin and write it into the contract. Third-party costs such as the consular fee and translations are paid separately; we set those out in advance too.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <h3>What happens if the visa is refused?</h3>
+              <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+              </svg>
+            </summary>
+            <div class="faq__a">
+              <p>
+                First we work out why. Most often the file was incomplete, or the purpose of the trip was not backed up well enough. We fix the gaps and prepare a fresh submission.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <h3>Which documents do I need?</h3>
+              <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+              </svg>
+            </summary>
+            <div class="faq__a">
+              <p>
+                The list varies by country and visa type. The usual items are a passport, a photograph, a completed application form, proof of funds and letters establishing the purpose of the trip. We give you the full list for your case in writing after the consultation.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <h3>Can I apply if I have been refused before?</h3>
+              <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+              </svg>
+            </summary>
+            <div class="faq__a">
+              <p>
+                Yes. A previous refusal is not a permanent bar, but it does have to be taken into account. We look at your earlier application and the refusal note, and work out what needs to change next time.
+              </p>
+            </div>
+          </details>
+
+          <details class="faq__item">
+            <summary class="faq__q">
+              <h3>Will I have to travel to another country to apply?</h3>
+              <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+              </svg>
+            </summary>
+            <div class="faq__a">
+              <p>
+                Some countries have no consulate in Turkmenistan, in which case the application is made in a neighbouring country. We tell you this in advance and help plan the trip so that it costs no more than it has to.
+              </p>
+            </div>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         7. Финальный призыв.
+         Пока это же место служит якорем #habarlasmak — на него ведут
+         кнопки из шапки и первого экрана. Когда появится полноценный
+         раздел контактов с формой, id можно будет перенести туда.
+         ================================================================== -->
+    <!-- cta:start title="Let us look at your case together" text="The first consultation is free. Tell us the purpose of your trip and we will explain which visa you need, where to start and how long it is likely to take." -->
+      <section class="section">
+        <div class="container">
+          <div class="cta">
+
+            <svg class="cta__mark" aria-hidden="true"><use href="#i-globe"/></svg>
+
+            <p class="badge cta__badge">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-badge-check"/></svg>
+              Free consultation
+            </p>
+
+            <h2>Let us look at your case together</h2>
+
+            <p class="cta__text">The first consultation is free. Tell us the purpose of your trip and we will explain which visa you need, where to start and how long it is likely to take.</p>
+
+            <div class="cta__actions">
+              <a class="btn btn--primary btn--lg" href="../habarlasmak.html">Get a consultation</a>
+              <a class="btn btn--secondary btn--lg" href="tel:+99361121888">+993 61 12 18 88</a>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    <!-- cta:end -->
+
+  </main>
+
+
+  <!-- footer:start -->
+  <footer class="site-footer">
+
+    <div class="container site-footer__top">
+
+      <div class="site-footer__brand">
+        <img src="../assets/logo-horizontal-light.svg"
+             alt="Täsin Dünýä Syýahat Visa Centre"
+             width="563" height="260" loading="lazy">
+        <p class="site-footer__tagline">
+          From preparing your documents to collecting the visa — with you
+          at every step.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Sections</h2>
+        <ul class="site-footer__list">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../wizalar.html">Visas</a></li>
+          <li><a href="../wizalar/bilim-maslahaty.html">Students</a></li>
+          <li><a href="../biz-barada.html">About</a></li>
+          <li><a href="../habarlasmak.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Services</h2>
+        <ul class="site-footer__list">
+          <li><a href="../wizalar/is-wizasy.html">Work visa</a></li>
+          <li><a href="../wizalar/okuw-wizasy.html">Student visa</a></li>
+          <li><a href="../wizalar/syyahat-wizasy.html">Tourist visa</a></li>
+          <li><a href="../wizalar/myhmancylyk-wizasy.html">Visitor visa</a></li>
+          <li><a href="../wizalar/isewurlik-wizasy.html">Business visa</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Contact</h2>
+
+        <!--
+          Контакты подставляются из data/site.json.
+          Здесь их править НЕ надо — правьте data/site.json
+          и запускайте: node scripts/sync-layout.js
+        -->
+        <address class="site-footer__contacts">
+
+          <div>
+            <span class="site-footer__contact-label">Address</span>
+            Ashgabat, Jepbarow köçesi 40 (Vysokovoltnaya 40)
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Phone</span>
+            <a class="site-footer__phone" href="tel:+99361121888">+993 61 12 18 88</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Email</span>
+            <a href="mailto:tasindunya@gmail.com">tasindunya@gmail.com</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Opening hours</span>
+            Daily: 08:00–20:00
+          </div>
+
+        </address>
+      </div>
+
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottom-inner">
+        <p class="site-footer__copyright">
+          &copy; <span data-current-year>2026</span> &laquo;Täsin Dünýä Syýahat&raquo;.
+          All rights reserved.
+        </p>
+        <p class="site-footer__copyright">Visa Centre &middot; Ashgabat, Turkmenistan</p>
+      </div>
+    </div>
+
+  </footer>
+  <!-- footer:end -->
+
+
+  <script src="../js/main.js" defer></script>
+  <!-- Микроразметка для поисковиков. Её расставляет scripts/build-seo.js -->
+  <!-- jsonld:start -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "TravelAgency",
+          "@id": "https://tasindunya.com/en/index.html#organization",
+          "name": "Täsin Dünýä Syýahat Visa Centre",
+          "url": "https://tasindunya.com/en/index.html",
+          "logo": "https://tasindunya.com/assets/logo-horizontal.svg",
+          "image": "https://tasindunya.com/assets/og-image.png",
+          "availableLanguage": [
+            "tk",
+            "ru",
+            "en"
+          ],
+          "telephone": "+993 61 12 18 88",
+          "email": "tasindunya@gmail.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "TM",
+            "addressLocality": "Ashgabat",
+            "streetAddress": "Jepbarow köçesi 40 (Vysokovoltnaya 40)"
+          },
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": [
+                "https://schema.org/Monday",
+                "https://schema.org/Tuesday",
+                "https://schema.org/Wednesday",
+                "https://schema.org/Thursday",
+                "https://schema.org/Friday",
+                "https://schema.org/Saturday",
+                "https://schema.org/Sunday"
+              ],
+              "opens": "08:00",
+              "closes": "20:00"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How long does it take to get a visa?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It depends on the country, the visa type and the consulate's queue. Preparing the documents usually takes a few days; the consulate's own processing can run to several weeks. We will give you the specific timeframe for your case at the consultation."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How much does it cost?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The price depends on the visa type and the amount of work. We quote it in full before we begin and write it into the contract. Third-party costs such as the consular fee and translations are paid separately; we set those out in advance too."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What happens if the visa is refused?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "First we work out why. Most often the file was incomplete, or the purpose of the trip was not backed up well enough. We fix the gaps and prepare a fresh submission."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which documents do I need?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The list varies by country and visa type. The usual items are a passport, a photograph, a completed application form, proof of funds and letters establishing the purpose of the trip. We give you the full list for your case in writing after the consultation."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I apply if I have been refused before?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. A previous refusal is not a permanent bar, but it does have to be taken into account. We look at your earlier application and the refusal note, and work out what needs to change next time."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Will I have to travel to another country to apply?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Some countries have no consulate in Turkmenistan, in which case the application is made in a neighbouring country. We tell you this in advance and help plan the trip so that it costs no more than it has to."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  </script>
+  <!-- jsonld:end -->
+
+</body>
+</html>

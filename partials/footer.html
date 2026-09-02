@@ -1,0 +1,82 @@
+  <footer class="site-footer">
+
+    <div class="container site-footer__top">
+
+      <div class="site-footer__brand">
+        <img src="assets/logo-horizontal-light.svg"
+             alt="Täsin Dünýä Syýahat — wiza merkezi"
+             width="563" height="260" loading="lazy">
+        <p class="site-footer__tagline">
+          Resminamalary taýýarlamakdan wizany almaga çenli — ähli tapgyrda
+          ýanyňyzda.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Bölümler</h2>
+        <ul class="site-footer__list">
+          <li><a href="index.html">Baş sahypa</a></li>
+          <li><a href="wizalar.html">Wizalar</a></li>
+          <li><a href="wizalar/bilim-maslahaty.html">Talyplar</a></li>
+          <li><a href="biz-barada.html">Biz barada</a></li>
+          <li><a href="habarlasmak.html">Habarlaşmak</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Hyzmatlar</h2>
+        <ul class="site-footer__list">
+          <li><a href="wizalar/is-wizasy.html">Iş wizasy</a></li>
+          <li><a href="wizalar/okuw-wizasy.html">Okuw wizasy</a></li>
+          <li><a href="wizalar/syyahat-wizasy.html">Syýahat wizasy</a></li>
+          <li><a href="wizalar/myhmancylyk-wizasy.html">Myhmançylyk wizasy</a></li>
+          <li><a href="wizalar/isewurlik-wizasy.html">Işewürlik wizasy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Habarlaşmak</h2>
+
+        <!--
+          Контакты подставляются из data/site.json.
+          Здесь их править НЕ надо — правьте data/site.json
+          и запускайте: node scripts/sync-layout.js
+        -->
+        <address class="site-footer__contacts">
+
+          <div>
+            <span class="site-footer__contact-label">Salgy</span>
+            {{address}}
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Telefon</span>
+            <a class="site-footer__phone" href="{{phoneHref}}">{{phone}}</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">E-poçta</span>
+            <a href="{{emailHref}}">{{email}}</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Iş wagty</span>
+            {{hoursHtml}}
+          </div>
+
+        </address>
+      </div>
+
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottom-inner">
+        <p class="site-footer__copyright">
+          &copy; <span data-current-year>2026</span> &laquo;{{name}}&raquo;.
+          Ähli hukuklar goralan.
+        </p>
+        <p class="site-footer__copyright">Wiza merkezi &middot; Aşgabat, Türkmenistan</p>
+      </div>
+    </div>
+
+  </footer>

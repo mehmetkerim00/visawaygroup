@@ -1,0 +1,82 @@
+  <footer class="site-footer">
+
+    <div class="container site-footer__top">
+
+      <div class="site-footer__brand">
+        <img src="assets/logo-horizontal-light.svg"
+             alt="Täsin Dünýä Syýahat Visa Centre"
+             width="563" height="260" loading="lazy">
+        <p class="site-footer__tagline">
+          From preparing your documents to collecting the visa — with you
+          at every step.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Sections</h2>
+        <ul class="site-footer__list">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="wizalar.html">Visas</a></li>
+          <li><a href="wizalar/bilim-maslahaty.html">Students</a></li>
+          <li><a href="biz-barada.html">About</a></li>
+          <li><a href="habarlasmak.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Services</h2>
+        <ul class="site-footer__list">
+          <li><a href="wizalar/is-wizasy.html">Work visa</a></li>
+          <li><a href="wizalar/okuw-wizasy.html">Student visa</a></li>
+          <li><a href="wizalar/syyahat-wizasy.html">Tourist visa</a></li>
+          <li><a href="wizalar/myhmancylyk-wizasy.html">Visitor visa</a></li>
+          <li><a href="wizalar/isewurlik-wizasy.html">Business visa</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Contact</h2>
+
+        <!--
+          Контакты подставляются из data/site.json.
+          Здесь их править НЕ надо — правьте data/site.json
+          и запускайте: node scripts/sync-layout.js
+        -->
+        <address class="site-footer__contacts">
+
+          <div>
+            <span class="site-footer__contact-label">Address</span>
+            {{address}}
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Phone</span>
+            <a class="site-footer__phone" href="{{phoneHref}}">{{phone}}</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Email</span>
+            <a href="{{emailHref}}">{{email}}</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Opening hours</span>
+            {{hoursHtml}}
+          </div>
+
+        </address>
+      </div>
+
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottom-inner">
+        <p class="site-footer__copyright">
+          &copy; <span data-current-year>2026</span> &laquo;{{name}}&raquo;.
+          All rights reserved.
+        </p>
+        <p class="site-footer__copyright">Visa Centre &middot; Ashgabat, Turkmenistan</p>
+      </div>
+    </div>
+
+  </footer>

@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="tk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Talyplara bilim maslahaty &mdash; Täsin Dünýä Syýahat</title>
+  <meta name="description" content="Daşary ýurt ýokary okuw mekdebine girmek boýunça talyplara maslahat: ugur we uniwersitet saýlamak, resminamalar, tabşyryş we okuw wizasy.">
+
+  <meta name="theme-color" content="#AF5F39">
+
+  <!-- Ссылки на другие языковые версии. Их расставляет sync-layout.js -->
+  <!-- hreflang:start -->
+  <link rel="canonical" href="https://tasindunya.com/wizalar/bilim-maslahaty.html">
+  <link rel="alternate" hreflang="tk" href="https://tasindunya.com/wizalar/bilim-maslahaty.html">
+  <link rel="alternate" hreflang="ru" href="https://tasindunya.com/ru/wizalar/bilim-maslahaty.html">
+  <link rel="alternate" hreflang="en" href="https://tasindunya.com/en/wizalar/bilim-maslahaty.html">
+  <link rel="alternate" hreflang="x-default" href="https://tasindunya.com/wizalar/bilim-maslahaty.html">
+  <!-- hreflang:end -->
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="../assets/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+  <!-- Иконка для экрана «Домой» на iPhone и iPad -->
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="manifest" href="../manifest.webmanifest">
+
+  <!-- ВНИМАНИЕ: адрес сайта ниже — заглушка. Когда появится домен,
+       замените https://tasindunya.tm/ на настоящий. -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Täsin Dünýä Syýahat">
+  <meta property="og:locale" content="tk_TM">
+  <meta property="og:title" content="Talyplara bilim maslahaty &mdash; Täsin Dünýä Syýahat">
+  <meta property="og:description" content="Daşary ýurt ýokary okuw mekdebine girmek boýunça talyplara maslahat: ugur we uniwersitet saýlamak, resminamalar, tabşyryş we okuw wizasy.">
+  <meta property="og:url" content="https://tasindunya.com/wizalar/bilim-maslahaty.html">
+  <meta property="og:image" content="https://tasindunya.com/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Шрифт грузим заранее. Туркменской версии нужны латиница и её
+       расширение (буквы ş ň ž). Остальное подгрузится само, если понадобится. -->
+  <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/inter-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/page.css">
+</head>
+
+<body>
+
+  <!-- icons:start -->
+  <!--
+    НАБОР ИКОНОК — общий для всех страниц.
+    Он невидим. Ниже по странице значки вставляются короткой строкой:
+        <svg class="icon"><use href="#i-briefcase"/></svg>
+    Чтобы поменять иконку — замените имя после решётки.
+    Правится только здесь; чтобы изменения разошлись по страницам,
+    запустите: node scripts/sync-layout.js
+  -->
+  <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- услуги -->
+    <symbol id="i-briefcase" viewBox="0 0 24 24">
+      <rect x="2.75" y="6.75" width="18.5" height="13.5" rx="2"/>
+      <path d="M8.5 6.75V5.25a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5"/>
+      <path d="M2.75 12.5h18.5"/><path d="M10 12.5h4"/>
+    </symbol>
+
+    <symbol id="i-cap" viewBox="0 0 24 24">
+      <path d="M2.5 8.75 12 4.25l9.5 4.5L12 13.25 2.5 8.75Z"/>
+      <path d="M6.5 10.6V15c0 1.6 2.5 2.9 5.5 2.9s5.5-1.3 5.5-2.9v-4.4"/>
+      <path d="M21.5 8.75v5.25"/>
+    </symbol>
+
+    <symbol id="i-plane" viewBox="0 0 24 24">
+      <path d="M21.5 3 2.75 10.25l7 2.9 2.9 7L21.5 3Z"/>
+      <path d="M9.75 13.15 21.5 3"/>
+    </symbol>
+
+    <symbol id="i-users" viewBox="0 0 24 24">
+      <circle cx="9" cy="8" r="3.25"/>
+      <path d="M2.75 20.25c0-3.45 2.8-5.5 6.25-5.5s6.25 2.05 6.25 5.5"/>
+      <path d="M16.25 5.1a3.25 3.25 0 0 1 0 5.8"/>
+      <path d="M17.5 15.1c2.2.55 3.75 2.1 3.75 4.4"/>
+    </symbol>
+
+    <symbol id="i-buildings" viewBox="0 0 24 24">
+      <path d="M2.75 20.75h18.5"/>
+      <path d="M5.75 20.75V5.25a1 1 0 0 1 1-1h5.5a1 1 0 0 1 1 1v15.5"/>
+      <path d="M13.25 10.75h4.5a1 1 0 0 1 1 1v9"/>
+      <path d="M8.25 8h2.5M8.25 11.5h2.5M8.25 15h2.5"/>
+      <path d="M15.5 14h1.5M15.5 17.5h1.5"/>
+    </symbol>
+
+    <symbol id="i-book" viewBox="0 0 24 24">
+      <path d="M12 6.75v13.5"/>
+      <path d="M12 6.75C10.4 5.15 8.4 4.5 6.25 4.5H3.25v13.25h3c2.15 0 4.15.65 5.75 2.25"/>
+      <path d="M12 6.75c1.6-1.6 3.6-2.25 5.75-2.25h3v13.25h-3c-2.15 0-4.15.65-5.75 2.25"/>
+    </symbol>
+
+    <!-- шаги -->
+    <symbol id="i-chat" viewBox="0 0 24 24">
+      <path d="M4.25 4.75h15.5a1.5 1.5 0 0 1 1.5 1.5v8.5a1.5 1.5 0 0 1-1.5 1.5H10.5l-4.25 3.5v-3.5H4.25a1.5 1.5 0 0 1-1.5-1.5v-8.5a1.5 1.5 0 0 1 1.5-1.5Z"/>
+      <path d="M7 9.25h10"/><path d="M7 12.75h6.5"/>
+    </symbol>
+
+    <symbol id="i-search-check" viewBox="0 0 24 24">
+      <circle cx="10.5" cy="10.5" r="6.75"/>
+      <path d="M15.4 15.4 21 21"/>
+      <path d="m7.75 10.6 2.15 2.15L13.4 9"/>
+    </symbol>
+
+    <symbol id="i-doc" viewBox="0 0 24 24">
+      <path d="M13.25 2.75H6.5A1.25 1.25 0 0 0 5.25 4v16a1.25 1.25 0 0 0 1.25 1.25h11A1.25 1.25 0 0 0 18.75 20V8.25l-5.5-5.5Z"/>
+      <path d="M13.25 2.75v5.5h5.5"/>
+      <path d="M8.5 12.75h7"/><path d="M8.5 16.25h7"/>
+    </symbol>
+
+    <symbol id="i-calendar-check" viewBox="0 0 24 24">
+      <rect x="3.25" y="5.25" width="17.5" height="15.5" rx="1.5"/>
+      <path d="M3.25 10.25h17.5"/>
+      <path d="M8 3.25v4M16 3.25v4"/>
+      <path d="m9.25 15.25 2 2 3.75-3.75"/>
+    </symbol>
+
+    <symbol id="i-badge-check" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.75"/>
+      <path d="m8.25 12.25 2.65 2.65 5-5.5"/>
+    </symbol>
+
+    <!-- преимущества -->
+    <symbol id="i-certificate" viewBox="0 0 24 24">
+      <rect x="3.75" y="3.25" width="16.5" height="11" rx="1.25"/>
+      <path d="M7 7.25h10"/><path d="M7 10.75h6"/>
+      <circle cx="12" cy="17.5" r="3.25"/>
+      <path d="m9.9 19.9-.9 3 3-1.5 3 1.5-.9-3"/>
+    </symbol>
+
+    <symbol id="i-scales" viewBox="0 0 24 24">
+      <path d="M12 4.75v15.5"/>
+      <path d="M8 20.25h8"/>
+      <path d="M4 8h16"/>
+      <path d="M1.5 13.75a3 3 0 0 0 5 0L4 8Z"/>
+      <path d="M17.5 13.75a3 3 0 0 0 5 0L20 8Z"/>
+    </symbol>
+
+    <symbol id="i-tag" viewBox="0 0 24 24">
+      <path d="M11.6 3.25H5A1.75 1.75 0 0 0 3.25 5v6.6a2 2 0 0 0 .6 1.4l7.4 7.4a1.75 1.75 0 0 0 2.5 0l6.6-6.6a1.75 1.75 0 0 0 0-2.5l-7.4-7.4a2 2 0 0 0-1.35-.65Z"/>
+      <circle cx="8" cy="8" r="1.5"/>
+    </symbol>
+
+    <symbol id="i-stairs-flag" viewBox="0 0 24 24">
+      <path d="M2.75 20.25h5v-4.5h5v-4.5h5"/>
+      <path d="M17.75 11.25V3.5"/>
+      <path d="M17.75 4.25H22l-1.4 1.9L22 8.05h-4.25"/>
+    </symbol>
+
+    <!-- служебные -->
+    <symbol id="i-arrow-right" viewBox="0 0 24 24">
+      <path d="M4 12h15"/><path d="m13 6.5 5.5 5.5-5.5 5.5"/>
+    </symbol>
+
+    <symbol id="i-instagram" viewBox="0 0 24 24">
+      <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="5"/>
+      <circle cx="12" cy="12" r="4.25"/>
+      <path d="M17.2 6.9h.01"/>
+    </symbol>
+
+    <symbol id="i-user" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="3.75"/>
+      <path d="M4.75 20.5c0-3.9 3.25-6.25 7.25-6.25s7.25 2.35 7.25 6.25"/>
+    </symbol>
+
+    <symbol id="i-message" viewBox="0 0 24 24">
+      <path d="M20.25 12.4c0 3.9-3.7 7.05-8.25 7.05-1 0-1.96-.15-2.84-.43l-4.66 1.63 1.5-3.9c-1.13-1.2-1.8-2.7-1.8-4.35 0-3.9 3.7-7.05 8.25-7.05s7.8 3.15 7.8 6.75Z"/>
+    </symbol>
+
+    <symbol id="i-phone" viewBox="0 0 24 24">
+      <path d="M6.6 3.5h2.6l1.6 4-2 1.4a11.5 11.5 0 0 0 5.3 5.3l1.4-2 4 1.6v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z"/>
+    </symbol>
+
+    <symbol id="i-mail" viewBox="0 0 24 24">
+      <rect x="2.75" y="5" width="18.5" height="14" rx="2"/>
+      <path d="m3.5 6.5 8.5 6 8.5-6"/>
+    </symbol>
+
+    <symbol id="i-pin" viewBox="0 0 24 24">
+      <path d="M12 21.5s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/>
+      <circle cx="12" cy="10.2" r="2.6"/>
+    </symbol>
+
+    <symbol id="i-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.75"/>
+      <path d="M12 7v5.3l3.3 2"/>
+    </symbol>
+
+    <symbol id="i-copy" viewBox="0 0 24 24">
+      <rect x="8.75" y="8.75" width="11.5" height="11.5" rx="2"/>
+      <path d="M15.25 8.75v-2a2 2 0 0 0-2-2h-7.5a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2"/>
+    </symbol>
+
+    <symbol id="i-send" viewBox="0 0 24 24">
+      <path d="M21.5 3 2.75 10.25l7 2.9 2.9 7L21.5 3Z"/>
+      <path d="M9.75 13.15 21.5 3"/>
+    </symbol>
+
+    <symbol id="i-shield" viewBox="0 0 24 24">
+      <path d="M12 2.75 4.75 5.75v6c0 4.3 3 8.3 7.25 9.5 4.25-1.2 7.25-5.2 7.25-9.5v-6L12 2.75Z"/>
+      <path d="m9 11.9 2.1 2.1 4-4.4"/>
+    </symbol>
+
+    <symbol id="i-no" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.75"/>
+      <path d="m6.7 6.7 10.6 10.6"/>
+    </symbol>
+
+    <symbol id="i-arrow-left" viewBox="0 0 24 24">
+      <path d="M20 12H5"/><path d="m11 6.5-5.5 5.5 5.5 5.5"/>
+    </symbol>
+
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.75"/>
+      <path d="M12 11.25v5"/><path d="M12 7.9h.01"/>
+    </symbol>
+
+    <symbol id="i-globe" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"/>
+      <ellipse cx="12" cy="12" rx="3.3" ry="8.5"/>
+      <path d="M3.5 12h17"/>
+      <path d="M5.2 7.4h13.6M5.2 16.6h13.6"/>
+    </symbol>
+
+  </svg>
+  <!-- icons:end -->
+
+  <!-- header:start nav="talyplar" -->
+  <!-- Ссылка для клавиатуры и скринридеров: перейти сразу к содержимому -->
+  <a class="skip-link" href="#mazmun">Esasy mazmuna geçiň</a>
+
+  <header class="site-header" data-header>
+    <div class="container site-header__inner">
+
+      <a class="site-header__logo" href="../index.html" aria-label="Täsin Dünýä Syýahat — baş sahypa">
+        <img src="../assets/logo-horizontal.svg"
+             alt="Täsin Dünýä Syýahat — wiza merkezi"
+             width="563" height="260">
+      </a>
+
+      <!-- Кнопка-бургер: видна только на телефонах и планшетах -->
+      <button class="burger"
+              type="button"
+              data-nav-toggle
+              aria-expanded="false"
+              aria-controls="site-nav"
+              aria-label="Menýuny açmak / ýapmak">
+        <span class="burger__line"></span>
+        <span class="burger__line"></span>
+        <span class="burger__line"></span>
+      </button>
+
+      <div class="site-nav" id="site-nav" data-nav>
+
+        <nav aria-label="Esasy menýu">
+          <ul class="site-nav__list">
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="home" href="../index.html">Baş sahypa</a>
+            </li>
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="wizalar" href="../wizalar.html">Wizalar</a>
+            </li>
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="talyplar" href="../wizalar/bilim-maslahaty.html" aria-current="page">Talyplar</a>
+            </li>
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="biz-barada" href="../biz-barada.html">Biz barada</a>
+            </li>
+            <li class="site-nav__item">
+              <a class="site-nav__link" data-nav-key="habarlasmak" href="../habarlasmak.html">Habarlaşmak</a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="site-nav__actions">
+
+          <!--
+            Переключатель языков. Адреса подставляет sync-layout.js:
+            каждая ссылка ведёт на ЭТУ ЖЕ страницу на другом языке,
+            а если перевода нет — на главную того языка.
+          -->
+          <div class="lang-switch" role="group" aria-label="Sahypanyň dili">
+            <a class="lang-switch__link" href="bilim-maslahaty.html" lang="tk" hreflang="tk" aria-current="true">TM</a>
+            <a class="lang-switch__link" href="../ru/wizalar/bilim-maslahaty.html" lang="ru" hreflang="ru">RU</a>
+            <a class="lang-switch__link" href="../en/wizalar/bilim-maslahaty.html" lang="en" hreflang="en">EN</a>
+          </div>
+
+          <a class="btn btn--primary" href="../habarlasmak.html">Maslahat almak</a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Затемнение позади открытого мобильного меню -->
+  <div class="nav-backdrop" data-nav-backdrop></div>
+  <!-- header:end -->
+
+  <main class="site-main" id="mazmun">
+    <article class="page">
+      <div class="container container--narrow">
+
+        <nav class="breadcrumbs" aria-label="Nawigasiýa">
+          <ol>
+            <li><a href="../index.html">Baş sahypa</a></li>
+            <li><a href="../wizalar.html">Wizalar</a></li>
+            <li><span aria-current="page">Talyplara bilim maslahaty</span></li>
+          </ol>
+        </nav>
+
+        <header class="page-head">
+          <p class="eyebrow">Bilim maslahaty</p>
+          <h1>Talyplara bilim maslahaty</h1>
+          <p class="lead">Daşary ýurtda okamak isleýän talyplara ugur we okuw mekdebini
+        saýlamakdan başlap, resminamalary tabşyrmaga, kabul edilmäge we okuw
+        wizasyny almaga çenli kömek edýäris.</p>
+        </header>
+
+        <section class="page-section">
+          <div class="note">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+            <div>
+              <p><strong>Kabul etmek baradaky karary uniwersitetiň özi kabul edýär.</strong>
+          Stipendiýalar we kwotalar bolsa maksatnama, tabşyryş möhletlerine we
+          bäsleşige bagly &mdash; olary hiç kim öňünden kepillendirip bilmeýär.</p>
+        <p>Biziň işimiz &mdash; mümkinçilikleriňize dogry baha bermek, size laýyk
+          maksatnamalary tapmak we resminamalaryňyzy wagtynda, talaplara laýyk
+          taýýarlamak.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section">
+          <h2>Kimler üçin</h2>
+          <ul class="checklist">
+            <li>Mekdebi tamamlaýan we daşary ýurtda okamak isleýän okuwçylar</li>
+            <li>Bakalawry gutaryp, magistratura girmegi meýilleşdirýänler</li>
+            <li>Hünär ugruny üýtgetmek ýa-da ikinji bilim almak isleýänler</li>
+            <li>Ilki dil kursundan ýa-da taýýarlyk maksatnamasyndan geçmek isleýänler</li>
+            <li>Çagasy üçin ugur we ýurt saýlaýan ata-eneler</li>
+          </ul>
+        </section>
+
+        <section class="page-section">
+          <h2>Umumy resminamalar</h2>
+          <ul class="doclist">
+            <li>Attestat ýa-da diplom we onuň goşundysy<span>terjimesi we zerur bolsa tassyklamasy bilen</span></li>
+            <li>Dil bilimi barada sertifikat ýa-da synag netijesi<span>maksatnama talap edýän bolsa</span></li>
+            <li>Motiwasion hat<span>näme üçin şu maksatnama we şu uniwersitet</span></li>
+            <li>Maslahat beriş haty<span>mugallymdan ýa-da iş berijiden, talap edilýän bolsa</span></li>
+            <li>Terjimehal (CV)</li>
+            <li>Portfolio<span>döredijilik we binagärlik ugurlary üçin</span></li>
+            <li>Daşary ýurt pasportynyň nusgasy</li>
+            <li>Maliýe ýagdaýyny tassyklaýan resminamalar<span>okuw we ýaşaýyş çykdajylary üçin</span></li>
+          </ul>
+          <div class="note">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+            <div>
+              <p>Her uniwersitetiň we her maksatnamanyň öz talaplary bar, olar ýyldan-ýyla
+        üýtgäp bilýär. Ýokardaky sanaw &mdash; köplenç soralýanlar. Size degişli
+        anyk sanawy uniwersitet saýlanandan soň, resmi çeşmelerden barlap
+        düzýäris.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section">
+          <h2>Tapgyrlar</h2>
+          <ol class="steps steps--stack">
+
+            <li class="step">
+              <div class="step__marker"><span class="step__num">1</span></div>
+              <div class="step__body">
+                <h3 class="step__title">Profili bahalandyrmak</h3>
+                <p class="step__text">Bahalaryňyza, dil derejäňize, býujetiňize we maksatlaryňyza seredýäris. Hakyky mümkinçilikleriňizi açyk aýdýarys.</p>
+              </div>
+            </li>
+
+            <li class="step">
+              <div class="step__marker"><span class="step__num">2</span></div>
+              <div class="step__body">
+                <h3 class="step__title">Ugur we okuw mekdebini saýlamak</h3>
+                <p class="step__text">Size laýyk gelýän maksatnamalaryň sanawyny düzýäris: talaplary, möhletleri we çykdajylary bilen.</p>
+              </div>
+            </li>
+
+            <li class="step">
+              <div class="step__marker"><span class="step__num">3</span></div>
+              <div class="step__body">
+                <h3 class="step__title">Resminamalar we motiwasion hat</h3>
+                <p class="step__text">Resminamalary ýygnaýarys, terjimeleri taýýarlaýarys, motiwasion haty bilelikde ýazýarys.</p>
+              </div>
+            </li>
+
+            <li class="step">
+              <div class="step__marker"><span class="step__num">4</span></div>
+              <div class="step__body">
+                <h3 class="step__title">Tabşyryş</h3>
+                <p class="step__text">Anketalary dolduryp, resminamalary möhletinde tabşyrýarys we uniwersitet bilen ýazyşmagy alyp barýarys.</p>
+              </div>
+            </li>
+
+            <li class="step">
+              <div class="step__marker"><span class="step__num">5</span></div>
+              <div class="step__body">
+                <h3 class="step__title">Kabul edilmek</h3>
+                <p class="step__text">Jogaplara garaşýarys, gelen tekliplere bilelikde baha berýäris we saýlaw etmäge kömek edýäris.</p>
+              </div>
+            </li>
+
+            <li class="step">
+              <div class="step__marker"><span class="step__num">6</span></div>
+              <div class="step__body">
+                <h3 class="step__title">Okuw wizasy</h3>
+                <p class="step__text">Kabul haty gelenden soň okuw wizasy boýunça resminamalary taýýarlaýarys we tabşyrýarys.</p>
+              </div>
+            </li>
+
+            <li class="step">
+              <div class="step__marker"><span class="step__num">7</span></div>
+              <div class="step__body">
+                <h3 class="step__title">Gitmäge taýýarlyk</h3>
+                <p class="step__text">Ýaşaýyş jaýy, ätiýaçlandyryş, biletler we ilkinji günler barada näme etmelidigini düşündirýäris.</p>
+              </div>
+            </li>
+
+          </ol>
+        </section>
+
+        <section class="page-section">
+          <h2>Möhletler we bahalar</h2>
+          <div class="pricing">
+            <p class="pricing__lead">Maslahat mugt. Hyzmatyň bahasy her ýagdaýa görä aýratyn kesgitlenýär &mdash; wiza görnüşine, ýurda we resminamalaryň ýagdaýyna bagly. Takyk bahany maslahatda aýdýarys.</p>
+
+            <ul class="pricing__list">
+              <li class="pricing__row">
+                <span class="pricing__label">Uniwersitetiň tabşyryş ýygymy</span>
+                <span class="pricing__value">Her uniwersitet öz nyrhyny özi belleýär</span>
+              </li>
+              <li class="pricing__row">
+                <span class="pricing__label">Terjime we resminamalary tassyklamak</span>
+                <span class="pricing__value">Aýratyn tölenýär</span>
+              </li>
+              <li class="pricing__row">
+                <span class="pricing__label">Tabşyryş möhletleri</span>
+                <span class="pricing__value">Her maksatnamada dürli, resmi taýdan öňünden yglan edilýär</span>
+              </li>
+            </ul>
+
+            <a class="btn btn--primary pricing__cta" href="../habarlasmak.html">Mugt maslahat almak</a>
+          </div>
+          <div class="note">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
+            <div>
+              <p>Hyzmatymyzyň bahasyny işe başlamazdan öň doly aýdýarys we şertnamada
+        ýazýarys. Uniwersitetiň ýygymlary, terjime we resminamalary tassyklamak
+        &mdash; daşarky çykdajylar, olar aýratyn tölenýär. Möhletler barada:
+        tabşyryş möwsümi köplenç okuwyň başlanmagyndan birnäçe aý öň gutarýar,
+        şonuň üçin işi ir başlamak möhüm.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="page-section">
+          <h2>Köp berilýän soraglar</h2>
+          <div class="faq" data-faq>
+
+            <details class="faq__item">
+              <summary class="faq__q">
+                <h3>Stipendiýa alyp bilerinmi?</h3>
+                <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+                </svg>
+              </summary>
+              <div class="faq__a">
+                <p>Stipendiýalar we ýeňillikler bar, ýöne olar bäsleşik esasynda berilýär we her maksatnamada şertleri dürli-dürli. Kepillik berip bilmeýäris. Biz size haýsy maksatnamalarda mümkinçiligiň bardygyny görkezýäris we resminamalaryňyzy şoňa görä taýýarlaýarys.</p>
+              </div>
+            </details>
+
+            <details class="faq__item">
+              <summary class="faq__q">
+                <h3>Dilim gowşak, mümkinçiligim barmy?</h3>
+                <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+                </svg>
+              </summary>
+              <div class="faq__a">
+                <p>Hawa. Köp ýurtda dil kursy ýa-da taýýarlyk maksatnamasy bar &mdash; ilki şoňa girip, soňra esasy okuwa geçmek ýoly işleýär. Muny profil bahalandyrylanda ara alyp maslahatlaşýarys.</p>
+              </div>
+            </details>
+
+            <details class="faq__item">
+              <summary class="faq__q">
+                <h3>Haýsy uniwersitete girip bilerin?</h3>
+                <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+                </svg>
+              </summary>
+              <div class="faq__a">
+                <p>Muny öňünden aýtmak dogry bolmaz. Ilki bahalaryňyza, diliňize we býujetiňize seredýäris, soň size laýyk maksatnamalaryň sanawyny düzýäris. Kabul etmek baradaky karary uniwersitet özi kabul edýär.</p>
+              </div>
+            </details>
+
+            <details class="faq__item">
+              <summary class="faq__q">
+                <h3>Okuw wizasyny hem siz edýärsiňizmi?</h3>
+                <svg class="faq__icon" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M3 10h14"/><path class="faq__icon-v" d="M10 3v14"/>
+                </svg>
+              </summary>
+              <div class="faq__a">
+                <p>Hawa. Kabul haty gelenden soň <a href="okuw-wizasy.html">okuw wizasy</a> boýunça resminamalary taýýarlaýarys we tabşyryşa çenli ýanyňyzda bolýarys.</p>
+              </div>
+            </details>
+
+          </div>
+
+          <a class="backlink" href="../wizalar.html">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-left"/></svg>
+            Ähli hyzmatlara dolan
+          </a>
+        </section>
+
+      </div>
+
+      <!-- cta:start title="Ýagdaýyňyzy bilelikde seredeliň" text="Ilkinji maslahat mugt. Ýagdaýyňyzy aýdyň &mdash; talyplara bilim maslahaty boýunça näme gerekdigini we nämeden başlamalydygyny düşündireris." -->
+      <section class="section">
+        <div class="container">
+          <div class="cta">
+
+            <svg class="cta__mark" aria-hidden="true"><use href="#i-globe"/></svg>
+
+            <p class="badge cta__badge">
+              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-badge-check"/></svg>
+              Maslahat mugt
+            </p>
+
+            <h2>Ýagdaýyňyzy bilelikde seredeliň</h2>
+
+            <p class="cta__text">Ilkinji maslahat mugt. Ýagdaýyňyzy aýdyň &mdash; talyplara bilim maslahaty boýunça näme gerekdigini we nämeden başlamalydygyny düşündireris.</p>
+
+            <div class="cta__actions">
+              <a class="btn btn--primary btn--lg" href="../habarlasmak.html">Maslahat almak</a>
+              <a class="btn btn--secondary btn--lg" href="tel:+99361121888">+993 61 12 18 88</a>
+            </div>
+
+          </div>
+        </div>
+      </section>
+      <!-- cta:end -->
+
+    </article>
+
+  </main>
+
+  <!-- footer:start -->
+  <footer class="site-footer">
+
+    <div class="container site-footer__top">
+
+      <div class="site-footer__brand">
+        <img src="../assets/logo-horizontal-light.svg"
+             alt="Täsin Dünýä Syýahat — wiza merkezi"
+             width="563" height="260" loading="lazy">
+        <p class="site-footer__tagline">
+          Resminamalary taýýarlamakdan wizany almaga çenli — ähli tapgyrda
+          ýanyňyzda.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Bölümler</h2>
+        <ul class="site-footer__list">
+          <li><a href="../index.html">Baş sahypa</a></li>
+          <li><a href="../wizalar.html">Wizalar</a></li>
+          <li><a href="../wizalar/bilim-maslahaty.html">Talyplar</a></li>
+          <li><a href="../biz-barada.html">Biz barada</a></li>
+          <li><a href="../habarlasmak.html">Habarlaşmak</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Hyzmatlar</h2>
+        <ul class="site-footer__list">
+          <li><a href="../wizalar/is-wizasy.html">Iş wizasy</a></li>
+          <li><a href="../wizalar/okuw-wizasy.html">Okuw wizasy</a></li>
+          <li><a href="../wizalar/syyahat-wizasy.html">Syýahat wizasy</a></li>
+          <li><a href="../wizalar/myhmancylyk-wizasy.html">Myhmançylyk wizasy</a></li>
+          <li><a href="../wizalar/isewurlik-wizasy.html">Işewürlik wizasy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Habarlaşmak</h2>
+
+        <!--
+          Контакты подставляются из data/site.json.
+          Здесь их править НЕ надо — правьте data/site.json
+          и запускайте: node scripts/sync-layout.js
+        -->
+        <address class="site-footer__contacts">
+
+          <div>
+            <span class="site-footer__contact-label">Salgy</span>
+            Aşgabat ş., Jepbarow köçesi 40 (Wysokowoltnaýa 40)
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Telefon</span>
+            <a class="site-footer__phone" href="tel:+99361121888">+993 61 12 18 88</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">E-poçta</span>
+            <a href="mailto:tasindunya@gmail.com">tasindunya@gmail.com</a>
+          </div>
+
+          <div>
+            <span class="site-footer__contact-label">Iş wagty</span>
+            Her gün: 08:00–20:00
+          </div>
+
+        </address>
+      </div>
+
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="container site-footer__bottom-inner">
+        <p class="site-footer__copyright">
+          &copy; <span data-current-year>2026</span> &laquo;Täsin Dünýä Syýahat&raquo;.
+          Ähli hukuklar goralan.
+        </p>
+        <p class="site-footer__copyright">Wiza merkezi &middot; Aşgabat, Türkmenistan</p>
+      </div>
+    </div>
+
+  </footer>
+  <!-- footer:end -->
+
+  <script src="../js/main.js" defer></script>
+  <!-- Микроразметка для поисковиков. Её расставляет scripts/build-seo.js -->
+  <!-- jsonld:start -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Service",
+          "name": "Talyplara bilim maslahaty",
+          "description": "Daşary ýurt ýokary okuw mekdebine girmek boýunça talyplara maslahat: ugur we uniwersitet saýlamak, resminamalar, tabşyryş we okuw wizasy.",
+          "serviceType": "Talyplara bilim maslahaty",
+          "provider": {
+            "@id": "https://tasindunya.com/index.html#organization"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "Türkmenistan"
+          },
+          "availableChannel": {
+            "@type": "ServiceChannel",
+            "serviceUrl": "https://tasindunya.com/habarlasmak.html"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Baş sahypa",
+              "item": "https://tasindunya.com/index.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Wizalar",
+              "item": "https://tasindunya.com/wizalar.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Talyplara bilim maslahaty"
+            }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Stipendiýa alyp bilerinmi?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Stipendiýalar we ýeňillikler bar, ýöne olar bäsleşik esasynda berilýär we her maksatnamada şertleri dürli-dürli. Kepillik berip bilmeýäris. Biz size haýsy maksatnamalarda mümkinçiligiň bardygyny görkezýäris we resminamalaryňyzy şoňa görä taýýarlaýarys."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Dilim gowşak, mümkinçiligim barmy?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Hawa. Köp ýurtda dil kursy ýa-da taýýarlyk maksatnamasy bar — ilki şoňa girip, soňra esasy okuwa geçmek ýoly işleýär. Muny profil bahalandyrylanda ara alyp maslahatlaşýarys."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Haýsy uniwersitete girip bilerin?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Muny öňünden aýtmak dogry bolmaz. Ilki bahalaryňyza, diliňize we býujetiňize seredýäris, soň size laýyk maksatnamalaryň sanawyny düzýäris. Kabul etmek baradaky karary uniwersitet özi kabul edýär."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Okuw wizasyny hem siz edýärsiňizmi?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Hawa. Kabul haty gelenden soň okuw wizasy boýunça resminamalary taýýarlaýarys we tabşyryşa çenli ýanyňyzda bolýarys."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  </script>
+  <!-- jsonld:end -->
+
+</body>
+</html>
