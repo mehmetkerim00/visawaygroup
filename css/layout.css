@@ -444,10 +444,16 @@ body {
   text-transform: uppercase;
 }
 
-/* Телефон делаем крупнее — это главное целевое действие */
+/* Телефон делаем крупнее — это главное целевое действие.
+   Телефонов может быть несколько: ставим их столбиком. */
 .site-footer__phone {
+  display: block;
   font-size: var(--text-lg);
   font-weight: var(--weight-semibold);
+}
+
+.site-footer__phone + .site-footer__phone {
+  margin-top: var(--space-1);
 }
 
 .site-footer a.site-footer__phone {

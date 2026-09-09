@@ -195,6 +195,53 @@ function checkLinks() {
 }
 
 /* --------------------------------------------------------------------- */
+/* 3b. Языковые префиксы                                                   */
+/*                                                                         */
+/* Страница из папки ru/ должна ссылаться на страницы из ru/, а не уводить */
+/* посетителя на туркменскую версию. Единственное исключение —             */
+/* переключатель языков: он для того и нужен, чтобы уводить.               */
+/*                                                                         */
+/* Эта проверка появилась после того, как меню на русских и английских     */
+/* страницах полгода вело на туркменские: ссылки в шаблонах считались      */
+/* от корня сайта, а не от папки языка.                                    */
+/* --------------------------------------------------------------------- */
+
+function checkLanguagePrefixes() {
+  let wrong = 0, checked = 0;
+
+  for (const rel of pages()) {
+    const lang = L.langOf(rel);
+    if (lang === L.DEFAULT_LANG) continue;          /* туркменский лежит в корне */
+
+    const html = fs.readFileSync(path.join(ROOT, rel), "utf8");
+    const dir = path.posix.dirname(rel);
+
+    for (const m of html.matchAll(/<a\b([^>]*)>/g)) {
+      const tag = m[1];
+      /* переключатель языков обязан вести на другие языки */
+      if (/class="[^"]*lang-switch__link/.test(tag)) continue;
+
+      const href = (tag.match(/\shref="([^"]*)"/) || [])[1];
+      if (!href || href === "#" || EXTERNAL.test(href)) continue;
+
+      const file = href.split("#")[0];
+      if (!file || !file.endsWith(".html")) continue;
+
+      const target = path.posix.normalize(path.posix.join(dir === "." ? "" : dir, file));
+      checked++;
+      if (L.langOf(target) !== lang) {
+        wrong++;
+        block("Языки",
+          `ссылка уводит из ${lang}/ на «${L.langOf(target)}»: ${href} → ${target}`,
+          `${rel}:${lineOf(html, m.index)}`);
+      }
+    }
+  }
+  if (!wrong) ok(`Ссылки не уводят между языками (проверено ${checked})`);
+}
+
+
+/* --------------------------------------------------------------------- */
 /* 4. Заголовки и описания страниц                                        */
 /* --------------------------------------------------------------------- */
 
@@ -431,6 +478,7 @@ function main() {
   checkPlaceholders(sync);
   checkDomain(site);
   checkLinks();
+  checkLanguagePrefixes();
   checkTitles();
   checkPricing();
   checkTeam();

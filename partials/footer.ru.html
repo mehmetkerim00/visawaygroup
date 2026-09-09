@@ -51,7 +51,11 @@
 
           <div>
             <span class="site-footer__contact-label">Телефон</span>
-            <a class="site-footer__phone" href="{{phoneHref}}">{{phone}}</a>
+            <!-- Телефоны берутся из списка phones в data/site.json.
+                 Сколько там записей — столько и покажется. -->
+            <!-- for:phones -->
+            <a class="site-footer__phone" href="{{href}}">{{display}}</a>
+            <!-- endfor -->
           </div>
 
           <div>

@@ -14,7 +14,7 @@
 | Домен | `visawaygroup.com` — сайт собран под адрес `https://visawaygroup.com` |
 | Телефон, основной | +993 61 12 18 88 |
 | Телефон, второй | +993 62 94 41 57 |
-| Электронная почта | tasindunya@gmail.com |
+| Электронная почта | visawaygroup@gmail.com |
 | Instagram | @visawaygroup |
 | Адрес | Ашхабад, ул. Высоковольтная 40 (Jepbarow köçesi 40) |
 | Часы работы | Ежедневно 08:00–20:00 |

@@ -276,11 +276,36 @@ function findPages(dir, found = []) {
 
 const LEAVE_ALONE = /^(#|\/|\{\{|[a-z][a-z0-9+.-]*:|\/\/)/i;
 
-function fixPaths(html, prefix) {
-  if (!prefix) return html;
+/* Общие файлы: лежат в корне и одинаковы для всех языков */
+const SHARED_ROOT = /^(assets|css|js|data)\/|^(manifest\.webmanifest|sitemap\.xml|robots\.txt)$/;
+
+/*
+ * Пути в партиалах пишутся так, как будто страница лежит в корне:
+ *   href="wizalar.html"  src="assets/logo-horizontal.svg"
+ *
+ * Дальше они расходятся:
+ *   • общие файлы (assets, css, js) одни на весь сайт — до них надо
+ *     подняться в корень;
+ *   • ссылки на страницы должны вести на страницу ТОГО ЖЕ языка,
+ *     то есть на ru/wizalar.html, а не на wizalar.html.
+ *
+ * Раньше здесь ко всему без разбора приписывалось ../ до корня, и меню
+ * на русской странице уводило на туркменскую версию.
+ */
+function fixPaths(html, relPosix, lang, prefix) {
   return html.replace(/\s(href|src)="([^"]*)"/g, (whole, attr, value) => {
     if (value === "" || LEAVE_ALONE.test(value) || value.startsWith("../")) return whole;
-    return ` ${attr}="${prefix}${value}"`;
+
+    if (SHARED_ROOT.test(value)) {
+      return prefix ? ` ${attr}="${prefix}${value}"` : whole;
+    }
+
+    /* ссылка на страницу — переводим её в папку текущего языка */
+    const hash = value.indexOf("#");
+    const bare = hash === -1 ? value : value.slice(0, hash);
+    const tail = hash === -1 ? "" : value.slice(hash);
+    const target = joinLang(bare, lang);
+    return ` ${attr}="${relLink(relPosix, target)}${tail}"`;
   });
 }
 
@@ -470,7 +495,7 @@ function syncFile(file, partials, site, valuesByLang, existing) {
     const attrs = parseAttrs(rawAttrs);
 
     let body = body0;
-    body = fixPaths(body, prefix);
+    body = fixPaths(body, relPosix, lang, prefix);
     body = expandConditions(body, site, values);
     body = expandLoops(body, site, lang);
     body = substitute(body, Object.assign({}, values, langInfo.values, attrs));
