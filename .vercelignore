@@ -13,6 +13,7 @@ data/
 # Полные исходники шрифтов (сайт использует урезанные)
 assets/fonts/full/
 assets/0_proverka_assetov.png
+assets/0_ves_komplekt.png
 
 # Инструкции для владельцев, а не для посетителей
 README.md
