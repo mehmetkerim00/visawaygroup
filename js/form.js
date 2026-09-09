@@ -155,7 +155,7 @@
 
     lines.push("");
     /* Название компании — последняя часть заголовка вкладки:
-       «Habarlaşmak — Täsin Dünýä Syýahat» */
+       «Habarlaşmak — VisaWay Group» */
     var parts = document.title.split("\u2014");
     var company = parts[parts.length - 1].trim();
     lines.push("(" + T.sentVia.replace("{name}", company) + ")");

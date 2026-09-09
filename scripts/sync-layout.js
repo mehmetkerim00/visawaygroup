@@ -496,7 +496,7 @@ const TK_LETTERS = /[äöüýňşžçÄÖÜÝŇŞŽÇ]/;
 /* Что разрешено оставлять нетронутым: название компании, город, страна,
    а также названия, которые так и пишутся в русском и английском. */
 const ALLOWED = [
-  "Täsin Dünýä Syýahat", "Täsin", "Dünýä", "Syýahat",
+  "VisaWay Group", "VisaWay", "Group",
   "Aşgabat", "Türkmenistan", "türkmen", "Türkmen", "Türkiye"
 ];
 
@@ -513,8 +513,8 @@ function checkParity(existing) {
 
 /* Названия и слова, которые одинаковы во всех языках */
 const BRAND = new Set([
-  "täsin", "dünýä", "syýahat", "aşgabat", "türkmenistan", "türkiye",
-  "whatsapp", "telegram", "instagram", "portfolio", "tasindunya",
+  "visaway", "group", "aşgabat", "türkmenistan", "türkiye",
+  "whatsapp", "telegram", "instagram", "portfolio", "visawaygroup",
   "belarus",      /* пишется одинаково по-туркменски и по-английски */
   "javascript"    /* название технологии, не переводится */
 ]);
@@ -587,7 +587,7 @@ function checkUntranslated(file, relPosix, lang, site) {
   s = s.replace(/<[^>]+>/g, " ");
   /* Сначала вырезаем целые значения из site.json, потом отдельные названия:
      иначе название компании удалится первым и разорвёт длинную строку
-     вроде «Täsin Dünýä Syýahat» hojalyk jemgyýeti. */
+     вроде VisaWay Group. */
   if (site) for (const value of sharedValues(site)) s = s.split(value).join(" ");
   for (const a of ALLOWED) s = s.split(a).join(" ");
 

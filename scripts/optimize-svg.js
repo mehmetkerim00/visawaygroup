@@ -27,8 +27,21 @@ const PRECISION = 1;
 function round(numText) {
   const n = Number(numText);
   if (!isFinite(n)) return numText;
-  let out = n.toFixed(PRECISION);
-  if (out.indexOf(".") !== -1) out = out.replace(/\.?0+$/, "");
+
+  /* Один знак после запятой годится для координат, которые измеряются
+     десятками и сотнями. Но у мелких чисел — например у коэффициентов
+     масштаба вроде 0.037 — так теряется всё значение: 0.037 превратится
+     в 0, и часть картинки просто исчезнет. Поэтому для чисел меньше
+     единицы оставляем значащие цифры, а не знаки после запятой. */
+  let out;
+  if (Math.abs(n) < 1 && n !== 0) {
+    out = n.toPrecision(4);
+    if (out.indexOf("e") !== -1) return numText;   /* очень мелкое — не трогаем */
+    if (out.indexOf(".") !== -1) out = out.replace(/0+$/, "").replace(/\.$/, "");
+  } else {
+    out = n.toFixed(PRECISION);
+    if (out.indexOf(".") !== -1) out = out.replace(/\.?0+$/, "");
+  }
   if (out === "-0") out = "0";
   return out;
 }

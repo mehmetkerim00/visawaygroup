@@ -4,7 +4,7 @@
  * на медленном интернете. Инструмент для разработчика, для работы сайта не нужен.
  *
  *     node scripts/measure-speed.js                  — главная и страница услуги
- *     BASE=https://tasindunya.vercel.app/ node scripts/measure-speed.js
+ *     BASE=https://visawaygroup.vercel.app/ node scripts/measure-speed.js
  *                                                    — замерить живой сайт
  *     node scripts/measure-speed.js ru/index.html    — конкретные страницы
  *
@@ -32,7 +32,7 @@ const CHROME = [
 
 const PORT = Number(process.env.PORT || 8777);
 /* По умолчанию меряем локальный сервер. Чтобы померить живой сайт:
-   BASE=https://tasindunya.vercel.app/ node scripts/measure-speed.js */
+   BASE=https://visawaygroup.vercel.app/ node scripts/measure-speed.js */
 const BASE = process.env.BASE
   ? process.env.BASE.replace(/\/?$/, "/")
   : `http://localhost:${PORT}/`;

@@ -247,7 +247,7 @@ function buildSitemap(site, pages) {
 function buildManifest(site) {
   return JSON.stringify({
     name: site.name,
-    short_name: "TDS",
+    short_name: "VisaWay",
     description: L.pick(site.tagline, L.DEFAULT_LANG) || "",
     lang: L.DEFAULT_LANG,
     dir: "ltr",

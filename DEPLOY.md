@@ -18,7 +18,7 @@ cd ~/Desktop/"tasin dunya" && node scripts/preflight.js
 
 ### Домен — адрес сайта
 
-Это имя вида `tasindunya.tm`. Покупается на год и продлевается.
+Это имя вида `visawaygroup.com`. Покупается на год и продлевается.
 
 **На что смотреть:**
 
@@ -284,13 +284,13 @@ robots.txt
 Сайт лежит на GitHub и публикуется через Vercel. Это бесплатно и подходит
 именно этому сайту: собирать нечего, файлы отдаются как есть.
 
-- Репозиторий: **https://github.com/mehmetkerim00/tasindunya**
+- Репозиторий: **https://github.com/mehmetkerim00/visawaygroup**
 - Ветка: **main**
 
 ### Где посмотреть адрес сайта
 
-Зайдите на vercel.com → проект **tasindunya**. Адрес написан сверху,
-вида `tasindunya.vercel.app` — на него можно нажать.
+Зайдите на vercel.com → проект **visawaygroup**. Адрес написан сверху,
+вида `visawaygroup.vercel.app` — на него можно нажать.
 
 Там же вкладка **Deployments**: список всех публикаций с датой и временем.
 Если что-то пошло не так, у любой прошлой публикации есть кнопка
@@ -298,9 +298,9 @@ robots.txt
 
 ### Адрес сайта
 
-**https://tasindunya.vercel.app**
+**https://visawaygroup.vercel.app**
 
-Есть и второй, длиннее — `tasindunya-kerim-s-projects1.vercel.app`. Это тот же
+Есть и второй, длиннее — `visawaygroup-kerim-s-projects1.vercel.app`. Это тот же
 сайт, пользуйтесь коротким.
 
 ### Как обновить сайт после правок
@@ -413,21 +413,21 @@ vercel logs <адрес>             журнал
 `vercel.json` и запушьте. Сайт продолжит работать, просто станет чуть
 медленнее для тех, кто заходит повторно.
 
-### Как подключить домен tasindunya.com
+### Как подключить домен visawaygroup.com
 
 Сайт уже собран под этот адрес, осталось его прикрутить.
 
-1. Купите домен `tasindunya.com` у любого регистратора.
-2. На vercel.com → проект **tasindunya** → вкладка **Settings** → **Domains**.
-3. Впишите `tasindunya.com` и нажмите **Add**.
+1. Купите домен `visawaygroup.com` у любого регистратора.
+2. На vercel.com → проект **visawaygroup** → вкладка **Settings** → **Domains**.
+3. Впишите `visawaygroup.com` и нажмите **Add**.
 4. Vercel покажет, какие записи DNS прописать у регистратора. Обычно это:
-   - запись **A** для `tasindunya.com` на IP, который назовёт Vercel;
+   - запись **A** для `visawaygroup.com` на IP, который назовёт Vercel;
    - запись **CNAME** для `www` на `cname.vercel-dns.com`.
 5. Пропишите их в панели регистратора и подождите. Обычно час, иногда сутки.
 6. Сертификат https Vercel выпустит сам, бесплатно. Ничего нажимать не надо.
 
 **После подключения домена** проверьте, что в `data/site.json` в поле `domain`
-написано `tasindunya.com` (сейчас так и есть), и на всякий случай прогоните:
+написано `visawaygroup.com` (сейчас так и есть), и на всякий случай прогоните:
 
 ```
 node scripts/sync-layout.js && node scripts/preflight.js

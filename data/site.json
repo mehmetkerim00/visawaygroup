@@ -3,11 +3,11 @@
 
   "_languages": "Языки сайта. tk — туркменский (основной, лежит в корне), ru — русский (/ru/), en — английский (/en/).",
 
-  "name": "Täsin Dünýä Syýahat",
-  "legalName": "Täsin Dünýä Syýahat",
+  "name": "VisaWay Group",
+  "legalName": "VisaWay Group",
 
-  "_nameSuffix": "Пояснение после названия. В английской версии название компании не переводится, поэтому к нему добавляется пояснение.",
-  "nameSuffix": { "tk": "", "ru": "", "en": " Visa Centre" },
+  "_nameSuffix": "Приписка после названия. Название VisaWay Group одинаково на всех языках и ничем не дополняется, поэтому здесь пусто. Если понадобится пояснение — впишите его для нужного языка.",
+  "nameSuffix": { "tk": "", "ru": "", "en": "" },
 
   "tagline": {
     "tk": "Wiza merkezi",
@@ -15,7 +15,7 @@
     "en": "Visa Centre"
   },
 
-  "domain": "tasindunya.com",
+  "domain": "visawaygroup.com",
 
   "email": "tasindunya@gmail.com",
 
@@ -76,6 +76,6 @@
 
   "_social": "Соцсети. Ненужные строки удалите целиком.",
   "social": [
-    { "label": "Instagram", "value": "@tasindunya", "url": "https://instagram.com/tasindunya" }
+    { "label": "Instagram", "value": "@visawaygroup", "url": "https://instagram.com/visawaygroup" }
   ]
 }

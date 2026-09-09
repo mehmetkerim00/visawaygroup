@@ -1,4 +1,4 @@
-# Täsin Dünýä Syýahat — сайт визового центра
+# VisaWay Group — сайт визового центра
 
 Сайт визового центра в Ашхабаде. Три языка: туркменский (основной),
 русский и английский. 33 страницы.
@@ -30,8 +30,8 @@
 это готовые html-файлы.
 
 ```
-git clone https://github.com/mehmetkerim00/tasindunya.git
-cd tasindunya
+git clone https://github.com/mehmetkerim00/visawaygroup.git
+cd visawaygroup
 node scripts/serve.js          # откроется на http://localhost:8777
 ```
 
@@ -43,7 +43,7 @@ node scripts/preflight.js
 
 ### Где живёт сайт
 
-**https://tasindunya.vercel.app**
+**https://visawaygroup.vercel.app**
 
 Опубликован на Vercel. Обновить можно двумя способами: коммит в ветку `main`
 (Vercel подхватит сам) или командой `vercel --prod` из папки проекта.
@@ -289,7 +289,7 @@ node scripts/sync-layout.js --check
 
 ### Название компании не переводится
 
-`Täsin Dünýä Syýahat` остаётся как есть на всех трёх языках. В английской
+`VisaWay Group` остаётся как есть на всех трёх языках. В английской
 версии к нему добавляется пояснение **Visa Centre** — оно задаётся в
 `data/site.json`, поле `nameSuffix`.
 

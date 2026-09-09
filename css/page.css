@@ -284,6 +284,7 @@
     bottom: calc(-1 * var(--space-6));
     width: 1px;
     height: auto;
+    background-image: var(--dash-line-vertical);
   }
 }
 

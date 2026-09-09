@@ -180,13 +180,15 @@
   }
 }
 
-/* Цвета внутри композиции — теми же токенами */
-.globe__ring     { stroke: var(--copper); }
-.globe__line       { stroke: var(--muted); opacity: 0.45; }
-.globe__line--soft { stroke: var(--muted); opacity: 0.3; }
-.globe__orbit    { stroke: var(--copper); opacity: 0.35; }
-.globe__plane    { fill: var(--copper); }
-.globe__dot      { fill: var(--copper); }
+/* Композиция первого экрана: пунктирный маршрут между точками.
+   Живёт из знака — та же скруглённая форма и тот же пунктир. */
+.route__plate            { stroke: var(--line); }
+.route__path             { stroke: var(--copper); opacity: 0.75; }
+.route__path--soft       { stroke: var(--muted); opacity: 0.35; }
+.route__ring             { stroke: var(--copper); opacity: 0.55; }
+.route__ring--wide       { stroke: var(--copper); opacity: 0.3; }
+.route__dot              { fill: var(--copper); }
+.route__stop             { fill: var(--muted); opacity: 0.55; }
 
 
 /* ==========================================================================
@@ -317,7 +319,8 @@
   font-weight: var(--weight-semibold);
 }
 
-/* Тонкая соединительная линия: на телефоне — вертикальная */
+/* Соединительная линия между шагами — пунктирная, как дуга в знаке.
+   На телефоне вертикальная, на широком экране становится горизонтальной. */
 .step:not(:last-child) .step__marker::after {
   content: "";
   position: absolute;
@@ -325,7 +328,8 @@
   top: 48px;
   bottom: calc(-1 * var(--space-6));
   width: 1px;
-  background-color: var(--line);
+  background-image: var(--dash-line-vertical);
+  opacity: var(--dash-opacity);
 }
 
 .step__icon {
@@ -365,6 +369,7 @@
     bottom: auto;
     width: auto;
     height: 1px;
+    background-image: var(--dash-line);
   }
 }
 
@@ -526,12 +531,57 @@
    7. Финальный призыв
    ========================================================================== */
 
+/* Тёмная плашка — как сам знак: сплошной тёмный прямоугольник со скруглением.
+   Таких блоков на сайте намеренно немного: этот и подвал. Если сделать больше,
+   сайт перестанет быть светлым и плашка потеряет силу. */
 .cta {
   padding: var(--space-7) var(--space-5);
-  background-color: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-xl);
+  background-color: var(--dark);
+  border-radius: var(--radius-lg);
+  color: var(--on-dark);
   text-align: center;
+}
+
+.cta h2 {
+  color: var(--on-dark);
+}
+
+.cta .cta__text {
+  color: var(--on-dark-muted);
+}
+
+/* Внутри тёмной плашки медный становится светлее: обычный медный
+   на тёмном фоне даёт контраст 2,9:1 и не читается. */
+.cta .cta__mark {
+  color: var(--copper-light);
+}
+
+/* Осветлённый медный на этой подложке даёт всего 3,4:1 — для текста мало,
+   поэтому надпись светлая, а медным остаётся только значок. */
+.cta .badge {
+  background-color: rgba(204, 123, 80, 0.18);
+  color: var(--on-dark);
+}
+
+.cta .badge .icon {
+  color: var(--copper-light);
+}
+
+/* Вторая кнопка на тёмном: рамка должна быть видна.
+   Полупрозрачная --line-dark давала 1,6:1 при норме 3:1. */
+.cta .btn--secondary {
+  border-color: var(--on-dark-muted);
+  color: var(--on-dark);
+}
+
+.cta .btn--secondary:hover {
+  background-color: rgba(242, 241, 238, 0.08);
+  border-color: var(--on-dark);
+  color: var(--on-dark);
+}
+
+.cta :focus-visible {
+  outline-color: var(--copper-light);
 }
 
 @media (min-width: 768px) {
@@ -623,4 +673,35 @@
 
 .cta__badge {
   margin-bottom: var(--space-4);
+}
+
+
+/* ==========================================================================
+   ФИРМЕННЫЙ ПУНКТИР
+
+   Пунктирная дуга из знака — самая узнаваемая деталь. На сайте она работает
+   разделителем между секциями. Это акцент, поэтому линия тонкая
+   и полупрозрачная: она отмечает границу, а не притягивает взгляд.
+   ========================================================================== */
+
+.section + .section > .container::before,
+.section + .section > .container--narrow::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-bottom: var(--space-7);
+  background-image: var(--dash-line);
+  opacity: var(--dash-opacity);
+}
+
+@media (min-width: 768px) {
+  .section + .section > .container::before,
+  .section + .section > .container--narrow::before {
+    margin-bottom: var(--space-8);
+  }
+}
+
+/* Перед блоком призыва разделитель не нужен: он и так отделён тёмной плашкой */
+.section:has(> .container > .cta) > .container::before {
+  display: none;
 }
