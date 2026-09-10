@@ -57,11 +57,23 @@
   --text-h1:    clamp(2.25rem,  3.15vw + 1.48rem, 4.5rem);
 
   /* --- Начертания ------------------------------------------------------- */
-  --font-sans:        "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-sans:        "Inter",
+                      "Inter fallback Segoe",
+                      "Inter fallback Helvetica",
+                      "Inter fallback Roboto",
+                      "Inter fallback Arial",
+                      system-ui, sans-serif;
   /* Акцидентный шрифт — только заголовки h1 и h2. Широкий геометрический
-     гротеск: та же логика, что у квадратного знака. Запасные варианты
-     подобраны широкие, чтобы при незагруженном шрифте вёрстка не прыгала. */
-  --font-display:     "Unbounded", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+     гротеск: та же логика, что у квадратного знака. Запасные варианты —
+     системные шрифты, подтянутые к метрикам Unbounded, чтобы в момент
+     подмены заголовок не менял ни ширину, ни высоту строки.
+     Как считаются их поправки — см. css/base.css, @font-face. */
+  --font-display:     "Unbounded",
+                      "Unbounded fallback Segoe",
+                      "Unbounded fallback Helvetica",
+                      "Unbounded fallback Roboto",
+                      "Unbounded fallback Arial",
+                      sans-serif;
   --weight-regular:   400;
   --weight-medium:    500;
   --weight-semibold:  600;

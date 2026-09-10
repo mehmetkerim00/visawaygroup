@@ -427,48 +427,126 @@ function buildLangValues(rel, existing) {
 }
 
 /* ==================================================================== */
+/* Блок стран на главной                                                */
+/* ==================================================================== */
+
+/* Строится из data/countries.json: и сетка карточек, и кнопки фильтра.
+   Правят только этот файл — разметку трогать не нужно.
+
+   Фотография вставляется, только если файл действительно лежит
+   в assets/photos/. Нет файла — карточка соберётся без него и вёрстка
+   не поедет; появится файл — следующий запуск скрипта его подхватит. */
+
+let countriesData = null;
+
+function loadCountries() {
+  if (countriesData) return countriesData;
+  const file = path.join(ROOT, "data", "countries.json");
+  if (!fs.existsSync(file)) {
+    err("нет data/countries.json — блок стран собрать не из чего");
+    return null;
+  }
+  countriesData = JSON.parse(fs.readFileSync(file, "utf8"));
+  return countriesData;
+}
+
+function escapeAttr(text) {
+  return String(text).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+}
+
+function countriesBlock(lang, prefix, indent, relPosix) {
+  const data = loadCountries();
+  if (!data) return `${indent}<!-- блок стран не собран -->`;
+
+  const pick = (obj) => (obj && (obj[lang] || obj[DEFAULT_LANG])) || "";
+  const L = data.labels || {};
+  const i = indent;
+  const out = [];
+
+  out.push(`${i}<div class="countries" data-countries data-reveal>`);
+
+  /* Кнопки фильтра. Без скриптов они бесполезны, поэтому спрятаны стилями
+     до тех пор, пока у <html> не появится класс js. */
+  out.push(`${i}  <div class="countries__filter" role="group" aria-label="${escapeAttr(pick(L.filter))}">`);
+  for (const region of data.regions) {
+    const first = region.key === "all";
+    out.push(`${i}    <button class="chip" type="button" data-region="${region.key}"` +
+             ` aria-pressed="${first ? "true" : "false"}">${pick(region)}</button>`);
+  }
+  out.push(`${i}  </div>`);
+
+  out.push(`${i}  <ul class="countries__grid" data-countries-grid>`);
+  for (const c of data.countries) {
+    const country = pick(c.country);
+    const city = pick(c.city);
+    const alt = pick(L.photoOf).replace("{{city}}", city);
+    const photoFile = c.photo ? path.join(ROOT, "assets", "photos", c.photo + ".webp") : null;
+    const hasPhoto = photoFile && fs.existsSync(photoFile);
+
+    out.push(`${i}    <li class="country" data-region="${c.region}">`);
+    out.push(`${i}      <div class="country__photo">`);
+    if (hasPhoto) {
+      /* width и height обязательны: браузер резервирует место под картинку
+         заранее, и страница не дёргается, когда фотография догрузится. */
+      out.push(`${i}        <img src="${prefix}assets/photos/${c.photo}.webp"` +
+               ` alt="${escapeAttr(alt)}" width="480" height="320"` +
+               ` loading="lazy" decoding="async">`);
+    }
+    out.push(`${i}      </div>`);
+    out.push(`${i}      <div class="country__label">`);
+    out.push(`${i}        <img class="country__flag" src="${prefix}assets/flags/${c.flag}.svg"` +
+             ` alt="" width="24" height="18" loading="lazy" decoding="async">`);
+    out.push(`${i}        <span class="country__name">${country}</span>`);
+    out.push(`${i}        <span class="country__city">${city}</span>`);
+    out.push(`${i}      </div>`);
+    out.push(`${i}    </li>`);
+  }
+  out.push(`${i}  </ul>`);
+
+  /* Сообщение на случай, если фильтр не нашёл ни одной страны.
+     Показывает его скрипт, поэтому в разметке оно скрыто. */
+  out.push(`${i}  <p class="countries__empty" data-countries-empty hidden>${pick(L.empty)}</p>`);
+
+  out.push(`${i}  <p class="countries__more">`);
+  out.push(`${i}    <span>${pick(L.more)}</span>`);
+  const contacts = relLink(relPosix, joinLang("habarlasmak.html", lang));
+  out.push(`${i}    <a href="${contacts}">${pick(L.moreCta)}</a>`);
+  out.push(`${i}  </p>`);
+  out.push(`${i}</div>`);
+
+  return out.join("\n");
+}
+
+
+/* ==================================================================== */
 /* Предзагрузка шрифтов                                                 */
 /* ==================================================================== */
 
-/* Что предзагружать. Здесь ровно один файл на страницу, и это не жадность,
-   а замер: на 400 Кбит/с каждая предзагрузка шрифта отбирает канал
-   у таблиц стилей, без которых страница не рисуется вовсе.
+/* Шрифты не предзагружаются вовсе — и это замер, а не экономия ради экономии.
+   На 400 Кбит/с предзагрузка отбирает канал у таблиц стилей, без которых
+   страница не рисуется:
 
-     один файл    — первый текст через 1,8 с;
-     два файла    — 2,0 с, впритык к сроку;
-     четыре файла — 2,6 с, срок сорван.
+     без предзагрузки   — первый текст через 1,7 с;
+     один файл          — 2,0 с, срок на пределе;
+     четыре файла       — 2,6 с, срок сорван.
 
-   Поэтому предзагружаем только основной шрифт того алфавита, которым набрана
-   страница: им набрано почти всё, что на ней написано. Остальные части —
-   расширенная латиница, кириллица, заголовочный Unbounded — приезжают своим
-   чередом; из-за font-display: swap текст всё это время виден системным
-   шрифтом и на месте.
+   Пока шрифты едут, текст набран системным, подтянутым к их метрикам
+   (см. @font-face в css/base.css): ни строка, ни высота при подмене
+   не меняются, вёрстка не прыгает.
+
+   Блок оставлен на случай, если предзагрузка всё же понадобится:
+   допишите сюда строку — и она появится на всех страницах нужного языка.
 
    Замерять после правок:  node scripts/serve.js  и  node scripts/measure-speed.js  */
-const FONT_PRELOAD = {
-  tk: "inter-latin",      /* туркменский набран латиницей */
-  ru: "inter-cyrillic",   /* русский — кириллицей          */
-  en: "inter-latin"
-};
 
-/* Одна строка, которая должна отработать до первой отрисовки страницы.
+function fontsBlock(lang, prefix, indent) {
+  return `${indent}<!-- Шрифты не предзагружаем: см. scripts/sync-layout.js, fontsBlock -->`;
+}
 
-   Она ставит классу <html> метку js — «скрипты работают». По ней стили
-   прячут блоки, которые потом плавно появляются. Если JavaScript выключен,
-   метки нет — и ничего не прячется, страница просто показана целиком.
 
-   Почему прямо в HTML, а не отдельным файлом: отдельный файл успел бы
-   загрузиться уже после первой отрисовки, и блоки на миг мигнули бы.  */
 function bootBlock(indent) {
   return `${indent}<script>document.documentElement.classList.add("js");</script>`;
 }
-
-function fontsBlock(lang, prefix, indent) {
-  const file = FONT_PRELOAD[lang] || FONT_PRELOAD[DEFAULT_LANG];
-  return `${indent}<link rel="preload" href="${prefix}assets/fonts/${file}.woff2"` +
-         ` as="font" type="font/woff2" crossorigin>`;
-}
-
 
 function hreflangBlock(rel, existing, siteUrl, indent) {
   const relPosix = rel.split(path.sep).join("/");
@@ -522,6 +600,12 @@ function syncFile(file, partials, site, valuesByLang, existing) {
   let updated = original.replace(MARKER, (whole, indent, name, rawAttrs) => {
     /* Микроразметку заполняет build-seo.js — партиала для неё нет */
     if (name === "jsonld") return whole;
+
+    /* Сетка стран и фильтр — из data/countries.json */
+    if (name === "countries") {
+      blocks++;
+      return `${indent}<!-- countries:start -->\n${countriesBlock(lang, prefix, indent, relPosix)}\n${indent}<!-- countries:end -->`;
+    }
 
     /* Строка, которая должна отработать до первой отрисовки */
     if (name === "boot") {
@@ -619,6 +703,19 @@ function sharedValues(site) {
     }
   };
   walk(site);
+
+  /* Названия стран и городов тоже одинаковы во многих языках: Berlin,
+     Almaty, Minsk, Kuala Lumpur пишутся так и по-туркменски, и по-английски.
+     Без этого проверка перевода считала бы их непереведённым текстом. */
+  const countriesFile = path.join(ROOT, "data", "countries.json");
+  if (fs.existsSync(countriesFile)) {
+    try {
+      walk(JSON.parse(fs.readFileSync(countriesFile, "utf8")));
+    } catch (e) {
+      warn(`data/countries.json не читается: ${e.message}`);
+    }
+  }
+
   /* сначала длинные, чтобы вырезать целые фразы, а не их куски */
   sharedValuesCache = out.sort((a, b) => b.length - a.length);
   return sharedValuesCache;

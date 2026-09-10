@@ -166,6 +166,105 @@ ol[class] {
 
 
 /* --------------------------------------------------------------------------
+   Подогнанная замена шрифтам на то время, пока они грузятся.
+
+   Зачем. Ни один шрифт мы не предзагружаем: на 400 Кбит/с предзагрузка
+   отбирает канал у таблиц стилей, без которых страница не рисуется вовсе.
+   С предзагрузкой первый текст появлялся через 2,0 с, без неё — через 1,7.
+   Значит, первые доли секунды весь текст набран системным шрифтом.
+
+   Unbounded на 40% шире системного, Inter — на 6%. Без поправок в момент
+   подмены строки меняли длину, заголовки — число строк, и всё, что ниже,
+   съезжало. Это и есть «прыгающая вёрстка», за которую поисковики штрафуют.
+
+   Как чиним. Системный шрифт растягиваем до ширины Unbounded (size-adjust)
+   и навязываем ему высоту строки Unbounded (ascent/descent-override). Ничего
+   не скачивается: local() берёт шрифт, который на устройстве уже есть.
+
+   Откуда числа. Считает scripts/font-fallback.py: он берёт текст сайта —
+   для Unbounded заголовки, для Inter всё остальное, — считает среднюю ширину
+   знака с учётом того, как часто каждый знак встречается, и делит одну
+   на другую. Поменяете шрифт — перезапустите скрипт и вставьте числа сюда.
+
+   Первая же строка списка, шрифт которой есть на устройстве, и сработает:
+   на Windows это Segoe UI, на маке Helvetica Neue, на Android Roboto.
+   -------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Unbounded fallback Segoe";   /* Windows */
+  src: local("Segoe UI");
+  size-adjust: 142.27%;
+  ascent-override: 69.94%;
+  descent-override: 17.22%;
+  line-gap-override: 0.00%;
+}
+
+@font-face {
+  font-family: "Unbounded fallback Helvetica";   /* macOS и iOS */
+  src: local("Helvetica Neue");
+  size-adjust: 140.28%;
+  ascent-override: 70.93%;
+  descent-override: 17.47%;
+  line-gap-override: 0.00%;
+}
+
+@font-face {
+  font-family: "Unbounded fallback Roboto";   /* Android */
+  src: local("Roboto");
+  size-adjust: 141.80%;
+  ascent-override: 70.17%;
+  descent-override: 17.28%;
+  line-gap-override: 0.00%;
+}
+
+@font-face {
+  font-family: "Unbounded fallback Arial";   /* всё остальное, включая Linux */
+  src: local("Arial"), local("Liberation Sans");
+  size-adjust: 141.49%;
+  ascent-override: 70.32%;
+  descent-override: 17.32%;
+  line-gap-override: 0.00%;
+}
+
+@font-face {
+  font-family: "Inter fallback Segoe";   /* Windows */
+  src: local("Segoe UI");
+  size-adjust: 107.08%;
+  ascent-override: 90.47%;
+  descent-override: 22.53%;
+  line-gap-override: 0.00%;
+}
+
+@font-face {
+  font-family: "Inter fallback Helvetica";   /* macOS и iOS */
+  src: local("Helvetica Neue");
+  size-adjust: 105.55%;
+  ascent-override: 91.78%;
+  descent-override: 22.85%;
+  line-gap-override: 0.00%;
+}
+
+@font-face {
+  font-family: "Inter fallback Roboto";   /* Android */
+  src: local("Roboto");
+  size-adjust: 106.72%;
+  ascent-override: 90.77%;
+  descent-override: 22.60%;
+  line-gap-override: 0.00%;
+}
+
+@font-face {
+  font-family: "Inter fallback Arial";   /* всё остальное, включая Linux */
+  src: local("Arial"), local("Liberation Sans");
+  size-adjust: 106.49%;
+  ascent-override: 90.97%;
+  descent-override: 22.65%;
+  line-gap-override: 0.00%;
+}
+
+
+
+/* --------------------------------------------------------------------------
    3. Типографика
    -------------------------------------------------------------------------- */
 
@@ -316,6 +415,21 @@ small {
   border-color: var(--copper-dark);
   color: var(--copper-dark);
 }
+
+/* Вторая кнопка на тёмном фоне: медная рамка светлеет, надпись светлая.
+   Модификатор, а не отдельные правила для каждого тёмного блока —
+   так первый экран и блок призыва выглядят одинаково. */
+.btn--secondary.btn--on-dark {
+  border-color: var(--copper-light);
+  color: var(--on-dark);
+}
+
+.btn--secondary.btn--on-dark:hover {
+  background-color: rgba(204, 123, 80, 0.16);
+  border-color: var(--copper-on-dark);
+  color: var(--on-dark);
+}
+
 
 /* Размеры кнопок */
 .btn--sm {

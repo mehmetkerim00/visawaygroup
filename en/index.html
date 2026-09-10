@@ -51,7 +51,7 @@
   <!-- Шрифт грузим заранее. Английской версии хватает латиницы:
        буквы ä ü ý из названия компании тоже в ней. -->
   <!-- fonts:start -->
-  <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Шрифты не предзагружаем: см. scripts/sync-layout.js, fontsBlock -->
   <!-- fonts:end -->
 
   <!-- boot:start -->
@@ -353,7 +353,7 @@
 
           <div class="hero__actions">
             <a class="btn btn--primary btn--lg" href="habarlasmak.html">Get a consultation</a>
-            <a class="btn btn--secondary btn--lg" href="#hyzmatlar">Types of visa</a>
+            <a class="btn btn--secondary btn--on-dark btn--lg" href="#hyzmatlar">Types of visa</a>
             <p class="badge">
               <svg class="icon icon--sm" aria-hidden="true"><use href="#i-badge-check"/></svg>
               First consultation is free
@@ -680,23 +680,132 @@
           </p>
         </div>
 
-        <div data-reveal>
-          <ul class="tags" data-reveal-group>
-            <li class="tag">Türkiye</li>
-            <li class="tag">Russia</li>
-            <li class="tag">UAE</li>
-            <li class="tag">China</li>
-            <li class="tag">Germany</li>
-            <li class="tag">Italy</li>
-            <li class="tag">Poland</li>
-            <li class="tag">Czechia</li>
-            <li class="tag">Malaysia</li>
-            <li class="tag">South Korea</li>
-            <li class="tag">Kazakhstan</li>
-            <li class="tag">Belarus</li>
+        <!-- countries:start -->
+        <div class="countries" data-countries data-reveal>
+          <div class="countries__filter" role="group" aria-label="Choose a region">
+            <button class="chip" type="button" data-region="all" aria-pressed="true">All</button>
+            <button class="chip" type="button" data-region="europe" aria-pressed="false">Europe</button>
+            <button class="chip" type="button" data-region="asia" aria-pressed="false">Asia</button>
+            <button class="chip" type="button" data-region="middle-east" aria-pressed="false">Middle East</button>
+            <button class="chip" type="button" data-region="cis" aria-pressed="false">CIS</button>
+          </div>
+          <ul class="countries__grid" data-countries-grid>
+            <li class="country" data-region="middle-east">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/tr.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">Türkiye</span>
+                <span class="country__city">Istanbul</span>
+              </div>
+            </li>
+            <li class="country" data-region="cis">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/ru.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">Russia</span>
+                <span class="country__city">Moscow</span>
+              </div>
+            </li>
+            <li class="country" data-region="middle-east">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/ae.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">UAE</span>
+                <span class="country__city">Dubai</span>
+              </div>
+            </li>
+            <li class="country" data-region="asia">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/cn.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">China</span>
+                <span class="country__city">Beijing</span>
+              </div>
+            </li>
+            <li class="country" data-region="europe">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/de.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">Germany</span>
+                <span class="country__city">Berlin</span>
+              </div>
+            </li>
+            <li class="country" data-region="europe">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/it.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">Italy</span>
+                <span class="country__city">Rome</span>
+              </div>
+            </li>
+            <li class="country" data-region="europe">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/pl.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">Poland</span>
+                <span class="country__city">Warsaw</span>
+              </div>
+            </li>
+            <li class="country" data-region="europe">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/cz.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">Czechia</span>
+                <span class="country__city">Prague</span>
+              </div>
+            </li>
+            <li class="country" data-region="asia">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/my.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">Malaysia</span>
+                <span class="country__city">Kuala Lumpur</span>
+              </div>
+            </li>
+            <li class="country" data-region="asia">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/kr.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">South Korea</span>
+                <span class="country__city">Seoul</span>
+              </div>
+            </li>
+            <li class="country" data-region="cis">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/kz.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">Kazakhstan</span>
+                <span class="country__city">Almaty</span>
+              </div>
+            </li>
+            <li class="country" data-region="cis">
+              <div class="country__photo">
+              </div>
+              <div class="country__label">
+                <img class="country__flag" src="../assets/flags/by.svg" alt="" width="24" height="18" loading="lazy" decoding="async">
+                <span class="country__name">Belarus</span>
+                <span class="country__city">Minsk</span>
+              </div>
+            </li>
           </ul>
-          <p class="tags__more">and other countries</p>
+          <p class="countries__empty" data-countries-empty hidden>No countries in this region.</p>
+          <p class="countries__more">
+            <span>Not on the list?</span>
+            <a href="habarlasmak.html">Ask us — we will check</a>
+          </p>
         </div>
+        <!-- countries:end -->
 
       </div>
     </section>
@@ -723,9 +832,11 @@
               </svg>
             </summary>
             <div class="faq__a">
-              <p>
-                It depends on the country, the visa type and the consulate's queue. Preparing the documents usually takes a few days; the consulate's own processing can run to several weeks. We will give you the specific timeframe for your case at the consultation.
-              </p>
+              <div class="faq__a-inner">
+                <p>
+                  It depends on the country, the visa type and the consulate's queue. Preparing the documents usually takes a few days; the consulate's own processing can run to several weeks. We will give you the specific timeframe for your case at the consultation.
+                </p>
+              </div>
             </div>
           </details>
 
@@ -737,9 +848,11 @@
               </svg>
             </summary>
             <div class="faq__a">
-              <p>
-                The price depends on the visa type and the amount of work. We quote it in full before we begin and write it into the contract. Third-party costs such as the consular fee and translations are paid separately; we set those out in advance too.
-              </p>
+              <div class="faq__a-inner">
+                <p>
+                  The price depends on the visa type and the amount of work. We quote it in full before we begin and write it into the contract. Third-party costs such as the consular fee and translations are paid separately; we set those out in advance too.
+                </p>
+              </div>
             </div>
           </details>
 
@@ -751,9 +864,11 @@
               </svg>
             </summary>
             <div class="faq__a">
-              <p>
-                First we work out why. Most often the file was incomplete, or the purpose of the trip was not backed up well enough. We fix the gaps and prepare a fresh submission.
-              </p>
+              <div class="faq__a-inner">
+                <p>
+                  First we work out why. Most often the file was incomplete, or the purpose of the trip was not backed up well enough. We fix the gaps and prepare a fresh submission.
+                </p>
+              </div>
             </div>
           </details>
 
@@ -765,9 +880,11 @@
               </svg>
             </summary>
             <div class="faq__a">
-              <p>
-                The list varies by country and visa type. The usual items are a passport, a photograph, a completed application form, proof of funds and letters establishing the purpose of the trip. We give you the full list for your case in writing after the consultation.
-              </p>
+              <div class="faq__a-inner">
+                <p>
+                  The list varies by country and visa type. The usual items are a passport, a photograph, a completed application form, proof of funds and letters establishing the purpose of the trip. We give you the full list for your case in writing after the consultation.
+                </p>
+              </div>
             </div>
           </details>
 
@@ -779,9 +896,11 @@
               </svg>
             </summary>
             <div class="faq__a">
-              <p>
-                Yes. A previous refusal is not a permanent bar, but it does have to be taken into account. We look at your earlier application and the refusal note, and work out what needs to change next time.
-              </p>
+              <div class="faq__a-inner">
+                <p>
+                  Yes. A previous refusal is not a permanent bar, but it does have to be taken into account. We look at your earlier application and the refusal note, and work out what needs to change next time.
+                </p>
+              </div>
             </div>
           </details>
 
@@ -793,9 +912,11 @@
               </svg>
             </summary>
             <div class="faq__a">
-              <p>
-                Some countries have no consulate in Turkmenistan, in which case the application is made in a neighbouring country. We tell you this in advance and help plan the trip so that it costs no more than it has to.
-              </p>
+              <div class="faq__a-inner">
+                <p>
+                  Some countries have no consulate in Turkmenistan, in which case the application is made in a neighbouring country. We tell you this in advance and help plan the trip so that it costs no more than it has to.
+                </p>
+              </div>
             </div>
           </details>
 
@@ -811,27 +932,36 @@
          раздел контактов с формой, id можно будет перенести туда.
          ================================================================== -->
     <!-- cta:start title="Let us look at your case together" text="The first consultation is free. Tell us the purpose of your trip and we will explain which visa you need, where to start and how long it is likely to take." -->
-      <section class="section">
-        <div class="container">
-          <div class="cta">
+      <section class="cta">
 
-            <svg class="cta__mark" aria-hidden="true"><use href="#i-route"/></svg>
+        <!-- Мотив маршрута с первого экрана, приглушённый до фона.
+             Пунктир медленно ползёт вдоль линий — движение почти
+             незаметное, но полоса перестаёт быть плоской. -->
+        <div class="cta__art" aria-hidden="true">
+          <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice"
+               xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path class="cta__line" d="M-40 372 C 210 330, 380 176, 720 140 C 950 116, 1080 70, 1240 40"
+                  fill="none" stroke-width="2" stroke-linecap="round"
+                  stroke-dasharray="5 13"/>
+            <path class="cta__line cta__line--soft" d="M-40 424 C 260 404, 470 268, 830 228 C 1030 206, 1150 158, 1240 132"
+                  fill="none" stroke-width="1.5" stroke-linecap="round"
+                  stroke-dasharray="4 12"/>
+          </svg>
+        </div>
 
-            <p class="badge cta__badge">
-              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-badge-check"/></svg>
-              Free consultation
-            </p>
+        <div class="container cta__inner" data-reveal="fade">
 
-            <h2>Let us look at your case together</h2>
+          <p class="cta__badge">First consultation is free</p>
 
-            <p class="cta__text">The first consultation is free. Tell us the purpose of your trip and we will explain which visa you need, where to start and how long it is likely to take.</p>
+          <h2 class="cta__title">Let us look at your case together</h2>
 
-            <div class="cta__actions">
-              <a class="btn btn--primary btn--lg" href="habarlasmak.html">Get a consultation</a>
-              <a class="btn btn--secondary btn--lg" href="tel:+99361121888">+993 61 12 18 88</a>
-            </div>
+          <p class="cta__text">The first consultation is free. Tell us the purpose of your trip and we will explain which visa you need, where to start and how long it is likely to take.</p>
 
+          <div class="cta__actions">
+            <a class="btn btn--primary btn--lg" href="habarlasmak.html">Get a consultation</a>
+            <a class="btn btn--secondary btn--on-dark btn--lg" href="tel:+99361121888">+993 61 12 18 88</a>
           </div>
+
         </div>
       </section>
     <!-- cta:end -->

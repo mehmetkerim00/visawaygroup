@@ -198,7 +198,97 @@
 
 
   /* ------------------------------------------------------------------------
-     4. ГОД В СТРОКЕ КОПИРАЙТА
+     4. ФИЛЬТР СТРАН ПО РЕГИОНАМ
+
+     Карточки не перерисовываются и не пересобираются — лишние просто
+     прячутся, а оставшиеся переезжают на новые места.
+
+     Переезд сделан приёмом FLIP: сначала запоминаем, где карточка была,
+     потом прячем ненужные и смотрим, куда карточка встала, потом мгновенно
+     возвращаем её на старое место сдвигом (transform) и отпускаем. Браузер
+     доигрывает сдвиг сам, на видеокарте: ни ширина, ни отступы при этом
+     не пересчитываются, поэтому даже на слабом телефоне не дёргается.
+
+     Без JavaScript кнопок фильтра не видно (правило в css/home.css),
+     а карточки показаны все — раздел остаётся рабочим.
+     ---------------------------------------------------------------------- */
+
+  var countries = document.querySelector("[data-countries]");
+
+  if (countries) {
+    var grid  = countries.querySelector("[data-countries-grid]");
+    var chips = countries.querySelectorAll(".chip");
+    var cards = grid ? grid.querySelectorAll(".country") : [];
+    var emptyNote = countries.querySelector("[data-countries-empty]");
+    var lessMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    function filterCountries(region) {
+
+      /* 1. Запоминаем, где карточки лежат сейчас */
+      var before = [];
+      Array.prototype.forEach.call(cards, function (card) {
+        before.push(card.hidden ? null : card.getBoundingClientRect());
+      });
+
+      /* 2. Прячем лишние — сетка перестраивается */
+      var shown = 0;
+      Array.prototype.forEach.call(cards, function (card) {
+        var match = region === "all" || card.getAttribute("data-region") === region;
+        card.hidden = !match;
+        if (match) shown++;
+      });
+      if (emptyNote) emptyNote.hidden = shown > 0;
+
+      /* В системе просят меньше движения — на этом и заканчиваем:
+         фильтр работает, просто без перестановки. */
+      if (lessMotion.matches) return;
+
+      /* 3. Возвращаем каждую карточку туда, где она была */
+      Array.prototype.forEach.call(cards, function (card, i) {
+        if (card.hidden) return;
+        var now = card.getBoundingClientRect();
+        var was = before[i];
+        card.style.transition = "none";
+        if (was) {
+          var dx = was.left - now.left;
+          var dy = was.top - now.top;
+          if (!dx && !dy) { card.style.transition = ""; return; }
+          card.style.transform = "translate(" + dx + "px, " + dy + "px)";
+        } else {
+          /* Карточка была спрятана и появляется заново */
+          card.style.transform = "scale(0.94)";
+          card.style.opacity = "0";
+        }
+      });
+
+      /* 4. Заставляем браузер принять новое положение… */
+      void grid.offsetWidth;
+
+      /* …и отпускаем: дальше он доигрывает сам */
+      Array.prototype.forEach.call(cards, function (card) {
+        if (card.hidden) return;
+        card.style.transition = "";
+        card.style.transform = "";
+        card.style.opacity = "";
+      });
+    }
+
+    Array.prototype.forEach.call(chips, function (chip) {
+      chip.addEventListener("click", function () {
+        if (chip.getAttribute("aria-pressed") === "true") return;
+
+        Array.prototype.forEach.call(chips, function (other) {
+          other.setAttribute("aria-pressed", other === chip ? "true" : "false");
+        });
+
+        filterCountries(chip.getAttribute("data-region"));
+      });
+    });
+  }
+
+
+  /* ------------------------------------------------------------------------
+     5. ГОД В СТРОКЕ КОПИРАЙТА
      Чтобы год в подвале не пришлось править руками каждый январь.
      ---------------------------------------------------------------------- */
 

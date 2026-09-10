@@ -168,17 +168,8 @@
   }
 }
 
-/* Вторая кнопка на тёмном: медная рамка светлеет, надпись — светлая */
-.hero .btn--secondary {
-  border-color: var(--copper-light);
-  color: var(--on-dark);
-}
-
-.hero .btn--secondary:hover {
-  background-color: rgba(204, 123, 80, 0.16);
-  border-color: var(--copper-on-dark);
-  color: var(--on-dark);
-}
+/* Вторая кнопка на тёмном оформлена модификатором btn--on-dark
+   в css/base.css — здесь дублировать не нужно. */
 
 /* Плашка «первая консультация бесплатно» — самое важное обещание
    на первом экране, поэтому у неё медная рамка, а не тихая подложка. */
@@ -638,81 +629,377 @@
 
 
 /* ==========================================================================
-   5. UGURLAR — направления
+   5. UGURLAR — куда чаще всего обращаются
+
+   Сетка карточек: вид города, флаг, страна. Карточки намеренно НЕ ссылки —
+   страниц по отдельным странам у нас нет, а вести в никуда нельзя.
+
+   Сама сетка и кнопки фильтра собираются из data/countries.json
+   скриптом sync-layout.js — разметку править не нужно.
    ========================================================================== */
 
-.tags {
-  display: flex;
+/* --- Фильтр по регионам ---------------------------------------------------
+   Без скриптов кнопки бесполезны, поэтому до появления класса js
+   их не видно, а карточки показаны все. */
+
+.countries__filter {
+  display: none;
   flex-wrap: wrap;
   gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.js .countries__filter {
+  display: flex;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-full);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .chip:hover {
+    border-color: var(--copper);
+    background-color: var(--copper-tint);
+    color: var(--copper-dark);
+  }
+}
+
+/* Выбранный регион. Признак — aria-pressed, а не лишний класс:
+   так состояние кнопки слышно в программе чтения с экрана. */
+.chip[aria-pressed="true"] {
+  background-color: var(--copper);
+  border-color: var(--copper);
+  color: #FFFFFF;
+  font-weight: var(--weight-semibold);
+}
+
+@media (hover: hover) {
+  .chip[aria-pressed="true"]:hover {
+    background-color: var(--copper-dark);
+    border-color: var(--copper-dark);
+    color: #FFFFFF;
+  }
+}
+
+
+/* --- Сетка ---------------------------------------------------------------- */
+
+.countries__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px var(--space-4);
-  background-color: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-full);
-  color: var(--ink);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
+@media (min-width: 768px) {
+  .countries__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
 }
 
-.tags__more {
-  margin-top: var(--space-4);
-  color: var(--muted);
+@media (min-width: 1024px) {
+  .countries__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+
+/* --- Карточка страны ------------------------------------------------------- */
+
+.country {
+  position: relative;
+  overflow: hidden;
+  /* Переезд при переключении фильтра. Скрипт задаёт сдвиг мгновенно,
+     а доигрывает его этот переход — см. js/main.js, раздел 4. */
+  transition: transform var(--dur-base) var(--ease-out),
+              opacity var(--dur-fast) var(--ease-out);
+  border-radius: var(--radius-md);
+  /* Пропорции 3:2 заданы и здесь, и в атрибутах width/height у картинки:
+     место под фотографию занято ещё до того, как она загрузится, поэтому
+     страница не дёргается. */
+  aspect-ratio: 3 / 2;
+  /* Пока фотографии нет, карточка не пустая: тёмная плашка с фирменным
+     пунктиром. Флаг и название на ней читаются так же. */
+  background-color: var(--dark);
+  background-image: var(--dash-line);
+  background-size: auto 1px;
+  background-position: center bottom 34%;
+  background-repeat: repeat-x;
+}
+
+.country__photo {
+  position: absolute;
+  inset: 0;
+}
+
+.country__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-hover);
+}
+
+/* Затемнение под подписью. Без него светлая фотография съедает текст,
+   а какие фотографии подставят завтра — заранее не известно.
+
+   Плотность подобрана по худшему случаю: даже если снимок окажется
+   совершенно белым, название получит 11:1 контраста, а город — 5,7:1.
+   Поэтому нижняя треть карточки, где и лежит подпись, затемнена
+   почти непрозрачно, и только выше затемнение сходит на нет. */
+.country::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to top,
+                      rgba(20, 22, 26, 0.94) 0%,
+                      rgba(20, 22, 26, 0.88) 34%,
+                      rgba(20, 22, 26, 0.55) 58%,
+                      rgba(20, 22, 26, 0.10) 82%,
+                      rgba(20, 22, 26, 0) 100%);
+}
+
+.country__label {
+  position: absolute;
+  /* Затемнение — это ::after, а псевдоэлемент рисуется последним, поверх
+     всего остального. Без этой строки оно легло бы прямо на подпись. */
+  z-index: 1;
+  inset-inline: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.country__flag {
+  grid-row: 1 / span 2;
+  width: 24px;
+  height: 18px;
+  border-radius: 2px;
+  /* Тонкая светлая рамка: у флагов Японии и подобных белое поле
+     иначе сливается с затемнением. */
+  box-shadow: 0 0 0 1px rgba(242, 241, 238, 0.35);
+}
+
+.country__name {
+  grid-column: 2;
+  color: var(--on-dark);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  line-height: 1.25;
+  transition: color var(--transition-fast);
+}
+
+.country__city {
+  grid-column: 2;
+  color: var(--on-dark-muted);
+  font-size: var(--text-xs);
+  line-height: 1.3;
+}
+
+/* Медная линия выезжает по нижнему краю */
+.country__label::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  background-color: var(--copper);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+/* Наведение есть только там, где есть курсор: на телефоне карточки
+   просто стоят на месте. */
+@media (hover: hover) {
+  .country:hover .country__photo img {
+    transform: scale(1.07);
+  }
+
+  .country:hover .country__label::after {
+    transform: scaleX(1);
+  }
+
+  .country:hover .country__name {
+    color: #FFFFFF;
+  }
+}
+
+
+/* --- «А если моей страны нет» ---------------------------------------------
+   Не серая приписка, а приглашение спросить: пунктирная рамка из фирменной
+   линии и ссылка на контакты. */
+
+.countries__more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  max-width: none;
+  margin-top: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  border: 1px dashed var(--copper);
+  border-radius: var(--radius-md);
+  background-color: var(--copper-tint);
+  color: var(--ink);
   font-size: var(--text-sm);
+}
+
+.countries__more span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Медная точка перед приглашением */
+.countries__more span::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--copper);
+}
+
+.countries__more a {
+  font-weight: var(--weight-semibold);
+}
+
+.countries__empty {
+  margin-top: var(--space-5);
+  color: var(--muted);
 }
 
 
 /* ==========================================================================
-   6. KÖP BERILÝÄN SORAGLAR — аккордеон
-   Построен на <details>/<summary>: работает даже при отключённом JS.
+   6. KÖP BERILÝÄN SORAGLAR — вопросы и ответы
+
+   Построен на <details>/<summary>: раскрывается даже при отключённом
+   JavaScript. Скрипт добавляет только удобство — закрывает соседний вопрос,
+   когда открывают новый.
    ========================================================================== */
 
 .faq {
+  /* Счётчик вопросов. Номера рисует CSS, в разметке их нет:
+     добавили вопрос — нумерация пересчиталась сама. */
+  counter-reset: faq;
   border-top: 1px solid var(--line);
 }
 
 .faq__item {
+  counter-increment: faq;
   border-bottom: 1px solid var(--line);
+  transition: background-color var(--dur-base) var(--ease-hover);
+}
+
+/* Открытый вопрос слегка подсвечен, соседние приглушены —
+   взгляд сразу находит, что именно раскрыто. */
+.faq__item[open] {
+  background-color: var(--copper-tint);
+}
+
+/* Приглушаем только сам вопрос, но не его номер: при более сильном
+   приглушении текст перестаёт добирать положенные 4,5:1 контраста.
+   Сейчас приглушённый вопрос даёт 5,4:1 — читается и в ярком свете. */
+.faq:has(.faq__item[open]) .faq__item:not([open]) .faq__q h3 {
+  opacity: 0.75;
+}
+
+.faq:has(.faq__item[open]) .faq__item:not([open]):hover .faq__q h3 {
+  opacity: 1;
 }
 
 .faq__q {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
   gap: var(--space-4);
-  padding-block: var(--space-4);
+  padding: var(--space-5) var(--space-4);
   cursor: pointer;
   list-style: none;          /* убираем стандартный треугольник */
   transition: color var(--transition-fast);
+}
+
+@media (min-width: 768px) {
+  .faq__q {
+    gap: var(--space-5);
+    padding: var(--space-6) var(--space-5);
+  }
 }
 
 .faq__q::-webkit-details-marker {
   display: none;
 }
 
+/* Номер вопроса: тонкая медная цифра слева */
+.faq__q::before {
+  content: counter(faq, decimal-leading-zero);
+  align-self: start;
+  /* Тёмная медь, а не обычная: цифра мелкая, ей нужен контраст повыше */
+  color: var(--copper-dark);
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.45;
+}
+
+@media (min-width: 768px) {
+  .faq__q::before {
+    font-size: var(--text-lg);
+    line-height: 1.5;
+  }
+}
+
 .faq__q:hover {
   color: var(--copper-dark);
 }
 
+/* Сам вопрос — акцидентным шрифтом и крупно */
 .faq__q h3 {
+  margin: 0;
+  color: inherit;
+  transition: opacity var(--dur-base) var(--ease-hover);
+  font-family: var(--font-display);
   font-size: var(--text-h4);
   font-weight: var(--weight-semibold);
-  color: inherit;
+  letter-spacing: -0.005em;
+  line-height: 1.35;
 }
 
-/* Плюс, который при открытии превращается в минус */
+@media (min-width: 768px) {
+  .faq__q h3 {
+    font-size: var(--text-h3);
+  }
+}
+
+/* Плюс превращается в минус поворотом одной палочки: вертикальная
+   ложится на горизонтальную. Иконку не подменяем — она одна и та же. */
 .faq__icon {
   flex: none;
-  width: 20px;
-  height: 20px;
-  margin-top: 3px;
+  width: 22px;
+  height: 22px;
+  margin-top: 4px;
   color: var(--copper);
   fill: none;
   stroke: currentColor;
@@ -722,26 +1009,94 @@
 
 .faq__icon-v {
   transform-origin: 10px 10px;
-  transition: transform var(--transition-base),
-              opacity var(--transition-base);
+  transition: transform var(--dur-base) var(--ease-out);
 }
 
 .faq__item[open] .faq__icon-v {
   transform: rotate(90deg);
-  opacity: 0;
 }
+
+
+/* --- Ответ ----------------------------------------------------------------
+
+   Раскрытие через grid-template-rows: 0fr → 1fr. Это единственный способ
+   плавно показать содержимое, высота которого заранее не известна: не нужно
+   ни задавать её числом, ни считать скриптом.
+
+   Здесь это анимация, а не переход: пока вопрос закрыт, браузер содержимое
+   вовсе не рисует, и переходу не от чего отталкиваться. Анимация же
+   отыгрывается с первого же кадра появления. */
 
 .faq__a {
-  padding-bottom: var(--space-5);
-  color: var(--muted);
-  font-size: var(--text-sm);
-  max-width: 78ch;
-  animation: faq-open var(--transition-base) ease;
+  display: grid;
+  grid-template-rows: 1fr;
+  padding: 0 var(--space-4) var(--space-5);
 }
 
-@keyframes faq-open {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: none; }
+@media (min-width: 768px) {
+  .faq__a {
+    padding: 0 var(--space-5) var(--space-6);
+    /* Ответ выровнен по левому краю вопроса, а не по номеру */
+    padding-left: calc(var(--space-5) + var(--space-5) + 1.9ch);
+  }
+}
+
+.faq__a-inner {
+  position: relative;
+  /* Обязательно: без этого содержимое вылезает за пределы строки,
+     которую мы схлопываем. */
+  overflow: hidden;
+  min-height: 0;
+  padding-left: var(--space-5);
+}
+
+/* Медная линия слева от ответа */
+.faq__a-inner::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  border-radius: 2px;
+  background-color: var(--copper);
+  transform: scaleY(1);
+  transform-origin: top center;
+}
+
+.faq__a-inner p {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  max-width: 72ch;
+}
+
+@media (min-width: 768px) {
+  .faq__a-inner p {
+    font-size: var(--text-base);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .faq__item[open] .faq__a {
+    animation: faq-open var(--dur-base) var(--ease-out);
+  }
+
+  @keyframes faq-open {
+    from { grid-template-rows: 0fr; opacity: 0; }
+    to   { grid-template-rows: 1fr; opacity: 1; }
+  }
+
+  /* Линия слева от ответа прорисовывается сверху вниз.
+     По умолчанию она на месте — значит, при выключенном движении
+     ответ выглядит законченным, а не наполовину нарисованным. */
+  .faq__item[open] .faq__a-inner::before {
+    animation: faq-line var(--dur-slow) var(--ease-out);
+  }
+
+  @keyframes faq-line {
+    from { transform: scaleY(0); }
+  }
 }
 
 
@@ -753,76 +1108,118 @@
    Таких блоков на сайте намеренно немного: этот и подвал. Если сделать больше,
    сайт перестанет быть светлым и плашка потеряет силу. */
 .cta {
-  padding: var(--space-7) var(--space-5);
+  position: relative;
+  overflow: hidden;
+  /* Подвал такой же тёмный, и без разделителя блок призыва сливался
+     с ним в одно бесформенное пятно. Фирменный пунктир по нижнему краю
+     отделяет их, не добавляя ни рамки, ни лишнего цвета. */
+  border-bottom: 1px solid transparent;
+  padding-block: var(--space-8);
   background-color: var(--dark);
-  border-radius: var(--radius-lg);
   color: var(--on-dark);
   text-align: center;
 }
 
-.cta h2 {
-  color: var(--on-dark);
-}
-
-.cta .cta__text {
-  color: var(--on-dark-muted);
-}
-
-/* Внутри тёмной плашки медный становится светлее: обычный медный
-   на тёмном фоне даёт контраст 2,9:1 и не читается. */
-.cta .cta__mark {
-  color: var(--copper-light);
-}
-
-/* Осветлённый медный на этой подложке даёт всего 3,4:1 — для текста мало,
-   поэтому надпись светлая, а медным остаётся только значок. */
-.cta .badge {
-  background-color: rgba(204, 123, 80, 0.18);
-  color: var(--on-dark);
-}
-
-.cta .badge .icon {
-  color: var(--copper-light);
-}
-
-/* Вторая кнопка на тёмном: рамка должна быть видна.
-   Полупрозрачная --line-dark давала 1,6:1 при норме 3:1. */
-.cta .btn--secondary {
-  border-color: var(--on-dark-muted);
-  color: var(--on-dark);
-}
-
-.cta .btn--secondary:hover {
-  background-color: rgba(242, 241, 238, 0.08);
-  border-color: var(--on-dark);
-  color: var(--on-dark);
-}
-
-.cta :focus-visible {
-  outline-color: var(--copper-light);
-}
-
 @media (min-width: 768px) {
   .cta {
-    padding: var(--space-8) var(--space-7);
+    padding-block: var(--space-9);
   }
 }
 
-.cta__mark {
-  display: block;
-  width: 44px;
-  height: 44px;
-  margin: 0 auto var(--space-5);
-  color: var(--copper);
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
+/* --- Фон: мотив маршрута ---------------------------------------------------
+   Те же линии, что на первом экране, только приглушённые до фона.
+   Пунктир медленно ползёт вдоль линии: движение на грани заметности,
+   его задача — оживить полосу, а не отвлечь от кнопки. */
+
+.cta__art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cta__art svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cta__line {
+  stroke: var(--copper-light);
+  opacity: 0.18;
+  animation: cta-drift 26s linear infinite;
+}
+
+.cta__line--soft {
+  stroke: var(--on-dark);
+  opacity: 0.08;
+  animation-duration: 38s;
+}
+
+@keyframes cta-drift {
+  to { stroke-dashoffset: -360; }
+}
+
+/* Пунктирная черта между полосой призыва и подвалом */
+.cta::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background-image: var(--dash-line);
+  opacity: 0.45;
+}
+
+.cta__inner {
+  position: relative;   /* поверх фона */
+}
+
+/* --- Метка «первая консультация бесплатно» ---------------------------------
+   Не серая приписка, а заметная метка: медная точка, медная рамка,
+   светлый текст. Это главное обещание блока. */
+
+.cta__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding: var(--space-2) var(--space-5);
+  background-color: rgba(204, 123, 80, 0.14);
+  border: 1px solid var(--copper-light);
+  border-radius: var(--radius-full);
+  color: var(--on-dark);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.cta__badge::before {
+  content: "";
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  background-color: var(--copper-on-dark);
+  animation: cta-dot 2.8s var(--ease-hover) infinite;
+}
+
+@keyframes cta-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(217, 138, 95, 0.55); }
+  70%      { box-shadow: 0 0 0 7px rgba(217, 138, 95, 0); }
+}
+
+.cta__title {
+  /* Ширина в em, а не в ch. Единица ch — это ширина нуля в текущем шрифте,
+     то есть при подмене шрифта она меняется, и заголовок переносится иначе.
+     Единица em считается от кегля и при подмене остаётся прежней. */
+  max-width: 13em;
+  margin-inline: auto;
+  color: var(--on-dark);
 }
 
 .cta__text {
   max-width: 56ch;
   margin: var(--space-4) auto 0;
-  color: var(--muted);
+  color: var(--on-dark-muted);
+  font-size: var(--text-lg);
 }
 
 .cta__actions {
@@ -830,9 +1227,19 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--space-3);
-  margin-top: var(--space-6);
+  margin-top: var(--space-7);
 }
 
+@media (max-width: 519px) {
+  .cta__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.cta :focus-visible {
+  outline-color: var(--copper-on-dark);
+}
 
 /* ==========================================================================
    Плавное появление при прокрутке.
@@ -950,7 +1357,6 @@
   }
 }
 
-/* Перед блоком призыва разделитель не нужен: он и так отделён тёмной плашкой */
-.section:has(> .container > .cta) > .container::before {
-  display: none;
-}
+/* Раньше здесь пряталась линия перед блоком призыва. Теперь он не .section,
+   а тёмная полоса во всю ширину, и правило .section + .section до него
+   не достаёт — прятать нечего. */

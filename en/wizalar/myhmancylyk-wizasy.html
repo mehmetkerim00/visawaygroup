@@ -45,7 +45,7 @@
   <!-- Шрифт грузим заранее. Английской версии хватает латиницы:
        буквы ä ü ý из названия компании тоже в ней. -->
   <!-- fonts:start -->
-  <link rel="preload" href="../../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Шрифты не предзагружаем: см. scripts/sync-layout.js, fontsBlock -->
   <!-- fonts:end -->
 
   <!-- boot:start -->
@@ -462,7 +462,9 @@
                 </svg>
               </summary>
               <div class="faq__a">
-                <p>The procedure varies by country: in some places the invitation is registered with a government office, in others a simple letter is enough. We give your host written instructions on what to do.</p>
+                <div class="faq__a-inner">
+                  <p>The procedure varies by country: in some places the invitation is registered with a government office, in others a simple letter is enough. We give your host written instructions on what to do.</p>
+                </div>
               </div>
             </details>
 
@@ -474,7 +476,9 @@
                 </svg>
               </summary>
               <div class="faq__a">
-                <p>No. An invitation from a friend is accepted too. In that case anything that evidences the friendship helps &mdash; previous visits, correspondence, photographs together.</p>
+                <div class="faq__a-inner">
+                  <p>No. An invitation from a friend is accepted too. In that case anything that evidences the friendship helps &mdash; previous visits, correspondence, photographs together.</p>
+                </div>
               </div>
             </details>
 
@@ -486,7 +490,9 @@
                 </svg>
               </summary>
               <div class="faq__a">
-                <p>Yes, most countries have a formal procedure for this. Even so, you may still be asked for documents about your own finances.</p>
+                <div class="faq__a-inner">
+                  <p>Yes, most countries have a formal procedure for this. Even so, you may still be asked for documents about your own finances.</p>
+                </div>
               </div>
             </details>
 
@@ -498,7 +504,9 @@
                 </svg>
               </summary>
               <div class="faq__a">
-                <p>A child needs their own set of papers: a birth certificate, the notarised consent of the other parent if they are not travelling, and their own application form.</p>
+                <div class="faq__a-inner">
+                  <p>A child needs their own set of papers: a birth certificate, the notarised consent of the other parent if they are not travelling, and their own application form.</p>
+                </div>
               </div>
             </details>
 
@@ -513,27 +521,36 @@
       </div>
 
       <!-- cta:start title="Let us look at your case together" text="The first consultation is free. Tell us about your situation and we will explain what a visitor visa requires and where to start." -->
-      <section class="section">
-        <div class="container">
-          <div class="cta">
+      <section class="cta">
 
-            <svg class="cta__mark" aria-hidden="true"><use href="#i-route"/></svg>
+        <!-- Мотив маршрута с первого экрана, приглушённый до фона.
+             Пунктир медленно ползёт вдоль линий — движение почти
+             незаметное, но полоса перестаёт быть плоской. -->
+        <div class="cta__art" aria-hidden="true">
+          <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice"
+               xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path class="cta__line" d="M-40 372 C 210 330, 380 176, 720 140 C 950 116, 1080 70, 1240 40"
+                  fill="none" stroke-width="2" stroke-linecap="round"
+                  stroke-dasharray="5 13"/>
+            <path class="cta__line cta__line--soft" d="M-40 424 C 260 404, 470 268, 830 228 C 1030 206, 1150 158, 1240 132"
+                  fill="none" stroke-width="1.5" stroke-linecap="round"
+                  stroke-dasharray="4 12"/>
+          </svg>
+        </div>
 
-            <p class="badge cta__badge">
-              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-badge-check"/></svg>
-              Free consultation
-            </p>
+        <div class="container cta__inner" data-reveal="fade">
 
-            <h2>Let us look at your case together</h2>
+          <p class="cta__badge">First consultation is free</p>
 
-            <p class="cta__text">The first consultation is free. Tell us about your situation and we will explain what a visitor visa requires and where to start.</p>
+          <h2 class="cta__title">Let us look at your case together</h2>
 
-            <div class="cta__actions">
-              <a class="btn btn--primary btn--lg" href="../habarlasmak.html">Get a consultation</a>
-              <a class="btn btn--secondary btn--lg" href="tel:+99361121888">+993 61 12 18 88</a>
-            </div>
+          <p class="cta__text">The first consultation is free. Tell us about your situation and we will explain what a visitor visa requires and where to start.</p>
 
+          <div class="cta__actions">
+            <a class="btn btn--primary btn--lg" href="../habarlasmak.html">Get a consultation</a>
+            <a class="btn btn--secondary btn--on-dark btn--lg" href="tel:+99361121888">+993 61 12 18 88</a>
           </div>
+
         </div>
       </section>
       <!-- cta:end -->

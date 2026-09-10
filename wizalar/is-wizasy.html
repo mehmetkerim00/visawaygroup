@@ -45,7 +45,7 @@
   <!-- Шрифт грузим заранее. Туркменской версии нужны латиница и её
        расширение (буквы ş ň ž). Остальное подгрузится само, если понадобится. -->
   <!-- fonts:start -->
-  <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- Шрифты не предзагружаем: см. scripts/sync-layout.js, fontsBlock -->
   <!-- fonts:end -->
 
   <!-- boot:start -->
@@ -471,7 +471,9 @@
                 </svg>
               </summary>
               <div class="faq__a">
-                <p>Ýok. Iş wizasy üçin daşary ýurtdaky iş berijiden resmi teklip ýa-da şertnama hökman gerek. Iş berijisiz ýagdaýda başga ýollara seredýäris &mdash; meselem, okuw wizasyna.</p>
+                <div class="faq__a-inner">
+                  <p>Ýok. Iş wizasy üçin daşary ýurtdaky iş berijiden resmi teklip ýa-da şertnama hökman gerek. Iş berijisiz ýagdaýda başga ýollara seredýäris &mdash; meselem, okuw wizasyna.</p>
+                </div>
               </div>
             </details>
 
@@ -483,7 +485,9 @@
                 </svg>
               </summary>
               <div class="faq__a">
-                <p>Köp ýurtda ony iş beriji öz ýurdunda resmileşdirýär, siz bolsa taýýar resminama bilen konsullyga ýüz tutýarsyňyz. Tertip ýurda görä üýtgeýär &mdash; muny maslahatda anyklaýarys.</p>
+                <div class="faq__a-inner">
+                  <p>Köp ýurtda ony iş beriji öz ýurdunda resmileşdirýär, siz bolsa taýýar resminama bilen konsullyga ýüz tutýarsyňyz. Tertip ýurda görä üýtgeýär &mdash; muny maslahatda anyklaýarys.</p>
+                </div>
               </div>
             </details>
 
@@ -495,7 +499,9 @@
                 </svg>
               </summary>
               <div class="faq__a">
-                <p>Köp ýurtda maşgala agzalary üçin aýratyn wiza görnüşi bar we ol adatça esasy wiza alnandan soň resmileşdirilýär. Şertler ýurda bagly, ony öňünden barlaýarys.</p>
+                <div class="faq__a-inner">
+                  <p>Köp ýurtda maşgala agzalary üçin aýratyn wiza görnüşi bar we ol adatça esasy wiza alnandan soň resmileşdirilýär. Şertler ýurda bagly, ony öňünden barlaýarys.</p>
+                </div>
               </div>
             </details>
 
@@ -507,7 +513,9 @@
                 </svg>
               </summary>
               <div class="faq__a">
-                <p>Köplenç hawa, käte notarial tassyklama bilen. Haýsy resminamalaryň terjime edilmelidigini sanaw düzülende görkezýäris.</p>
+                <div class="faq__a-inner">
+                  <p>Köplenç hawa, käte notarial tassyklama bilen. Haýsy resminamalaryň terjime edilmelidigini sanaw düzülende görkezýäris.</p>
+                </div>
               </div>
             </details>
 
@@ -522,27 +530,36 @@
       </div>
 
       <!-- cta:start title="Ýagdaýyňyzy bilelikde seredeliň" text="Ilkinji maslahat mugt. Ýagdaýyňyzy aýdyň &mdash; iş wizasy boýunça näme gerekdigini we nämeden başlamalydygyny düşündireris." -->
-      <section class="section">
-        <div class="container">
-          <div class="cta">
+      <section class="cta">
 
-            <svg class="cta__mark" aria-hidden="true"><use href="#i-route"/></svg>
+        <!-- Мотив маршрута с первого экрана, приглушённый до фона.
+             Пунктир медленно ползёт вдоль линий — движение почти
+             незаметное, но полоса перестаёт быть плоской. -->
+        <div class="cta__art" aria-hidden="true">
+          <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice"
+               xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <path class="cta__line" d="M-40 372 C 210 330, 380 176, 720 140 C 950 116, 1080 70, 1240 40"
+                  fill="none" stroke-width="2" stroke-linecap="round"
+                  stroke-dasharray="5 13"/>
+            <path class="cta__line cta__line--soft" d="M-40 424 C 260 404, 470 268, 830 228 C 1030 206, 1150 158, 1240 132"
+                  fill="none" stroke-width="1.5" stroke-linecap="round"
+                  stroke-dasharray="4 12"/>
+          </svg>
+        </div>
 
-            <p class="badge cta__badge">
-              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-badge-check"/></svg>
-              Maslahat mugt
-            </p>
+        <div class="container cta__inner" data-reveal="fade">
 
-            <h2>Ýagdaýyňyzy bilelikde seredeliň</h2>
+          <p class="cta__badge">Ilkinji maslahat mugt</p>
 
-            <p class="cta__text">Ilkinji maslahat mugt. Ýagdaýyňyzy aýdyň &mdash; iş wizasy boýunça näme gerekdigini we nämeden başlamalydygyny düşündireris.</p>
+          <h2 class="cta__title">Ýagdaýyňyzy bilelikde seredeliň</h2>
 
-            <div class="cta__actions">
-              <a class="btn btn--primary btn--lg" href="../habarlasmak.html">Maslahat almak</a>
-              <a class="btn btn--secondary btn--lg" href="tel:+99361121888">+993 61 12 18 88</a>
-            </div>
+          <p class="cta__text">Ilkinji maslahat mugt. Ýagdaýyňyzy aýdyň &mdash; iş wizasy boýunça näme gerekdigini we nämeden başlamalydygyny düşündireris.</p>
 
+          <div class="cta__actions">
+            <a class="btn btn--primary btn--lg" href="../habarlasmak.html">Maslahat almak</a>
+            <a class="btn btn--secondary btn--on-dark btn--lg" href="tel:+99361121888">+993 61 12 18 88</a>
           </div>
+
         </div>
       </section>
       <!-- cta:end -->
