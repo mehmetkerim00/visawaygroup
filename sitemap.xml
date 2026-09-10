@@ -35,6 +35,14 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://visawaygroup.com/en/suratlar.html</loc>
+    <xhtml:link rel="alternate" hreflang="tk" href="https://visawaygroup.com/suratlar.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://visawaygroup.com/ru/suratlar.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://visawaygroup.com/en/suratlar.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://visawaygroup.com/suratlar.html"/>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://visawaygroup.com/en/wizalar.html</loc>
     <xhtml:link rel="alternate" hreflang="tk" href="https://visawaygroup.com/wizalar.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://visawaygroup.com/ru/wizalar.html"/>
@@ -131,6 +139,14 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://visawaygroup.com/ru/suratlar.html</loc>
+    <xhtml:link rel="alternate" hreflang="tk" href="https://visawaygroup.com/suratlar.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://visawaygroup.com/ru/suratlar.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://visawaygroup.com/en/suratlar.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://visawaygroup.com/suratlar.html"/>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://visawaygroup.com/ru/wizalar.html</loc>
     <xhtml:link rel="alternate" hreflang="tk" href="https://visawaygroup.com/wizalar.html"/>
     <xhtml:link rel="alternate" hreflang="ru" href="https://visawaygroup.com/ru/wizalar.html"/>
@@ -184,6 +200,14 @@
     <xhtml:link rel="alternate" hreflang="ru" href="https://visawaygroup.com/ru/wizalar/syyahat-wizasy.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://visawaygroup.com/en/wizalar/syyahat-wizasy.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://visawaygroup.com/wizalar/syyahat-wizasy.html"/>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://visawaygroup.com/suratlar.html</loc>
+    <xhtml:link rel="alternate" hreflang="tk" href="https://visawaygroup.com/suratlar.html"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://visawaygroup.com/ru/suratlar.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://visawaygroup.com/en/suratlar.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://visawaygroup.com/suratlar.html"/>
     <changefreq>monthly</changefreq>
   </url>
   <url>

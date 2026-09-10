@@ -4,20 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Sahypa tapylmady — VisaWay Group</title>
-  <meta name="description" content="Gözlenen sahypa tapylmady. Baş sahypa ýa-da beýleki bölümlere geçiň.">
-
-  <!-- Страницу ошибки поисковикам индексировать не нужно -->
-  <meta name="robots" content="noindex, follow">
+  <title>Suratlaryň çeşmeleri — VisaWay Group</title>
+  <meta name="description" content="Baş sahypadaky şäher suratlarynyň çeşmeleri: awtor, ygtyýarnama we Wikimedia Commons-daky beýan sahypasy.">
 
   <meta name="theme-color" content="#AF5F39">
+
+  <!-- Ссылки на другие языковые версии. Их расставляет sync-layout.js -->
+  <!-- hreflang:start -->
+  <link rel="canonical" href="https://visawaygroup.com/suratlar.html">
+  <link rel="alternate" hreflang="tk" href="https://visawaygroup.com/suratlar.html">
+  <link rel="alternate" hreflang="ru" href="https://visawaygroup.com/ru/suratlar.html">
+  <link rel="alternate" hreflang="en" href="https://visawaygroup.com/en/suratlar.html">
+  <link rel="alternate" hreflang="x-default" href="https://visawaygroup.com/suratlar.html">
+  <!-- hreflang:end -->
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">
   <link rel="icon" href="assets/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
+  <!-- Иконка для экрана «Домой» на iPhone и iPad -->
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
 
+  <!--
+    Как ссылка выглядит в мессенджерах и соцсетях.
+    Адреса подставляет scripts/build-seo.js из data/site.json — здесь
+    править не надо.
+  -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="VisaWay Group">
+  <meta property="og:locale" content="tk_TM">
+  <meta property="og:title" content="Biz barada — VisaWay Group">
+  <meta property="og:description" content="Resmi işleýän wiza merkezi Aşgabatda. Dogruçyl baha, aç-açan bahalar, ähli tapgyrda goldaw.">
+  <meta property="og:url" content="https://visawaygroup.com/suratlar.html">
+  <meta property="og:image" content="https://visawaygroup.com/assets/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Шрифт грузим заранее. Туркменской версии нужны латиница и её
+       расширение (буквы ş ň ž). Остальное подгрузится само, если понадобится. -->
   <!-- fonts:start -->
   <!-- Шрифты не предзагружаем: см. scripts/sync-layout.js, fontsBlock -->
   <!-- fonts:end -->
@@ -280,9 +306,9 @@
             а если перевода нет — на главную того языка.
           -->
           <div class="lang-switch" role="group" aria-label="Sahypanyň dili">
-            <a class="lang-switch__link" href="404.html" lang="tk" hreflang="tk" aria-current="true">TM</a>
-            <a class="lang-switch__link" href="ru/404.html" lang="ru" hreflang="ru">RU</a>
-            <a class="lang-switch__link" href="en/404.html" lang="en" hreflang="en">EN</a>
+            <a class="lang-switch__link" href="suratlar.html" lang="tk" hreflang="tk" aria-current="true">TM</a>
+            <a class="lang-switch__link" href="ru/suratlar.html" lang="ru" hreflang="ru">RU</a>
+            <a class="lang-switch__link" href="en/suratlar.html" lang="en" hreflang="en">EN</a>
           </div>
 
           <a class="btn btn--primary" href="habarlasmak.html">Maslahat almak</a>
@@ -297,45 +323,175 @@
   <!-- header:end -->
 
   <main class="site-main" id="mazmun">
-    <article class="page page--notfound">
+    <article class="page">
+      <div class="container container--narrow">
 
-      <!-- Страница «такой страницы нет». Крупная цифра, оборванный маршрут
-           и два выхода: на главную и к людям. -->
-      <section class="notfound">
+        <nav class="breadcrumbs" aria-label="Nawigasiýa">
+          <ol>
+            <li><a href="index.html">Baş sahypa</a></li>
+            <li><span aria-current="page">Suratlaryň çeşmeleri</span></li>
+          </ol>
+        </nav>
 
-        <div class="notfound__art" aria-hidden="true">
-          <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" focusable="false">
-            <!-- Маршрут, который обрывается на полпути -->
-            <path class="notfound__route" d="M14 186 C 110 178, 170 96, 268 66"
-                  fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 13"/>
-            <circle class="notfound__start" cx="14" cy="186" r="5"/>
-            <!-- Дальше линии нет: только следы там, где она должна была идти -->
-            <path class="notfound__ghost" d="M300 56 C 380 38, 440 30, 506 22"
-                  fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 16"/>
-          </svg>
-        </div>
+        <header class="page-head" data-reveal>
+          <p class="eyebrow">Çeşmeler</p>
+          <h1>Suratlaryň çeşmeleri</h1>
+          <p class="lead">Şäherleriň suratlary Wikimedia Commons-dan alyndy. Aşakda her suratyň awtory, ygtyýarnamasy we beýan sahypasyna salgysy görkezilýär. CC-BY we CC-BY-SA ygtyýarnamalary awtoryň adyny görkezmegi talap edýär — bu sahypa şonuň üçin bar.</p>
+        </header>
 
-        <div class="container notfound__inner">
-          <p class="notfound__code" aria-hidden="true">404</p>
-          <h1 class="notfound__title">Beýle sahypa ýok</h1>
-          <p class="notfound__lead">Salgy nädogry ýazylan bolmagy ýa-da sahypanyň göçürilen bolmagy mümkin.</p>
+        <!-- Список собирается из data/photos.json скриптом sync-layout.js -->
+        <!-- photos:start -->
+        <ul class="credits" data-reveal-group>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/istanbul.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Stambul</p>
+              <p class="credit__author">Moonik</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by-sa/3.0" rel="license nofollow noopener" target="_blank">CC BY-SA 3.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:Exterior_of_Sultan_Ahmed_I_Mosque_in_Istanbul,_Turkey_002.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy. Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/moscow.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Moskwa</p>
+              <p class="credit__author">Юрий Д.К.</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by/4.0" rel="license nofollow noopener" target="_blank">CC BY 4.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:Moscow_-_Saint_Basil%27s_Cathedral_-_worm-eye_perspective_-_2025-8-17.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/dubai.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Dubaý</p>
+              <p class="credit__author">Norlando Pobre</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by/2.0" rel="license nofollow noopener" target="_blank">CC BY 2.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:Dubai_Marina_Skyline.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/beijing.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Pekin</p>
+              <p class="credit__author">Ermell</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="license nofollow noopener" target="_blank">CC BY-SA 4.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:Beijing_forbidden_city_Belvedere_of_Embodying_Benevolence-20071018-RM-142403.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy. Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/berlin.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Berlin</p>
+              <p class="credit__author">Daniel Schwen</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="license nofollow noopener" target="_blank">CC BY-SA 4.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:Reichstag_pano.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy. Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/rome.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Rim</p>
+              <p class="credit__author">Dietmar Rabich</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="license nofollow noopener" target="_blank">CC BY-SA 4.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:Rome_(IT),_Kolosseum_--_2013_--_3379-86.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy. Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/warsaw.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Warşawa</p>
+              <p class="credit__author">Marcin Białek</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by-sa/3.0" rel="license nofollow noopener" target="_blank">CC BY-SA 3.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:Warszawa-Zamek_Kr%C3%B3lewski.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy. Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/prague.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Praga</p>
+              <p class="credit__author">Suicasmo</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="license nofollow noopener" target="_blank">CC BY-SA 4.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:Old_Town_Square_(Prague)_20150903.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy. Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/kuala-lumpur.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Kuala-Lumpur</p>
+              <p class="credit__author">Renek78</p>
+              <p class="credit__licence">
+                <a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en" rel="license nofollow noopener" target="_blank">CC0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:KLCC_Park_in_2025_02.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/seoul.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Seul</p>
+              <p class="credit__author">Basile Morin</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="license nofollow noopener" target="_blank">CC BY-SA 4.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:Front_view_of_the_Imperial_Throne_Hall_Geunjeongjeon_at_Gyeongbokgung_Palace_with_blue_sky_in_Seoul.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy. Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/almaty.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Almaty</p>
+              <p class="credit__author">Nikolai Bulykin</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="license nofollow noopener" target="_blank">CC BY-SA 4.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B,_%D0%92%D0%BE%D0%B7%D0%BD%D0%B5%D1%81%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D1%81%D0%BE%D0%B1%D0%BE%D1%80_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83_(2).jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy. Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.</p>
+            </div>
+          </li>
+          <li class="credit">
+            <img class="credit__thumb" src="assets/photos/minsk.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <div class="credit__body">
+              <p class="credit__city">Minsk</p>
+              <p class="credit__author">Liilia Moroz</p>
+              <p class="credit__licence">
+                <a href="https://creativecommons.org/licenses/by-sa/4.0" rel="license nofollow noopener" target="_blank">CC BY-SA 4.0</a>
+                <a class="credit__source" href="https://commons.wikimedia.org/wiki/File:%D0%9C%D0%B8%D0%BD%D1%81%D0%BA_%D0%A6%D0%B5%D0%BD%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D1%80%D0%B0%D0%B9%D0%BE%D0%BD_2016_%D0%B3%D0%BE%D0%B4.jpg" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>
+              </p>
+              <p class="credit__note">Surat saýt üçin kesildi we gysyldy. Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.</p>
+            </div>
+          </li>
+        </ul>
+        <!-- photos:end -->
 
-          <div class="notfound__actions">
-            <a class="btn btn--primary btn--lg" href="index.html">Baş sahypa</a>
-            <a class="btn btn--secondary btn--on-dark btn--lg" href="habarlasmak.html">Habarlaşmak</a>
-          </div>
+        <p class="credits__flags">Baýdaklar — flag-icons toplumyndan, MIT ygtyýarnamasy: täjirçilik taslamalarynda ulanmaga rugsat berilýär.</p>
 
-          <p class="notfound__more">Ýa-da beýleki bölümler:</p>
-          <ul class="notfound__links">
-              <li><a href="index.html">Baş sahypa</a></li>
-              <li><a href="wizalar.html">Wizalar we hyzmatlar</a></li>
-              <li><a href="wizalar/bilim-maslahaty.html">Talyplara bilim maslahaty</a></li>
-              <li><a href="biz-barada.html">Biz barada</a></li>
-              <li><a href="habarlasmak.html">Habarlaşmak</a></li>
-          </ul>
-        </div>
-      </section>
-
+      </div>
     </article>
   </main>
 
@@ -433,5 +589,32 @@
   <script src="js/main.js" defer></script>
 
   <script src="js/motion.js" defer></script>
+  <!-- Микроразметка для поисковиков. Её расставляет scripts/build-seo.js -->
+  <!-- jsonld:start -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Baş sahypa",
+              "item": "https://visawaygroup.com/index.html"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Suratlaryň çeşmeleri"
+            }
+          ]
+        }
+      ]
+    }
+  </script>
+  <!-- jsonld:end -->
+
 </body>
 </html>

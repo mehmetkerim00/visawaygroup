@@ -427,6 +427,67 @@ function buildLangValues(rel, existing) {
 }
 
 /* ==================================================================== */
+/* Список источников фотографий                                         */
+/* ==================================================================== */
+
+/* Собирается из data/photos.json — тот же файл, из которого скрипт
+   photos.py пишет assets/photos/CREDITS.md. Указание автора и лицензии
+   для CC-BY и CC-BY-SA — требование лицензии, а не вежливость, поэтому
+   список должен быть открыт посетителям, а не только владельцу. */
+
+let photoData = null;
+
+function loadPhotos() {
+  if (photoData) return photoData;
+  const file = path.join(ROOT, "data", "photos.json");
+  if (!fs.existsSync(file)) {
+    warn("нет data/photos.json — список источников фотографий пуст");
+    return null;
+  }
+  photoData = JSON.parse(fs.readFileSync(file, "utf8"));
+  return photoData;
+}
+
+function photosBlock(lang, prefix, indent) {
+  const data = loadPhotos();
+  if (!data) return `${indent}<!-- список источников не собран -->`;
+
+  const pick = (obj) => (obj && (obj[lang] || obj[DEFAULT_LANG])) || "";
+  const notice = data.notice || {};
+  const i = indent;
+  const out = [];
+
+  out.push(`${i}<ul class="credits" data-reveal-group>`);
+  for (const p of data.photos) {
+    const city = pick(p.city);
+    /* Для CC-BY-SA обязательна ещё и пометка про «те же права» */
+    let note = pick(notice.modified);
+    if (p.shareAlike) note += " " + pick(notice.shareAlike);
+
+    out.push(`${i}  <li class="credit">`);
+    out.push(`${i}    <img class="credit__thumb" src="${prefix}assets/photos/${p.photo}.webp"` +
+             ` alt="" width="480" height="320" loading="lazy" decoding="async">`);
+    out.push(`${i}    <div class="credit__body">`);
+    out.push(`${i}      <p class="credit__city">${city}</p>`);
+    out.push(`${i}      <p class="credit__author">${escapeAttr(p.author)}</p>`);
+    out.push(`${i}      <p class="credit__licence">`);
+    if (p.licenceUrl) {
+      out.push(`${i}        <a href="${p.licenceUrl}" rel="license nofollow noopener" target="_blank">${p.licence}</a>`);
+    } else {
+      out.push(`${i}        ${p.licence}`);
+    }
+    out.push(`${i}        <a class="credit__source" href="${p.page}" rel="nofollow noopener" target="_blank">Wikimedia Commons</a>`);
+    out.push(`${i}      </p>`);
+    out.push(`${i}      <p class="credit__note">${note}</p>`);
+    out.push(`${i}    </div>`);
+    out.push(`${i}  </li>`);
+  }
+  out.push(`${i}</ul>`);
+  return out.join("\n");
+}
+
+
+/* ==================================================================== */
 /* Блок стран на главной                                                */
 /* ==================================================================== */
 
@@ -601,6 +662,12 @@ function syncFile(file, partials, site, valuesByLang, existing) {
     /* Микроразметку заполняет build-seo.js — партиала для неё нет */
     if (name === "jsonld") return whole;
 
+    /* Список источников фотографий — из data/photos.json */
+    if (name === "photos") {
+      blocks++;
+      return `${indent}<!-- photos:start -->\n${photosBlock(lang, prefix, indent)}\n${indent}<!-- photos:end -->`;
+    }
+
     /* Сетка стран и фильтр — из data/countries.json */
     if (name === "countries") {
       blocks++;
@@ -664,7 +731,9 @@ const TK_LETTERS = /[äöüýňşžçÄÖÜÝŇŞŽÇ]/;
    а также названия, которые так и пишутся в русском и английском. */
 const ALLOWED = [
   "VisaWay Group", "VisaWay", "Group",
-  "Aşgabat", "Türkmenistan", "türkmen", "Türkmen", "Türkiye"
+  "Aşgabat", "Türkmenistan", "türkmen", "Türkmen", "Türkiye",
+  /* Названия проектов и наборов, которые не переводятся ни на один язык */
+  "Wikimedia Commons", "Wikimedia", "Commons", "flag-icons"
 ];
 
 function checkParity(existing) {
@@ -707,12 +776,15 @@ function sharedValues(site) {
   /* Названия стран и городов тоже одинаковы во многих языках: Berlin,
      Almaty, Minsk, Kuala Lumpur пишутся так и по-туркменски, и по-английски.
      Без этого проверка перевода считала бы их непереведённым текстом. */
-  const countriesFile = path.join(ROOT, "data", "countries.json");
-  if (fs.existsSync(countriesFile)) {
+  /* То же с именами фотографов, названиями лицензий и адресами
+     на Викисклад: они одинаковы на всех трёх языках. */
+  for (const name of ["countries.json", "photos.json"]) {
+    const file = path.join(ROOT, "data", name);
+    if (!fs.existsSync(file)) continue;
     try {
-      walk(JSON.parse(fs.readFileSync(countriesFile, "utf8")));
+      walk(JSON.parse(fs.readFileSync(file, "utf8")));
     } catch (e) {
-      warn(`data/countries.json не читается: ${e.message}`);
+      warn(`data/${name} не читается: ${e.message}`);
     }
   }
 
@@ -730,6 +802,10 @@ function visibleText(file, site) {
   s = s.replace(/ЗАПОЛНИТЬ:?[^\n<]{0,40}/g, " ");
   s = s.replace(/&[a-z]+;/gi, " ");        /* &mdash; &laquo; и подобные — не слова */
   if (site) for (const value of sharedValues(site)) s = s.split(value).join(" ");
+  /* Названия, которые одинаковы на всех языках: компания, город,
+     Wikimedia Commons и подобное. Их совпадение — не признак того,
+     что страницу забыли перевести. */
+  for (const a of ALLOWED) s = s.split(a).join(" ");
   return s;
 }
 

@@ -319,8 +319,8 @@
   <!-- header:end -->
 
   <main class="site-main" id="mazmun">
-    <article class="page">
-      <div class="container container--narrow">
+    <article class="page page--contacts">
+      <div class="container">
 
         <nav class="breadcrumbs" aria-label="Breadcrumb">
           <ol>
@@ -342,90 +342,71 @@
              Содержимое приходит из partials/contacts.html,
              а данные — из data/site.json.
              ============================================================== -->
-        <section class="page-section" id="habarlasmak">
+        <div class="contacts">
+
+        <section class="contacts__panel" id="habarlasmak">
           <!-- contacts:start -->
   <!--
-    Способы связи и адрес офиса. Все данные берутся из data/site.json.
+    Тёмная панель со способами связи. Все данные берутся из data/site.json.
     Здесь править не надо: правьте data/site.json и запускайте
         node scripts/sync-layout.js
 
-    Блоки, обёрнутые в парные метки "if" и "endif", показываются только
-    когда поле заполнено. Пустое поле в site.json = блока на странице нет.
-    Так на сайте не бывает заголовков без содержимого и ссылок в никуда.
+    Блоки в парных метках "if" и "endif" показываются, только когда поле
+    заполнено. Пустое поле в site.json = блока на странице нет.
   -->
 
-        <h2>Call us</h2>
-        <p class="text-muted">The fastest way. During opening hours we always answer. The consultation is free.</p>
+        <div class="contact-panel">
 
-        <div class="contact-list contact-list--phones">
-          <a class="contact-card" href="tel:+99361121888">
-            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-phone"/></svg>
-            <div class="contact-card__body">
-              <span class="contact-card__label">Phone</span>
-              <span class="contact-card__value">+993 61 12 18 88</span>
-            </div>
-          </a>
-          <a class="contact-card" href="tel:+99362944157">
-            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-phone"/></svg>
-            <div class="contact-card__body">
-              <span class="contact-card__label">Phone</span>
-              <span class="contact-card__value">+993 62 94 41 57</span>
-            </div>
-          </a>
-        </div>
+          <!-- Тот же мотив маршрута, что в блоке призыва, приглушённый до фона -->
+          <div class="contact-panel__art" aria-hidden="true">
+            <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice"
+                 xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path class="cta__line" d="M-40 372 C 210 330, 380 176, 720 140 C 950 116, 1080 70, 1240 40"
+                    fill="none" stroke-width="2" stroke-linecap="round"
+                    stroke-dasharray="5 13"/>
+              <path class="cta__line cta__line--soft" d="M-40 424 C 260 404, 470 268, 830 228 C 1030 206, 1150 158, 1240 132"
+                    fill="none" stroke-width="1.5" stroke-linecap="round"
+                    stroke-dasharray="4 12"/>
+            </svg>
+          </div>
+
+          <div class="contact-panel__inner">
+
+            <h2 class="contact-panel__title">Call us</h2>
+            <p class="contact-panel__note">The fastest way. During working hours we always answer.</p>
+
+            <!-- Телефоны — главное на странице, поэтому и крупнее всего.
+                 Сколько номеров в data/site.json, столько и покажется. -->
+            <ul class="phones">
+              <li><a class="phones__link" href="tel:+99361121888">+993 61 12 18 88</a></li>
+              <li><a class="phones__link" href="tel:+99362944157">+993 62 94 41 57</a></li>
+            </ul>
+
+            <p class="contact-panel__subtitle">Write to us</p>
+
+            <ul class="contact-lines">
+              <li>
+                <a class="contact-line" href="mailto:visawaygroup@gmail.com">
+                  <svg class="icon contact-line__icon" aria-hidden="true"><use href="#i-mail"/></svg>
+                  <span class="contact-line__label">Email</span>
+                  <span class="contact-line__value">visawaygroup@gmail.com</span>
+                </a>
+              </li>
+              <li>
+                <a class="contact-line" href="https://instagram.com/visawaygroup" target="_blank" rel="noopener">
+                  <svg class="icon contact-line__icon" aria-hidden="true"><use href="#i-instagram"/></svg>
+                  <span class="contact-line__label">Instagram</span>
+                  <span class="contact-line__value">@visawaygroup</span>
+                </a>
+              </li>
+            </ul>
 
 
-        <h2 class="contact-group">Write to us</h2>
-        <p class="text-muted">Good for a longer question or a list of documents.</p>
-
-        <div class="contact-list">
-          <a class="contact-card" href="mailto:visawaygroup@gmail.com">
-            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-mail"/></svg>
-            <div class="contact-card__body">
-              <span class="contact-card__label">Email</span>
-              <span class="contact-card__value">visawaygroup@gmail.com</span>
-            </div>
-          </a>
-          <a class="contact-card" href="https://instagram.com/visawaygroup" target="_blank" rel="noopener">
-            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-instagram"/></svg>
-            <div class="contact-card__body">
-              <span class="contact-card__label">Instagram</span>
-              <span class="contact-card__value">@visawaygroup</span>
-            </div>
-          </a>
-        </div>
-
-        <h2 class="contact-group">Visit our office</h2>
-        <p class="text-muted">Documents are accepted at the office.</p>
-
-        <div class="factlist">
-
-          <div class="fact">
-            <svg class="icon fact__icon" aria-hidden="true"><use href="#i-pin"/></svg>
-            <span class="fact__label">Address</span>
-            <p class="fact__value">
-              Ashgabat, Jepbarow köçesi 40 (Vysokovoltnaya 40)
+            <p class="contact-panel__foot">
+              <span>Working hours: Daily: 08:00–20:00</span>
+              <span>Languages: Turkmen, Russian, English</span>
             </p>
-          </div>
 
-          <div class="fact">
-            <svg class="icon fact__icon" aria-hidden="true"><use href="#i-clock"/></svg>
-            <span class="fact__label">Opening hours</span>
-            <p class="fact__value">Daily: 08:00–20:00</p>
-          </div>
-
-          <div class="fact">
-            <svg class="icon fact__icon" aria-hidden="true"><use href="#i-message"/></svg>
-            <span class="fact__label">Languages we work in</span>
-            <p class="fact__value">Turkmen, Russian, English</p>
-          </div>
-
-        </div>
-
-        <div class="note">
-          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
-          <div>
-            <p>Call before you come in — we will book you a time slot so you do not have to wait.</p>
           </div>
         </div>
           <!-- contacts:end -->
@@ -439,33 +420,32 @@
              она собирает сообщение и даёт его отправить мессенджером,
              почтой или скопировать.
              ============================================================== -->
-        <section class="page-section">
-          <h2>Send an enquiry</h2>
+        <section class="contacts__form">
+          <h2>Leave a request</h2>
           <p class="text-muted">
-            Fill in the form and we will assemble a short message from it, which you can send in one tap by messenger or email.
+            Fill in the form — we will put together a short message, and you send it by messenger or email in one tap.
           </p>
 
           <form class="form" data-request-form novalidate>
 
             <div class="form__grid">
 
-              <div class="field">
-                <label for="f-name">Your name <span class="field__required" aria-hidden="true">*</span></label>
-                <input type="text" id="f-name" name="name" autocomplete="name"
+              <div class="field field--float">
+                <input placeholder=" " type="text" id="f-name" name="name" autocomplete="name"
                        aria-describedby="e-name" required>
+                <label for="f-name">Your name <span class="field__required" aria-hidden="true">*</span></label>
                 <span class="field__error" id="e-name" role="alert"></span>
               </div>
 
-              <div class="field">
-                <label for="f-phone">Phone <span class="field__required" aria-hidden="true">*</span></label>
-                <input type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel"
+              <div class="field field--float">
+                <input placeholder=" " type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel"
                        aria-describedby="e-phone h-phone" required>
+                <label for="f-phone">Phone <span class="field__required" aria-hidden="true">*</span></label>
                 <span class="field__hint" id="h-phone">This is the number we will call you back on.</span>
                 <span class="field__error" id="e-phone" role="alert"></span>
               </div>
 
-              <div class="field">
-                <label for="f-visa">Visa type</label>
+              <div class="field field--float field--select">
                 <select id="f-visa" name="visa">
                   <option value="">Choose one, or leave blank</option>
                   <option>Work visa</option>
@@ -475,26 +455,26 @@
                   <option>Business visa</option>
                   <option>Study abroad advice</option>
                 </select>
+                <label for="f-visa">Visa type</label>
               </div>
 
-              <div class="field">
-                <label for="f-country">Destination country</label>
-                <input type="text" id="f-country" name="country"
+              <div class="field field--float">
+                <input placeholder=" " type="text" id="f-country" name="country"
                        aria-describedby="h-country">
+                <label for="f-country">Destination country</label>
                 <span class="field__hint" id="h-country">Leave this blank if you have not decided yet.</span>
               </div>
 
-              <div class="field field--wide">
-                <label for="f-dates">When you plan to travel</label>
-                <input type="text" id="f-dates" name="dates"
+              <div class="field field--float field--wide">
+                <input placeholder=" " type="text" id="f-dates" name="dates"
                        aria-describedby="h-dates">
+                <label for="f-dates">When you plan to travel</label>
                 <span class="field__hint" id="h-dates">An approximate answer is fine. For example: in summer, or in March.</span>
               </div>
 
-              <div class="field field--wide">
+              <div class="field field--float field--wide">
+                <textarea placeholder=" " id="f-comment" name="comment" rows="4" aria-describedby="h-comment"></textarea>
                 <label for="f-comment">Anything else</label>
-                <textarea id="f-comment" name="comment" rows="4"
-                          aria-describedby="h-comment"></textarea>
                 <span class="field__hint" id="h-comment">Anything about your situation we should know.</span>
               </div>
 
@@ -512,9 +492,13 @@
                 Send by email
               </a>
 
+              <!-- После нажатия кнопка на две секунды меняет надпись:
+                   человек должен видеть, что копирование сработало. -->
               <button type="button" class="btn btn--secondary btn--lg" data-action="copy">
-                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-copy"/></svg>
-                Copy the text
+                <svg class="icon icon--sm btn__icon" aria-hidden="true"><use href="#i-copy"/></svg>
+                <svg class="icon icon--sm btn__icon btn__icon--done" aria-hidden="true"><use href="#i-badge-check"/></svg>
+                <span class="btn__text">Copy the text</span>
+                <span class="btn__text btn__text--done">Copied</span>
               </button>
             </div>
 
@@ -550,6 +534,37 @@
             </div>
 
           </form>
+        </section>
+
+        </div><!-- /.contacts -->
+
+        <!-- ==============================================================
+             ОФИС. Адрес подставляется из data/site.json по data-site.
+             Карты нет намеренно: ссылку на карту добавим, когда в site.json
+             появится mapUrl. Вести в никуда нельзя.
+             ============================================================== -->
+        <section class="office" data-reveal>
+          <div class="office__body">
+            <p class="eyebrow">Address</p>
+            <h2 class="office__title">Come to the office</h2>
+            <p class="office__address" data-site="address">Ashgabat, Jepbarow köçesi 40 (Vysokovoltnaya 40)</p>
+            <p class="office__lead">We accept documents at the office. Call before you come — we will book you a time so you do not have to wait.</p>
+          </div>
+
+          <!-- Не карта, а знак того, что нас можно найти:
+               фирменный пунктир, ведущий к метке. -->
+          <div class="office__mark" aria-hidden="true">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path class="office__route" d="M18 176 C 90 176, 96 96, 168 84 C 228 74, 244 52, 262 34"
+                    fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 13"/>
+              <circle class="office__start" cx="18" cy="176" r="5"/>
+              <g class="office__pin">
+                <path d="M262 16 c 11 0 20 9 20 20 c 0 15 -20 32 -20 32 s -20 -17 -20 -32 c 0 -11 9 -20 20 -20 z"
+                      fill="none" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="262" cy="36" r="5.5"/>
+              </g>
+            </svg>
+          </div>
         </section>
 
       </div>
@@ -638,6 +653,9 @@
           All rights reserved.
         </p>
         <p class="site-footer__copyright">Visa Centre &middot; Ashgabat, Turkmenistan</p>
+        <!-- Ссылка на источники фотографий. Для снимков под CC-BY
+             и CC-BY-SA указание автора — требование лицензии. -->
+        <p class="site-footer__credits"><a href="suratlar.html">Photo credits</a></p>
       </div>
     </div>
 

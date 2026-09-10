@@ -323,24 +323,40 @@
   <!-- header:end -->
 
   <main class="site-main" id="mazmun">
-    <article class="page">
+    <article class="page page--service">
+
+      <!-- Первый экран страницы услуги: тёмная полоса во всю ширину.
+           Вдвое ниже, чем на главной — здесь она представляет раздел,
+           а не открывает сайт. -->
+      <section class="page-hero">
+          <div class="page-hero__art" aria-hidden="true">
+            <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path class="page-hero__line" d="M-10 232 C 90 214, 150 120, 250 88 C 320 66, 360 44, 412 22"
+                    fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 13"/>
+              <circle class="page-hero__ring" cx="352" cy="46" r="17" fill="none" stroke-width="1.5"/>
+              <circle class="page-hero__dot" cx="352" cy="46" r="5.5"/>
+            </svg>
+          </div>
+        <div class="container container--narrow page-hero__inner">
+          <nav class="breadcrumbs" aria-label="Навигация">
+            <ol>
+              <li><a href="../index.html">Главная</a></li>
+              <li><a href="../wizalar.html">Визы</a></li>
+              <li><span aria-current="page">Рабочая виза</span></li>
+            </ol>
+          </nav>
+
+          <div class="page-hero__head" data-reveal>
+            <p class="eyebrow">Тип визы</p>
+            <h1>Рабочая виза</h1>
+            <p class="lead">Рабочая виза выдаётся для работы за рубежом по официальному трудовому договору. Её главная особенность &mdash; приглашение или разрешение на работу, оформленное принимающей стороной. Поэтому рабочая виза требует больше документов и больше времени, чем остальные.</p>
+          </div>
+        </div>
+      </section>
+
       <div class="container container--narrow">
 
-        <nav class="breadcrumbs" aria-label="Навигация">
-          <ol>
-            <li><a href="../index.html">Главная</a></li>
-            <li><a href="../wizalar.html">Визы</a></li>
-            <li><span aria-current="page">Рабочая виза</span></li>
-          </ol>
-        </nav>
-
-        <header class="page-head">
-          <p class="eyebrow">Тип визы</p>
-          <h1>Рабочая виза</h1>
-          <p class="lead">Рабочая виза выдаётся для работы за рубежом по официальному трудовому договору. Её главная особенность &mdash; приглашение или разрешение на работу, оформленное принимающей стороной. Поэтому рабочая виза требует больше документов и больше времени, чем остальные.</p>
-        </header>
-
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Кому подходит</h2>
           <ul class="checklist">
             <li>Тем, кто заключил договор с работодателем за рубежом или получил официальное предложение о работе</li>
@@ -351,19 +367,19 @@
           </ul>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Базовый список документов</h2>
-          <ul class="doclist">
-            <li>Загранпаспорт<span>срок действия должен полностью покрывать поездку</span></li>
-            <li>Фотография установленного размера</li>
-            <li>Заполненная визовая анкета</li>
-            <li>Договор с работодателем или официальное предложение о работе</li>
-            <li>Разрешение на работу или подтверждение его оформления<span>порядок зависит от страны</span></li>
-            <li>Документы об образовании и квалификации<span>при необходимости с переводом</span></li>
-            <li>Документы, подтверждающие опыт работы</li>
-            <li>Медицинская страховка</li>
-            <li>Сведения о месте проживания</li>
-            <li>Документы, подтверждающие финансовое положение</li>
+          <ul class="doclist" data-reveal-group>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Загранпаспорт<span>срок действия должен полностью покрывать поездку</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Фотография установленного размера</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Заполненная визовая анкета</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Договор с работодателем или официальное предложение о работе</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Разрешение на работу или подтверждение его оформления<span>порядок зависит от страны</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Документы об образовании и квалификации<span>при необходимости с переводом</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Документы, подтверждающие опыт работы</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Медицинская страховка</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Сведения о месте проживания</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Документы, подтверждающие финансовое положение</span></li>
           </ul>
           <div class="note">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
@@ -373,7 +389,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Этапы работы</h2>
           <ol class="steps steps--stack">
 
@@ -420,9 +436,10 @@
           </ol>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Сроки и цены</h2>
           <div class="pricing">
+            <p class="pricing__free">Первая консультация бесплатная</p>
             <p class="pricing__lead">Консультация бесплатная. Стоимость услуги определяется индивидуально &mdash; зависит от типа визы, страны и состояния документов. Точную цену называем на консультации.</p>
 
             <ul class="pricing__list">
@@ -450,7 +467,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Частые вопросы</h2>
           <div class="faq" data-faq>
 
@@ -641,6 +658,9 @@
           Все права защищены.
         </p>
         <p class="site-footer__copyright">Визовый центр &middot; Ашхабад, Туркменистан</p>
+        <!-- Ссылка на источники фотографий. Для снимков под CC-BY
+             и CC-BY-SA указание автора — требование лицензии. -->
+        <p class="site-footer__credits"><a href="../suratlar.html">Источники фотографий</a></p>
       </div>
     </div>
 

@@ -1,0 +1,209 @@
+{
+ "_comment": [
+  "Откуда взяты фотографии городов. Отсюда собираются три вещи:",
+  "  assets/photos/CREDITS.md   — список источников для вас;",
+  "  suratlar.html на трёх языках — та же страница для посетителей;",
+  "  сама загрузка снимков       — python3 scripts/photos.py --commons.",
+  "",
+  "Указание автора и лицензии — требование лицензий CC-BY и CC-BY-SA,",
+  "а не украшение. Убирать нельзя.",
+  "",
+  "shareAlike — снимок под лицензией с условием «те же права»:",
+  "обрезанная и сжатая версия распространяется под той же лицензией.",
+  "attribution — лицензия требует называть автора."
+ ],
+ "notice": {
+  "modified": {
+   "tk": "Surat saýt üçin kesildi we gysyldy.",
+   "ru": "Снимок обрезан и сжат для сайта.",
+   "en": "The photograph was cropped and compressed for this site."
+  },
+  "shareAlike": {
+   "tk": "Üýtgedilen görnüşi şol bir ygtyýarnamanyň şertlerinde ýaýradylýar.",
+   "ru": "Изменённая версия распространяется на условиях той же лицензии.",
+   "en": "The modified version is distributed under the same licence."
+  }
+ },
+ "photos": [
+  {
+   "photo": "istanbul",
+   "city": {
+    "tk": "Stambul",
+    "ru": "Стамбул",
+    "en": "Istanbul"
+   },
+   "author": "Moonik",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Exterior_of_Sultan_Ahmed_I_Mosque_in_Istanbul,_Turkey_002.jpg",
+   "file": "Exterior of Sultan Ahmed I Mosque in Istanbul, Turkey 002.jpg",
+   "attribution": true,
+   "shareAlike": true
+  },
+  {
+   "photo": "moscow",
+   "city": {
+    "tk": "Moskwa",
+    "ru": "Москва",
+    "en": "Moscow"
+   },
+   "author": "Юрий Д.К.",
+   "licence": "CC BY 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Moscow_-_Saint_Basil%27s_Cathedral_-_worm-eye_perspective_-_2025-8-17.jpg",
+   "file": "Moscow - Saint Basil's Cathedral - worm-eye perspective - 2025-8-17.jpg",
+   "attribution": true,
+   "shareAlike": false
+  },
+  {
+   "photo": "dubai",
+   "city": {
+    "tk": "Dubaý",
+    "ru": "Дубай",
+    "en": "Dubai"
+   },
+   "author": "Norlando Pobre",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Dubai_Marina_Skyline.jpg",
+   "file": "Dubai Marina Skyline.jpg",
+   "attribution": true,
+   "shareAlike": false
+  },
+  {
+   "photo": "beijing",
+   "city": {
+    "tk": "Pekin",
+    "ru": "Пекин",
+    "en": "Beijing"
+   },
+   "author": "Ermell",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Beijing_forbidden_city_Belvedere_of_Embodying_Benevolence-20071018-RM-142403.jpg",
+   "file": "Beijing forbidden city Belvedere of Embodying Benevolence-20071018-RM-142403.jpg",
+   "attribution": true,
+   "shareAlike": true
+  },
+  {
+   "photo": "berlin",
+   "city": {
+    "tk": "Berlin",
+    "ru": "Берлин",
+    "en": "Berlin"
+   },
+   "author": "Daniel Schwen",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Reichstag_pano.jpg",
+   "file": "Reichstag pano.jpg",
+   "attribution": true,
+   "shareAlike": true
+  },
+  {
+   "photo": "rome",
+   "city": {
+    "tk": "Rim",
+    "ru": "Рим",
+    "en": "Rome"
+   },
+   "author": "Dietmar Rabich",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Rome_(IT),_Kolosseum_--_2013_--_3379-86.jpg",
+   "file": "Rome (IT), Kolosseum -- 2013 -- 3379-86.jpg",
+   "attribution": true,
+   "shareAlike": true
+  },
+  {
+   "photo": "warsaw",
+   "city": {
+    "tk": "Warşawa",
+    "ru": "Варшава",
+    "en": "Warsaw"
+   },
+   "author": "Marcin Białek",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Warszawa-Zamek_Kr%C3%B3lewski.jpg",
+   "file": "Warszawa-Zamek Królewski.jpg",
+   "attribution": true,
+   "shareAlike": true
+  },
+  {
+   "photo": "prague",
+   "city": {
+    "tk": "Praga",
+    "ru": "Прага",
+    "en": "Prague"
+   },
+   "author": "Suicasmo",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Old_Town_Square_(Prague)_20150903.jpg",
+   "file": "Old Town Square (Prague) 20150903.jpg",
+   "attribution": true,
+   "shareAlike": true
+  },
+  {
+   "photo": "kuala-lumpur",
+   "city": {
+    "tk": "Kuala-Lumpur",
+    "ru": "Куала-Лумпур",
+    "en": "Kuala Lumpur"
+   },
+   "author": "Renek78",
+   "licence": "CC0",
+   "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "page": "https://commons.wikimedia.org/wiki/File:KLCC_Park_in_2025_02.jpg",
+   "file": "KLCC Park in 2025 02.jpg",
+   "attribution": false,
+   "shareAlike": false
+  },
+  {
+   "photo": "seoul",
+   "city": {
+    "tk": "Seul",
+    "ru": "Сеул",
+    "en": "Seoul"
+   },
+   "author": "Basile Morin",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Front_view_of_the_Imperial_Throne_Hall_Geunjeongjeon_at_Gyeongbokgung_Palace_with_blue_sky_in_Seoul.jpg",
+   "file": "Front view of the Imperial Throne Hall Geunjeongjeon at Gyeongbokgung Palace with blue sky in Seoul.jpg",
+   "attribution": true,
+   "shareAlike": true
+  },
+  {
+   "photo": "almaty",
+   "city": {
+    "tk": "Almaty",
+    "ru": "Алматы",
+    "en": "Almaty"
+   },
+   "author": "Nikolai Bulykin",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B,_%D0%92%D0%BE%D0%B7%D0%BD%D0%B5%D1%81%D0%B5%D0%BD%D1%81%D0%BA%D0%B8%D0%B9_%D1%81%D0%BE%D0%B1%D0%BE%D1%80_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83_(2).jpg",
+   "file": "Алматы, Вознесенский собор сверху (2).jpg",
+   "attribution": true,
+   "shareAlike": true
+  },
+  {
+   "photo": "minsk",
+   "city": {
+    "tk": "Minsk",
+    "ru": "Минск",
+    "en": "Minsk"
+   },
+   "author": "Liilia Moroz",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:%D0%9C%D0%B8%D0%BD%D1%81%D0%BA_%D0%A6%D0%B5%D0%BD%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9_%D1%80%D0%B0%D0%B9%D0%BE%D0%BD_2016_%D0%B3%D0%BE%D0%B4.jpg",
+   "file": "Минск Центральный район 2016 год.jpg",
+   "attribution": true,
+   "shareAlike": true
+  }
+ ]
+}

@@ -2,34 +2,45 @@
 """
 photos.py — готовит фотографии городов для блока стран на главной.
 
-Что делает: берёт исходный снимок, обрезает его по центру до 480×320,
-сжимает в WebP не тяжелее 22 КБ и кладёт в assets/photos/. Заодно
-записывает, откуда снимок взят, в assets/flags/CREDITS.md.
+Что делает: берёт исходный снимок, обрезает по центру до 480×320, приводит
+к общему виду, сжимает в WebP не тяжелее 22 КБ и кладёт в assets/photos/.
+Заодно переписывает assets/photos/CREDITS.md.
 
-Зачем так строго по весу: фотографий двенадцать, а посетители сидят
-на медленном интернете. Двенадцать снимков по 22 КБ — это 264 КБ,
-и они грузятся только когда до них доскроллят (loading="lazy").
+Зачем так строго по весу: снимков двенадцать, а посетители сидят на медленном
+интернете. Двенадцать по 22 КБ — это 264 КБ, и грузятся они только когда
+до них доскроллят (loading="lazy").
 
-Два способа работы
+Про общую обработку
+-------------------
+Снимки сделаны разными людьми и разной техникой. Если положить их в сетку
+как есть, набор рассыпается: один синее, другой желтее, третий вялый.
+Поэтому ко всем двенадцати применяются ОДИНАКОВЫЕ поправки — чуть меньше
+насыщенности, чуть больше контраста, лёгкая общая теплота. Индивидуально
+ничего не подгоняется: смысл именно в том, что обработка одна на всех.
+Это выравнивание, а не фильтр — здания и небо остаются естественными.
+
+Три способа работы
 ------------------
 
-1. Скачать с Unsplash. Нужен бесплатный ключ разработчика:
-   зарегистрируйте приложение на unsplash.com/developers, скопируйте
-   Access Key и запустите:
+1. Скачать с Викисклада по списку из data/photos.json — так собран
+   нынешний набор:
 
-       UNSPLASH_KEY=ваш_ключ python3 scripts/photos.py
+       python3 scripts/photos.py --commons
 
-   Что искать по каждому городу, написано в data/countries.json,
-   поле "query".
+2. Скачать с Unsplash. Нужен бесплатный ключ разработчика
+   (unsplash.com/developers → New Application → Access Key):
 
-2. Взять готовые файлы из папки. Годится, если снимки вы скачали руками
-   или они свои собственные. Имена файлов должны совпадать с полем
-   "photo" в data/countries.json (istanbul.jpg, moscow.png и так далее):
+       UNSPLASH_KEY=ваш_ключ python3 scripts/photos.py --unsplash
+
+   Что искать по каждому городу — в data/countries.json, поле "query".
+
+3. Взять готовые файлы из папки. Имена должны совпадать с полем "photo"
+   в data/countries.json (istanbul.jpg, moscow.png и так далее):
 
        python3 scripts/photos.py --from ~/Downloads/goroda
 
-   При этом способе строки об авторах в CREDITS.md скрипт дописать
-   не может — впишите их сами.
+   При этом способе строки об авторах скрипт дописать не может —
+   впишите их в data/photos.json сами.
 
 После запуска:  node scripts/sync-layout.js
 
@@ -42,18 +53,30 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
 PHOTOS = os.path.join("assets", "photos")
-CREDITS = os.path.join("assets", "flags", "CREDITS.md")
-DATA = os.path.join("data", "countries.json")
+CREDITS = os.path.join("assets", "photos", "CREDITS.md")
+COUNTRIES = os.path.join("data", "countries.json")
+SOURCES = os.path.join("data", "photos.json")
 
 WIDTH, HEIGHT = 480, 320
 LIMIT = 22 * 1024
 SOURCE_EXT = (".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff")
 
+# --- Общая обработка. Одни и те же числа для всех двенадцати снимков. -------
+# Меняете — меняйте осторожно и сразу для всех: разнобой хуже, чем
+# не самая удачная, но одинаковая обработка.
+SATURATION = 0.88   # чуть спокойнее цвет
+CONTRAST   = 1.08   # чуть плотнее тени
+WARM_RED   = 1.03   # общая теплота: красного немного больше…
+WARM_BLUE  = 0.97   # …синего немного меньше
+
+COMMONS_API = "https://commons.wikimedia.org/w/api.php"
+AGENT = "VisaWayGroup-site-build/1.0 (kerimdev7@gmail.com)"
+
 
 def fetch(url, headers=None):
     """Качаем через curl: у системного питона на маке часто не настроен
     список корневых сертификатов, и обычный urlopen падает."""
-    args = ["curl", "-sSL", "--max-time", "120", "-A", "Mozilla/5.0"]
+    args = ["curl", "-sSL", "--max-time", "120", "-A", AGENT]
     for key, value in (headers or {}).items():
         args += ["-H", f"{key}: {value}"]
     args.append(url)
@@ -63,8 +86,20 @@ def fetch(url, headers=None):
     return result.stdout
 
 
+def grade(image):
+    """Общая обработка: одинаковая для всех снимков набора."""
+    from PIL import Image, ImageEnhance
+
+    image = ImageEnhance.Contrast(image).enhance(CONTRAST)
+    image = ImageEnhance.Color(image).enhance(SATURATION)
+    red, green, blue = image.split()
+    red = red.point(lambda v: min(255, int(v * WARM_RED)))
+    blue = blue.point(lambda v: min(255, int(v * WARM_BLUE)))
+    return Image.merge("RGB", (red, green, blue))
+
+
 def crop_and_encode(image):
-    """Обрезка по центру до нужных пропорций, потом подбор сжатия."""
+    """Обрезка по центру, общая обработка, потом подбор сжатия."""
     from PIL import Image
 
     image = image.convert("RGB")
@@ -78,7 +113,7 @@ def crop_and_encode(image):
         new_height = int(width / target)
         top = (height - new_height) // 2
         image = image.crop((0, top, width, top + new_height))
-    image = image.resize((WIDTH, HEIGHT), Image.LANCZOS)
+    image = grade(image.resize((WIDTH, HEIGHT), Image.LANCZOS))
 
     # Качество подбираем сверху вниз: берём первое, которое влезает в лимит,
     # чтобы не пережимать снимок сильнее необходимого.
@@ -92,15 +127,31 @@ def crop_and_encode(image):
     return data, quality
 
 
-def write_credits(entries):
-    """Список источников. Лицензия Unsplash ссылки на автора не требует,
-    но при споре именно этот файл показывает, что снимки взяты законно."""
+def sources():
+    if not os.path.exists(SOURCES):
+        return None
+    return json.load(open(SOURCES, encoding="utf-8"))
+
+
+def write_credits():
+    """Список источников. Для CC-BY и CC-BY-SA указание автора обязательно,
+    а для CC-BY-SA обязательна ещё и пометка, что изменённая версия
+    распространяется под той же лицензией."""
+    data = sources()
+    if not data:
+        print("  data/photos.json нет — CREDITS.md не тронут")
+        return
+
+    notice = data["notice"]
     lines = [
         "# Откуда взяты фотографии и флаги",
         "",
-        "Файл нужен на случай вопросов о правах. Лицензия Unsplash разрешает",
-        "коммерческое использование и не требует указывать автора, но список",
-        "источников — ваше доказательство, что снимки взяты законно.",
+        "Файл нужен на случай вопросов о правах. Для снимков под CC-BY и CC-BY-SA",
+        "указание автора — требование лицензии, а не вежливость. Тот же список",
+        "открыт посетителям на странице `suratlar.html`.",
+        "",
+        "Собирается скриптом: `python3 scripts/photos.py`. Правьте не этот файл,",
+        "а `data/photos.json`.",
         "",
         "## Флаги",
         "",
@@ -110,42 +161,87 @@ def write_credits(entries):
         "",
         "## Фотографии городов",
         "",
-        "`assets/photos/*.webp` — [Unsplash](https://unsplash.com/license),",
-        "лицензия разрешает коммерческое использование.",
+        "Все — [Викисклад](https://commons.wikimedia.org/), лицензии CC0, CC-BY и CC-BY-SA.",
+        "Файлов с условиями «некоммерческое использование» и «без производных» в наборе нет:",
+        "они нам запрещены.",
         "",
-        "| Файл | Город | Автор | Снимок |",
-        "|---|---|---|---|",
+        f"Обработка одна на все снимки: {notice['modified']['ru']}",
+        "",
     ]
-    for e in entries:
-        author = e.get("author") or "—"
-        author_link = e.get("author_link")
-        photo_link = e.get("photo_link")
-        author_cell = f"[{author}]({author_link})" if author_link else author
-        photo_cell = f"[{e['id']}]({photo_link})" if photo_link else (e.get("id") or "—")
-        lines.append(f"| `{e['slug']}.webp` | {e['city']} | {author_cell} | {photo_cell} |")
-    lines.append("")
+    for p in data["photos"]:
+        path = os.path.join(PHOTOS, p["photo"] + ".webp")
+        size = f"{os.path.getsize(path)/1024:.1f} КБ" if os.path.exists(path) else "файла нет"
+        lines.append(f"### {p['city']['ru']} — `{p['photo']}.webp` ({size})")
+        lines.append("")
+        lines.append(f"- Автор: **{p['author']}**")
+        licence = f"[{p['licence']}]({p['licenceUrl']})" if p.get("licenceUrl") else p["licence"]
+        lines.append(f"- Лицензия: {licence}")
+        lines.append(f"- Страница описания: <{p['page']}>")
+        note = notice["modified"]["ru"]
+        if p.get("shareAlike"):
+            note += " " + notice["shareAlike"]["ru"]
+        lines.append(f"- {note}")
+        lines.append("")
+
     os.makedirs(os.path.dirname(CREDITS), exist_ok=True)
     open(CREDITS, "w", encoding="utf-8").write("\n".join(lines))
 
 
-def load_existing_credits():
-    """Строки об авторах из прошлого запуска, чтобы не потерять их,
-    когда часть снимков обновляют вручную."""
-    known = {}
-    if not os.path.exists(CREDITS):
-        return known
-    for line in open(CREDITS, encoding="utf-8"):
-        m = re.match(r"\|\s*`([^`]+)\.webp`\s*\|([^|]*)\|([^|]*)\|([^|]*)\|", line)
-        if m:
-            known[m.group(1)] = m.group(3).strip()
-    return known
+def cities():
+    """Города из data/countries.json — по ним же названы файлы."""
+    data = json.load(open(COUNTRIES, encoding="utf-8"))
+    return [{"photo": c["photo"], "query": c.get("query"), "city": c["city"]["ru"]}
+            for c in data["countries"] if c.get("photo")]
 
 
-def from_unsplash(countries, key):
+def save(slug, data, quality, note):
+    os.makedirs(PHOTOS, exist_ok=True)
+    open(os.path.join(PHOTOS, slug + ".webp"), "wb").write(data)
+    mark = "" if len(data) <= LIMIT else "  ПРЕВЫШЕН ЛИМИТ"
+    print(f"  {slug:14} {len(data)/1024:5.1f} КБ  качество {quality}  {note}{mark}")
+
+
+def from_commons():
     from PIL import Image
 
-    entries = []
-    for c in countries:
+    data = sources()
+    if not data:
+        sys.exit(f"ОШИБКА: нет {SOURCES} — из чего скачивать, неизвестно")
+
+    titles = [p["file"] for p in data["photos"]]
+    args = ["curl", "-sS", "--max-time", "90", "-G", COMMONS_API, "-A", AGENT]
+    for key, value in (("action", "query"), ("format", "json"), ("prop", "imageinfo"),
+                       ("iiprop", "url"), ("iiurlwidth", "1400"),
+                       ("titles", "|".join("File:" + t for t in titles))):
+        args += ["--data-urlencode", f"{key}={value}"]
+    answer = json.loads(subprocess.run(args, capture_output=True).stdout)
+    by_title = {}
+    for page in answer["query"]["pages"].values():
+        info = (page.get("imageinfo") or [{}])[0]
+        by_title[page["title"][5:]] = info.get("thumburl") or info.get("url")
+
+    done = 0
+    for p in data["photos"]:
+        url = by_title.get(p["file"])
+        if not url:
+            print(f"  {p['photo']:14} не нашёлся на Викискладе: {p['file']}")
+            continue
+        image = Image.open(io.BytesIO(fetch(url)))
+        payload, quality = crop_and_encode(image)
+        save(p["photo"], payload, quality, f"© {p['author']}")
+        done += 1
+    return done
+
+
+def from_unsplash():
+    from PIL import Image
+
+    key = os.environ.get("UNSPLASH_KEY", "").strip()
+    if not key:
+        sys.exit("Не задан ключ: UNSPLASH_KEY=ваш_ключ python3 scripts/photos.py --unsplash")
+
+    done = 0
+    for c in cities():
         query = c.get("query") or c["city"]
         url = ("https://api.unsplash.com/search/photos?per_page=5&orientation=landscape&query="
                + urllib.parse.quote(query))
@@ -156,34 +252,23 @@ def from_unsplash(countries, key):
             print(f"  {c['photo']:14} ничего не нашлось по запросу «{query}»")
             continue
         photo = results[0]
-        raw = photo["urls"]["raw"] + "&w=1400&fm=jpg&q=85"
-        image = Image.open(io.BytesIO(fetch(raw)))
-        data, quality = crop_and_encode(image)
-
-        os.makedirs(PHOTOS, exist_ok=True)
-        open(os.path.join(PHOTOS, c["photo"] + ".webp"), "wb").write(data)
-        entries.append({
-            "slug": c["photo"], "city": c["city"], "id": photo["id"],
-            "author": photo["user"]["name"],
-            "author_link": photo["user"]["links"]["html"],
-            "photo_link": photo["links"]["html"],
-        })
-        mark = "" if len(data) <= LIMIT else "  ПРЕВЫШЕН ЛИМИТ"
-        print(f"  {c['photo']:14} {len(data)/1024:5.1f} КБ  качество {quality}"
-              f"  © {photo['user']['name']}{mark}")
-    return entries
+        image = Image.open(io.BytesIO(fetch(photo["urls"]["raw"] + "&w=1400&fm=jpg&q=85")))
+        payload, quality = crop_and_encode(image)
+        save(c["photo"], payload, quality, f"© {photo['user']['name']}")
+        done += 1
+    print("\n⚠  Данные об авторах впишите в data/photos.json вручную.")
+    return done
 
 
-def from_folder(countries, folder):
+def from_folder(folder):
     from PIL import Image
 
     folder = os.path.expanduser(folder)
     if not os.path.isdir(folder):
         sys.exit(f"ОШИБКА: нет папки {folder}")
 
-    known = load_existing_credits()
-    entries = []
-    for c in countries:
+    done = 0
+    for c in cities():
         source = None
         for ext in SOURCE_EXT:
             candidate = os.path.join(folder, c["photo"] + ext)
@@ -193,16 +278,10 @@ def from_folder(countries, folder):
         if not source:
             print(f"  {c['photo']:14} файла нет в папке — пропущен")
             continue
-
-        data, quality = crop_and_encode(Image.open(source))
-        os.makedirs(PHOTOS, exist_ok=True)
-        open(os.path.join(PHOTOS, c["photo"] + ".webp"), "wb").write(data)
-        entries.append({"slug": c["photo"], "city": c["city"],
-                        "author": known.get(c["photo"], ""), "id": ""})
-        mark = "" if len(data) <= LIMIT else "  ПРЕВЫШЕН ЛИМИТ"
-        print(f"  {c['photo']:14} {len(data)/1024:5.1f} КБ  качество {quality}"
-              f"  из {os.path.basename(source)}{mark}")
-    return entries
+        payload, quality = crop_and_encode(Image.open(source))
+        save(c["photo"], payload, quality, f"из {os.path.basename(source)}")
+        done += 1
+    return done
 
 
 def main():
@@ -211,35 +290,24 @@ def main():
     except ImportError:
         sys.exit("Нужен Pillow:  pip3 install pillow")
 
-    data = json.load(open(DATA, encoding="utf-8"))
-    countries = [
-        {"photo": c["photo"], "query": c.get("query"), "city": c["city"]["ru"]}
-        for c in data["countries"] if c.get("photo")
-    ]
-
     if "--from" in sys.argv:
         folder = sys.argv[sys.argv.index("--from") + 1]
         print(f"Беру готовые снимки из {folder}\n")
-        entries = from_folder(countries, folder)
-    else:
-        key = os.environ.get("UNSPLASH_KEY", "").strip()
-        if not key:
-            sys.exit(
-                "Не задан ключ Unsplash.\n\n"
-                "  Бесплатный ключ: unsplash.com/developers → New Application → Access Key.\n"
-                "  Потом:  UNSPLASH_KEY=ваш_ключ python3 scripts/photos.py\n\n"
-                "  Если снимки уже скачаны руками:\n"
-                "          python3 scripts/photos.py --from путь/к/папке"
-            )
+        done = from_folder(folder)
+    elif "--unsplash" in sys.argv:
         print("Скачиваю с Unsplash\n")
-        entries = from_unsplash(countries, key)
+        done = from_unsplash()
+    else:
+        print("Скачиваю с Викисклада по списку из data/photos.json\n")
+        done = from_commons()
 
-    if not entries:
-        sys.exit("\nНи одной фотографии не получилось — CREDITS.md не тронут.")
+    if not done:
+        sys.exit("\nНи одной фотографии не получилось.")
 
-    write_credits(entries)
-    total = sum(os.path.getsize(os.path.join(PHOTOS, e["slug"] + ".webp")) for e in entries)
-    print(f"\nГотово: {len(entries)} шт., вместе {total/1024:.0f} КБ")
+    write_credits()
+    total = sum(os.path.getsize(os.path.join(PHOTOS, f))
+                for f in os.listdir(PHOTOS) if f.endswith(".webp"))
+    print(f"\nГотово: {done} шт., вместе {total/1024:.0f} КБ")
     print(f"Источники записаны в {CREDITS}")
     print("Теперь: node scripts/sync-layout.js")
 

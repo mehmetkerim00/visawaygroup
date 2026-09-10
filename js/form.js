@@ -265,10 +265,27 @@
     showStatus(MESSAGES.mailOpened);
   }
 
-  function copyOnly() {
+  /* Кнопка «скопировать» на две секунды превращается в «скопировано».
+     Надпись и значок для этого уже лежат в разметке — здесь только
+     переключается класс, чтобы перевод не оказался внутри скрипта. */
+  var copyTimer = null;
+
+  function markCopied(button) {
+    if (!button) return;
+    button.classList.add("is-done");
+    if (copyTimer) clearTimeout(copyTimer);
+    copyTimer = setTimeout(function () {
+      button.classList.remove("is-done");
+      copyTimer = null;
+    }, 2000);
+  }
+
+  function copyOnly(event) {
     if (!validate()) return;
+    var button = event && event.currentTarget;
     copyText(buildMessage()).then(function () {
       showStatus(MESSAGES.copied);
+      markCopied(button);
     }, function () {
       showStatus(MESSAGES.copyFailed);
     });

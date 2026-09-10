@@ -559,6 +559,12 @@ body {
   text-underline-offset: 0.2em;
 }
 
+/* Ссылка на источники фотографий: мелко, но не спрятана —
+   это требование лицензий CC-BY и CC-BY-SA. */
+.site-footer__credits {
+  font-size: var(--text-xs);
+}
+
 .site-footer :focus-visible {
   outline-color: var(--copper-light);
 }

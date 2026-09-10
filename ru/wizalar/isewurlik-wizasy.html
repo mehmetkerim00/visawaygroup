@@ -323,24 +323,40 @@
   <!-- header:end -->
 
   <main class="site-main" id="mazmun">
-    <article class="page">
+    <article class="page page--service">
+
+      <!-- Первый экран страницы услуги: тёмная полоса во всю ширину.
+           Вдвое ниже, чем на главной — здесь она представляет раздел,
+           а не открывает сайт. -->
+      <section class="page-hero">
+          <div class="page-hero__art" aria-hidden="true">
+            <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path class="page-hero__line" d="M-10 232 C 90 214, 150 120, 250 88 C 320 66, 360 44, 412 22"
+                    fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 13"/>
+              <circle class="page-hero__ring" cx="352" cy="46" r="17" fill="none" stroke-width="1.5"/>
+              <circle class="page-hero__dot" cx="352" cy="46" r="5.5"/>
+            </svg>
+          </div>
+        <div class="container container--narrow page-hero__inner">
+          <nav class="breadcrumbs" aria-label="Навигация">
+            <ol>
+              <li><a href="../index.html">Главная</a></li>
+              <li><a href="../wizalar.html">Визы</a></li>
+              <li><span aria-current="page">Деловая виза</span></li>
+            </ol>
+          </nav>
+
+          <div class="page-hero__head" data-reveal>
+            <p class="eyebrow">Тип визы</p>
+            <h1>Деловая виза</h1>
+            <p class="lead">Деловая виза выдаётся для переговоров, выставок, обучающих семинаров и коротких командировок. Основной документ &mdash; приглашение принимающей компании и письма, подтверждающие деловую цель поездки.</p>
+          </div>
+        </div>
+      </section>
+
       <div class="container container--narrow">
 
-        <nav class="breadcrumbs" aria-label="Навигация">
-          <ol>
-            <li><a href="../index.html">Главная</a></li>
-            <li><a href="../wizalar.html">Визы</a></li>
-            <li><span aria-current="page">Деловая виза</span></li>
-          </ol>
-        </nav>
-
-        <header class="page-head">
-          <p class="eyebrow">Тип визы</p>
-          <h1>Деловая виза</h1>
-          <p class="lead">Деловая виза выдаётся для переговоров, выставок, обучающих семинаров и коротких командировок. Основной документ &mdash; приглашение принимающей компании и письма, подтверждающие деловую цель поездки.</p>
-        </header>
-
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Кому подходит</h2>
           <ul class="checklist">
             <li>Тем, кто едет на переговоры с зарубежными партнёрами</li>
@@ -351,20 +367,20 @@
           </ul>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Базовый список документов</h2>
-          <ul class="doclist">
-            <li>Загранпаспорт</li>
-            <li>Фотография установленного размера</li>
-            <li>Заполненная визовая анкета</li>
-            <li>Приглашение принимающей компании</li>
-            <li>Письмо или приказ о командировке от вашей компании</li>
-            <li>Справка с места работы с указанием должности</li>
-            <li>Регистрационные документы компании<span>если требуется</span></li>
-            <li>Подтверждение участия в выставке или мероприятии<span>если применимо</span></li>
-            <li>Бронь жилья и билетов</li>
-            <li>Медицинская страховка</li>
-            <li>Документы, подтверждающие финансовое положение<span>с вашего счёта или за счёт компании</span></li>
+          <ul class="doclist" data-reveal-group>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Загранпаспорт</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Фотография установленного размера</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Заполненная визовая анкета</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Приглашение принимающей компании</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Письмо или приказ о командировке от вашей компании</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Справка с места работы с указанием должности</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Регистрационные документы компании<span>если требуется</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Подтверждение участия в выставке или мероприятии<span>если применимо</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Бронь жилья и билетов</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Медицинская страховка</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Документы, подтверждающие финансовое положение<span>с вашего счёта или за счёт компании</span></span></li>
           </ul>
           <div class="note">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
@@ -374,7 +390,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Этапы работы</h2>
           <ol class="steps steps--stack">
 
@@ -421,9 +437,10 @@
           </ol>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Сроки и цены</h2>
           <div class="pricing">
+            <p class="pricing__free">Первая консультация бесплатная</p>
             <p class="pricing__lead">Консультация бесплатная. Стоимость услуги определяется индивидуально &mdash; зависит от типа визы, страны и состояния документов. Точную цену называем на консультации.</p>
 
             <ul class="pricing__list">
@@ -451,7 +468,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Частые вопросы</h2>
           <div class="faq" data-faq>
 
@@ -642,6 +659,9 @@
           Все права защищены.
         </p>
         <p class="site-footer__copyright">Визовый центр &middot; Ашхабад, Туркменистан</p>
+        <!-- Ссылка на источники фотографий. Для снимков под CC-BY
+             и CC-BY-SA указание автора — требование лицензии. -->
+        <p class="site-footer__credits"><a href="../suratlar.html">Источники фотографий</a></p>
       </div>
     </div>
 

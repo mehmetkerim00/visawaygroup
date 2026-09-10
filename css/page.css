@@ -322,134 +322,23 @@
    КОНТАКТЫ
    ========================================================================== */
 
-.contact-list {
-  display: grid;
-  gap: var(--space-3);
-  margin-top: var(--space-5);
-}
 
 @media (min-width: 600px) {
-  .contact-list--two {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
-.contact-card {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-4);
-  padding: var(--space-5);
-  background-color: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  color: var(--ink);
-  text-decoration: none;
-  transition: border-color var(--transition-base);
-}
 
-a.contact-card:hover {
-  border-color: var(--copper);
-}
+a
 
-.contact-card__icon {
-  flex: none;
-  color: var(--copper);
-  margin-top: 2px;
-}
-
-.contact-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.contact-card__label {
-  color: var(--muted);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-medium);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.contact-card__value {
-  font-size: var(--text-lg);
-  font-weight: var(--weight-semibold);
-  overflow-wrap: anywhere;
-}
-
-.contact-card__value a {
-  color: var(--copper-dark);
-  text-decoration: none;
-}
-
-.contact-card__value a:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
-
-.contact-card__note {
-  margin-top: var(--space-1);
-  color: var(--muted);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-regular);
-}
 
 /* Главный способ связи — первый телефон в списке. Крупнее остальных.
    Порядок телефонов задаётся в data/site.json: первый в списке = главный. */
-.contact-list--phones .contact-card:first-child {
-  border-color: var(--copper);
-  padding-block: var(--space-6);
-}
 
-.contact-list--phones .contact-card:first-child .contact-card__value {
-  font-size: var(--text-h3);
-  color: var(--copper-dark);
-}
-
-.contact-list--phones .contact-card:first-child .contact-card__icon {
-  width: 40px;
-  height: 40px;
-}
 
 /* Строка «адрес / часы / языки» */
-.factlist {
-  display: grid;
-  gap: var(--space-5);
-  margin-top: var(--space-5);
-}
 
 @media (min-width: 768px) {
-  .factlist {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
-.fact {
-  min-width: 0;
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--line);
-}
-
-.fact__icon {
-  color: var(--copper);
-  margin-bottom: var(--space-3);
-}
-
-.fact__label {
-  display: block;
-  margin-bottom: var(--space-2);
-  color: var(--muted);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-medium);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.fact__value {
-  font-size: var(--text-sm);
-  line-height: var(--leading-snug);
-}
 
 /* ==========================================================================
    ФОРМА ЗАЯВКИ
@@ -685,7 +574,6 @@ a.contact-card:hover {
 }
 
 
-
 /* Блок «Сроки и цены»: вводный абзац и кнопка на контакты.
    Цифр в блоке нет намеренно — цена зависит от случая, и это сказано прямо. */
 .pricing__lead {
@@ -704,4 +592,862 @@ a.contact-card:hover {
     display: flex;
     width: 100%;
   }
+}
+
+
+/* ==========================================================================
+   ИСТОЧНИКИ ФОТОГРАФИЙ (suratlar.html)
+
+   Страница нужна не для красоты: лицензии CC-BY и CC-BY-SA требуют называть
+   автора, а CC-BY-SA — ещё и помечать, что изменённая версия расходится
+   под той же лицензией. Список собирается из data/photos.json.
+   ========================================================================== */
+
+.credits {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-7) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .credits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+}
+
+.credit {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+  padding: var(--space-4);
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.credit__thumb {
+  width: 96px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.credit__body {
+  min-width: 0;
+}
+
+.credit__city {
+  margin: 0;
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+}
+
+.credit__author {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.credit__licence {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+}
+
+.credit__source {
+  color: var(--muted);
+}
+
+/* Строка про то, что снимок изменён. Мелко, но на месте:
+   без неё условия лицензии не выполнены. */
+.credit__note {
+  margin: var(--space-2) 0 0;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+}
+
+.credits__flags {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+
+/* ==========================================================================
+   СТРАНИЦА КОНТАКТОВ
+
+   Две колонки: слева тёмная панель со связью, справа форма на светлой
+   карточке. Телефон — главный канал, поэтому он и самое крупное на странице.
+   На телефоне колонки становятся друг под другом, тёмная панель первой.
+   ========================================================================== */
+
+.contacts {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-7);
+}
+
+@media (min-width: 900px) {
+  .contacts {
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--space-6);
+    align-items: stretch;
+  }
+}
+
+/* Обе колонки — одинаковой высоты, поэтому панель тянется вниз */
+.contacts__panel,
+.contacts__form {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* --- Тёмная панель --------------------------------------------------------- */
+
+.contact-panel {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  padding: var(--space-6) var(--space-5);
+  background-color: var(--dark);
+  border-radius: var(--radius-lg);
+  color: var(--on-dark);
+}
+
+@media (min-width: 600px) {
+  .contact-panel {
+    padding: var(--space-7) var(--space-6);
+  }
+}
+
+/* Тот же приглушённый мотив маршрута, что в блоке призыва */
+.contact-panel__art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.contact-panel__art svg {
+  width: 100%;
+  height: 100%;
+}
+
+.contact-panel__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.contact-panel__title {
+  margin: 0;
+  color: var(--on-dark);
+  font-size: var(--text-h2);
+}
+
+.contact-panel__note {
+  margin-top: var(--space-3);
+  color: var(--on-dark-muted);
+  font-size: var(--text-sm);
+  max-width: 34ch;
+}
+
+/* --- Телефоны: самое заметное на странице ---------------------------------- */
+
+.phones {
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.phones li + li {
+  margin-top: var(--space-3);
+}
+
+.phones__link {
+  display: inline-block;
+  color: var(--on-dark);
+  font-family: var(--font-display);
+  /* Крупнее любого заголовка страницы, кроме h1: это главный канал связи */
+  font-size: clamp(1.5rem, 2.4vw + 0.9rem, 2.25rem);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .phones__link:hover {
+    color: var(--copper-on-dark);
+  }
+}
+
+.phones__link:focus-visible {
+  outline-color: var(--copper-on-dark);
+}
+
+
+/* --- Почта, Instagram, мессенджеры ----------------------------------------- */
+
+.contact-panel__subtitle {
+  margin: var(--space-6) 0 var(--space-3);
+  color: var(--on-dark-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.contact-lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact-lines li + li {
+  margin-top: var(--space-2);
+}
+
+.contact-line {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--space-3);
+  padding: var(--space-2) 0;
+  color: var(--on-dark);
+  text-decoration: none;
+}
+
+.contact-line__icon {
+  grid-row: 1 / span 2;
+  color: var(--copper-on-dark);
+}
+
+.contact-line__label {
+  color: var(--on-dark-muted);
+  font-size: var(--text-xs);
+}
+
+.contact-line__value {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  overflow-wrap: anywhere;
+}
+
+@media (hover: hover) {
+  a.contact-line:hover .contact-line__value {
+    color: var(--copper-on-dark);
+  }
+}
+
+/* --- Часы и языки: тонкой строкой в самом низу ------------------------------ */
+
+.contact-panel__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  margin: auto 0 0;
+  padding-top: var(--space-6);
+  color: var(--on-dark-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+}
+
+.contact-panel :focus-visible {
+  outline-color: var(--copper-on-dark);
+}
+
+
+/* --- Форма на светлой карточке ---------------------------------------------- */
+
+.contacts__form {
+  padding: var(--space-6) var(--space-5);
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 600px) {
+  .contacts__form {
+    padding: var(--space-7) var(--space-6);
+  }
+}
+
+.contacts__form > h2 {
+  margin-top: 0;
+}
+
+
+/* --- Плавающие подписи ------------------------------------------------------
+
+   Подпись сидит внутри поля и уезжает наверх, когда в поле встают курсором
+   или что-то пишут. Держится это на :placeholder-shown — поэтому у каждого
+   поля в разметке стоит placeholder=" " с пробелом: пока он «показан»,
+   поле считается пустым. Скрипт для этого не нужен.
+
+   Порядок в разметке обратный привычному: сначала поле, потом подпись.
+   Иначе селектор «поле в фокусе + подпись» не сработает.
+   ---------------------------------------------------------------------------- */
+
+.field--float {
+  position: relative;
+}
+
+.field--float input,
+.field--float select,
+.field--float textarea {
+  /* Сверху оставлено место под уехавшую подпись */
+  padding: 24px var(--space-4) 10px;
+  min-height: 60px;
+}
+
+.field--float textarea {
+  padding-top: 28px;
+}
+
+.field--float label {
+  position: absolute;
+  left: calc(var(--space-4) + 1px);
+  top: 19px;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  line-height: 1;
+  /* Клик по подписи должен попадать в поле, а не в саму подпись */
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform var(--dur-base) var(--ease-out),
+              color var(--dur-fast) var(--ease-hover);
+}
+
+/* Поле заполнено или в фокусе — подпись уезжает наверх и мельчает */
+.field--float input:focus + label,
+.field--float input:not(:placeholder-shown) + label,
+.field--float textarea:focus + label,
+.field--float textarea:not(:placeholder-shown) + label,
+.field--select label {
+  transform: translateY(-11px) scale(0.75);
+}
+
+.field--float input:focus + label,
+.field--float textarea:focus + label,
+.field--float select:focus + label {
+  color: var(--copper-dark);
+}
+
+/* У списка выбора значение есть всегда, поэтому подпись у него
+   всегда наверху — прятать её не за чем. */
+.field--select select {
+  padding-top: 26px;
+}
+
+/* Медное кольцо фокуса — плавное, поверх обычной обводки */
+.field--float input:focus,
+.field--float select:focus,
+.field--float textarea:focus {
+  border-color: var(--copper);
+  box-shadow: 0 0 0 3px var(--copper-tint);
+}
+
+.field--float input,
+.field--float select,
+.field--float textarea {
+  transition: border-color var(--transition-fast),
+              box-shadow var(--dur-base) var(--ease-out);
+}
+
+.field__hint {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+/* Ошибка появляется со сдвигом, а не возникает мгновенно */
+.field__error {
+  margin-top: var(--space-2);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .field__error[style*="block"],
+  .field__error:not(:empty) {
+    animation: field-error var(--dur-base) var(--ease-out);
+  }
+
+  @keyframes field-error {
+    from { opacity: 0; transform: translateY(-4px); }
+  }
+}
+
+/* Поле с ошибкой видно и без цвета: рамка становится толще */
+.field--float input[aria-invalid="true"],
+.field--float textarea[aria-invalid="true"] {
+  border-color: var(--copper-dark);
+  box-shadow: 0 0 0 3px rgba(175, 95, 57, 0.14);
+}
+
+
+/* --- Предупреждение о документах --------------------------------------------
+   Не серая сноска, а полоса с медной левой границей: это единственное место
+   на сайте, где мы просим чего-то НЕ делать. */
+
+.warn {
+  align-items: flex-start;
+  max-width: none;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--copper);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: var(--space-5);
+}
+
+
+/* --- Кнопка «скопировать» ----------------------------------------------------
+   После нажатия на две секунды показывает вторую надпись со значком.
+   Обе надписи лежат в разметке, чтобы перевод не попал внутрь скрипта. */
+
+.btn__icon--done,
+.btn__text--done {
+  display: none;
+}
+
+.btn.is-done .btn__icon,
+.btn.is-done .btn__text {
+  display: none;
+}
+
+.btn.is-done .btn__icon--done {
+  display: inline-flex;
+}
+
+.btn.is-done .btn__text--done {
+  display: inline;
+}
+
+.btn.is-done {
+  border-color: var(--copper-dark);
+  color: var(--copper-dark);
+}
+
+
+/* --- «Приходите в офис» ------------------------------------------------------
+   Карты нет: вместо неё фирменный пунктир, ведущий к метке. Это знак того,
+   что нас можно найти, а не попытка изобразить карту. */
+
+.office {
+  display: grid;
+  gap: var(--space-5);
+  align-items: center;
+  margin-top: var(--space-8);
+  padding: var(--space-6) var(--space-5);
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 768px) {
+  .office {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+    gap: var(--space-7);
+    padding: var(--space-7) var(--space-7);
+  }
+}
+
+.office__title {
+  margin: 0 0 var(--space-3);
+}
+
+.office__address {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+}
+
+.office__lead {
+  margin-top: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.office__mark svg {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin-inline: auto;
+}
+
+.office__route { stroke: var(--copper); opacity: 0.75; }
+.office__start { fill: var(--muted); }
+.office__pin   { stroke: var(--copper); fill: none; }
+.office__pin circle { fill: var(--copper); stroke: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .office.is-visible .office__route {
+    stroke-dasharray: 5 13;
+    animation: office-draw var(--dur-slow) var(--ease-out) both;
+  }
+
+  @keyframes office-draw {
+    from { opacity: 0; }
+    to   { opacity: 0.75; }
+  }
+
+  .office.is-visible .office__pin {
+    animation: office-pin var(--dur-slow) var(--ease-out) 300ms both;
+  }
+
+  @keyframes office-pin {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+
+/* ==========================================================================
+   ВНУТРЕННИЕ СТРАНИЦЫ: первый экран, документы, цены, 404
+   ========================================================================== */
+
+/* --- Тёмная полоса вверху страницы услуги ----------------------------------
+   Вдвое ниже, чем первый экран главной: здесь она представляет раздел,
+   а не открывает сайт. */
+
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  /* Отступ снизу небольшой: первая же секция страницы добавляет свой,
+     иначе между полосой и текстом получается провал. */
+  margin-bottom: var(--space-2);
+  padding-block: var(--space-6) var(--space-7);
+  background-color: var(--dark);
+  color: var(--on-dark);
+}
+
+@media (min-width: 768px) {
+  .page-hero {
+    margin-bottom: var(--space-3);
+    padding-block: var(--space-7) var(--space-8);
+  }
+}
+
+.page-hero__inner {
+  position: relative;
+}
+
+@media (min-width: 900px) {
+  .page-hero__inner {
+    /* Мотив лежит правее колонки текста, поэтому место под него
+       забирать не нужно: колонка и так узкая. */
+    padding-right: 0;
+  }
+}
+
+.page-hero__head h1 {
+  color: var(--on-dark);
+}
+
+.page-hero .eyebrow {
+  color: var(--copper-on-dark);
+}
+
+.page-hero .eyebrow::before {
+  background-color: var(--copper-light);
+}
+
+.page-hero .lead {
+  color: var(--on-dark-muted);
+  max-width: 62ch;
+}
+
+/* Крошки на тёмном: тише обычного, это служебная строка */
+.page-hero .breadcrumbs {
+  margin-bottom: var(--space-5);
+}
+
+.page-hero .breadcrumbs a {
+  color: var(--on-dark-muted);
+}
+
+.page-hero .breadcrumbs a:hover {
+  color: var(--on-dark);
+}
+
+.page-hero .breadcrumbs [aria-current="page"] {
+  color: var(--on-dark-muted);
+}
+
+.page-hero :focus-visible {
+  outline-color: var(--copper-on-dark);
+}
+
+/* Мотив маршрута справа. На узком экране он только мешал бы тексту. */
+.page-hero__art {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .page-hero__art {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 34%;
+    max-width: 420px;
+    pointer-events: none;
+  }
+
+  .page-hero__art svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.page-hero__line { stroke: var(--copper-light); opacity: 0.55; }
+.page-hero__ring { stroke: var(--copper-light); opacity: 0.45; }
+.page-hero__dot  { fill: var(--copper-on-dark); }
+
+
+/* --- Крошки: тоньше и спокойнее -------------------------------------------- */
+
+.breadcrumbs {
+  font-size: var(--text-xs);
+}
+
+.breadcrumbs ol {
+  gap: var(--space-2);
+}
+
+
+/* --- Список документов: карточки в две колонки ------------------------------ */
+
+.doclist {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .doclist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+.doclist li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+}
+
+.doclist__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  color: var(--copper);
+}
+
+/* Уточнение под названием документа */
+.doclist li span span {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+
+/* --- Сроки и цены: заметная карточка ----------------------------------------- */
+
+.pricing {
+  margin-top: var(--space-5);
+  padding: var(--space-5);
+  background-color: var(--surface);
+  border: 1px solid var(--copper);
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 768px) {
+  .pricing {
+    padding: var(--space-6) var(--space-7);
+  }
+}
+
+/* Главное в блоке — то, что первая консультация бесплатная */
+.pricing__free {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  max-width: none;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-snug);
+}
+
+.pricing__free::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--copper);
+}
+
+.pricing__lead {
+  max-width: 68ch;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+
+/* --- Страница «такой страницы нет» ------------------------------------------- */
+
+.page--notfound {
+  display: flex;
+  flex: 1;
+}
+
+.notfound {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-block: var(--space-8);
+  background-color: var(--dark);
+  color: var(--on-dark);
+}
+
+@media (min-width: 768px) {
+  .notfound {
+    min-height: min(72svh, 640px);
+    padding-block: var(--space-9);
+  }
+}
+
+/* Оборванный маршрут держится правого нижнего угла и не лезет
+   поперёк заголовка. */
+.notfound__art {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  width: min(100%, 820px);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.notfound__art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.notfound__route { stroke: var(--copper-light); opacity: 0.6; }
+.notfound__ghost { stroke: var(--on-dark);      opacity: 0.14; }
+.notfound__start { fill: var(--copper-on-dark); }
+
+.notfound__inner {
+  position: relative;
+}
+
+/* Крупная цифра — единственное, что видно с порога */
+.notfound__code {
+  margin: 0;
+  color: var(--copper-on-dark);
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 12vw + 1rem, 9rem);
+  font-weight: var(--weight-bold);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+.notfound__title {
+  margin: var(--space-5) 0 0;
+  color: var(--on-dark);
+}
+
+.notfound__lead {
+  margin-top: var(--space-4);
+  max-width: 46ch;
+  color: var(--on-dark-muted);
+  font-size: var(--text-lg);
+}
+
+.notfound__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 519px) {
+  .notfound__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.notfound__more {
+  margin-top: var(--space-7);
+  color: var(--on-dark-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.notfound__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+}
+
+.notfound__links a {
+  color: var(--on-dark-muted);
+  text-decoration: none;
+}
+
+.notfound__links a:hover {
+  color: var(--on-dark);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.notfound :focus-visible {
+  outline-color: var(--copper-on-dark);
 }

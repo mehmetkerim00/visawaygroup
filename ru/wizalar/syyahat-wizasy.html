@@ -323,24 +323,40 @@
   <!-- header:end -->
 
   <main class="site-main" id="mazmun">
-    <article class="page">
+    <article class="page page--service">
+
+      <!-- Первый экран страницы услуги: тёмная полоса во всю ширину.
+           Вдвое ниже, чем на главной — здесь она представляет раздел,
+           а не открывает сайт. -->
+      <section class="page-hero">
+          <div class="page-hero__art" aria-hidden="true">
+            <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path class="page-hero__line" d="M-10 232 C 90 214, 150 120, 250 88 C 320 66, 360 44, 412 22"
+                    fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 13"/>
+              <circle class="page-hero__ring" cx="352" cy="46" r="17" fill="none" stroke-width="1.5"/>
+              <circle class="page-hero__dot" cx="352" cy="46" r="5.5"/>
+            </svg>
+          </div>
+        <div class="container container--narrow page-hero__inner">
+          <nav class="breadcrumbs" aria-label="Навигация">
+            <ol>
+              <li><a href="../index.html">Главная</a></li>
+              <li><a href="../wizalar.html">Визы</a></li>
+              <li><span aria-current="page">Туристическая виза</span></li>
+            </ol>
+          </nav>
+
+          <div class="page-hero__head" data-reveal>
+            <p class="eyebrow">Тип визы</p>
+            <h1>Туристическая виза</h1>
+            <p class="lead">Туристическая виза выдаётся для отдыха, путешествий и ознакомительных поездок. Главное здесь &mdash; убедительно показать цель поездки и то, что вы вернётесь: маршрут, бронь жилья, билеты и ваше финансовое положение.</p>
+          </div>
+        </div>
+      </section>
+
       <div class="container container--narrow">
 
-        <nav class="breadcrumbs" aria-label="Навигация">
-          <ol>
-            <li><a href="../index.html">Главная</a></li>
-            <li><a href="../wizalar.html">Визы</a></li>
-            <li><span aria-current="page">Туристическая виза</span></li>
-          </ol>
-        </nav>
-
-        <header class="page-head">
-          <p class="eyebrow">Тип визы</p>
-          <h1>Туристическая виза</h1>
-          <p class="lead">Туристическая виза выдаётся для отдыха, путешествий и ознакомительных поездок. Главное здесь &mdash; убедительно показать цель поездки и то, что вы вернётесь: маршрут, бронь жилья, билеты и ваше финансовое положение.</p>
-        </header>
-
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Кому подходит</h2>
           <ul class="checklist">
             <li>Тем, кто едет отдыхать и путешествовать</li>
@@ -351,19 +367,19 @@
           </ul>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Базовый список документов</h2>
-          <ul class="doclist">
-            <li>Загранпаспорт<span>срок действия должен оставаться достаточным и после поездки</span></li>
-            <li>Фотография установленного размера</li>
-            <li>Заполненная визовая анкета</li>
-            <li>План поездки или маршрут</li>
-            <li>Бронь жилья<span>гостиница или съёмное жильё</span></li>
-            <li>Бронь билетов</li>
-            <li>Медицинская страховка</li>
-            <li>Документы, подтверждающие финансовое положение<span>выписка с банковского счёта</span></li>
-            <li>Справка с места работы или учёбы</li>
-            <li>Документы, показывающие вашу связь с родиной<span>работа, учёба, семейное положение</span></li>
+          <ul class="doclist" data-reveal-group>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Загранпаспорт<span>срок действия должен оставаться достаточным и после поездки</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Фотография установленного размера</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Заполненная визовая анкета</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>План поездки или маршрут</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Бронь жилья<span>гостиница или съёмное жильё</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Бронь билетов</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Медицинская страховка</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Документы, подтверждающие финансовое положение<span>выписка с банковского счёта</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Справка с места работы или учёбы</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Документы, показывающие вашу связь с родиной<span>работа, учёба, семейное положение</span></span></li>
           </ul>
           <div class="note">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
@@ -373,7 +389,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Этапы работы</h2>
           <ol class="steps steps--stack">
 
@@ -420,9 +436,10 @@
           </ol>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Сроки и цены</h2>
           <div class="pricing">
+            <p class="pricing__free">Первая консультация бесплатная</p>
             <p class="pricing__lead">Консультация бесплатная. Стоимость услуги определяется индивидуально &mdash; зависит от типа визы, страны и состояния документов. Точную цену называем на консультации.</p>
 
             <ul class="pricing__list">
@@ -450,7 +467,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Частые вопросы</h2>
           <div class="faq" data-faq>
 
@@ -641,6 +658,9 @@
           Все права защищены.
         </p>
         <p class="site-footer__copyright">Визовый центр &middot; Ашхабад, Туркменистан</p>
+        <!-- Ссылка на источники фотографий. Для снимков под CC-BY
+             и CC-BY-SA указание автора — требование лицензии. -->
+        <p class="site-footer__credits"><a href="../suratlar.html">Источники фотографий</a></p>
       </div>
     </div>
 

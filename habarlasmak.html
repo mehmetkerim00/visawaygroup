@@ -319,8 +319,8 @@
   <!-- header:end -->
 
   <main class="site-main" id="mazmun">
-    <article class="page">
-      <div class="container container--narrow">
+    <article class="page page--contacts">
+      <div class="container">
 
         <nav class="breadcrumbs" aria-label="Nawigasiýa">
           <ol>
@@ -344,90 +344,71 @@
              Содержимое приходит из partials/contacts.html,
              а данные — из data/site.json.
              ============================================================== -->
-        <section class="page-section" id="habarlasmak">
+        <div class="contacts">
+
+        <section class="contacts__panel" id="habarlasmak">
           <!-- contacts:start -->
   <!--
-    Способы связи и адрес офиса. Все данные берутся из data/site.json.
+    Тёмная панель со способами связи. Все данные берутся из data/site.json.
     Здесь править не надо: правьте data/site.json и запускайте
         node scripts/sync-layout.js
 
-    Блоки, обёрнутые в парные метки "if" и "endif", показываются только
-    когда поле заполнено. Пустое поле в site.json = блока на странице нет.
-    Так на сайте не бывает заголовков без содержимого и ссылок в никуда.
+    Блоки в парных метках "if" и "endif" показываются, только когда поле
+    заполнено. Пустое поле в site.json = блока на странице нет.
   -->
 
-        <h2>Jaň ediň</h2>
-        <p class="text-muted">Iň çalt ýol. Iş wagtynda jaňa hemişe jogap berýäris. Maslahat mugt.</p>
+        <div class="contact-panel">
 
-        <div class="contact-list contact-list--phones">
-          <a class="contact-card" href="tel:+99361121888">
-            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-phone"/></svg>
-            <div class="contact-card__body">
-              <span class="contact-card__label">Telefon</span>
-              <span class="contact-card__value">+993 61 12 18 88</span>
-            </div>
-          </a>
-          <a class="contact-card" href="tel:+99362944157">
-            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-phone"/></svg>
-            <div class="contact-card__body">
-              <span class="contact-card__label">Telefon</span>
-              <span class="contact-card__value">+993 62 94 41 57</span>
-            </div>
-          </a>
-        </div>
+          <!-- Тот же мотив маршрута, что в блоке призыва, приглушённый до фона -->
+          <div class="contact-panel__art" aria-hidden="true">
+            <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice"
+                 xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path class="cta__line" d="M-40 372 C 210 330, 380 176, 720 140 C 950 116, 1080 70, 1240 40"
+                    fill="none" stroke-width="2" stroke-linecap="round"
+                    stroke-dasharray="5 13"/>
+              <path class="cta__line cta__line--soft" d="M-40 424 C 260 404, 470 268, 830 228 C 1030 206, 1150 158, 1240 132"
+                    fill="none" stroke-width="1.5" stroke-linecap="round"
+                    stroke-dasharray="4 12"/>
+            </svg>
+          </div>
+
+          <div class="contact-panel__inner">
+
+            <h2 class="contact-panel__title">Jaň ediň</h2>
+            <p class="contact-panel__note">Iň çalt ýol. Iş wagtynda jaňa hemişe jogap berýäris.</p>
+
+            <!-- Телефоны — главное на странице, поэтому и крупнее всего.
+                 Сколько номеров в data/site.json, столько и покажется. -->
+            <ul class="phones">
+              <li><a class="phones__link" href="tel:+99361121888">+993 61 12 18 88</a></li>
+              <li><a class="phones__link" href="tel:+99362944157">+993 62 94 41 57</a></li>
+            </ul>
+
+            <p class="contact-panel__subtitle">Ýazyň</p>
+
+            <ul class="contact-lines">
+              <li>
+                <a class="contact-line" href="mailto:visawaygroup@gmail.com">
+                  <svg class="icon contact-line__icon" aria-hidden="true"><use href="#i-mail"/></svg>
+                  <span class="contact-line__label">E-poçta</span>
+                  <span class="contact-line__value">visawaygroup@gmail.com</span>
+                </a>
+              </li>
+              <li>
+                <a class="contact-line" href="https://instagram.com/visawaygroup" target="_blank" rel="noopener">
+                  <svg class="icon contact-line__icon" aria-hidden="true"><use href="#i-instagram"/></svg>
+                  <span class="contact-line__label">Instagram</span>
+                  <span class="contact-line__value">@visawaygroup</span>
+                </a>
+              </li>
+            </ul>
 
 
-        <h2 class="contact-group">Ýazyň</h2>
-        <p class="text-muted">Uzyn sorag ýa-da resminamalar boýunça sanaw üçin amatly.</p>
-
-        <div class="contact-list">
-          <a class="contact-card" href="mailto:visawaygroup@gmail.com">
-            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-mail"/></svg>
-            <div class="contact-card__body">
-              <span class="contact-card__label">E-poçta</span>
-              <span class="contact-card__value">visawaygroup@gmail.com</span>
-            </div>
-          </a>
-          <a class="contact-card" href="https://instagram.com/visawaygroup" target="_blank" rel="noopener">
-            <svg class="icon contact-card__icon" aria-hidden="true"><use href="#i-instagram"/></svg>
-            <div class="contact-card__body">
-              <span class="contact-card__label">Instagram</span>
-              <span class="contact-card__value">@visawaygroup</span>
-            </div>
-          </a>
-        </div>
-
-        <h2 class="contact-group">Ofise geliň</h2>
-        <p class="text-muted">Resminamalary ofisde kabul edýäris.</p>
-
-        <div class="factlist">
-
-          <div class="fact">
-            <svg class="icon fact__icon" aria-hidden="true"><use href="#i-pin"/></svg>
-            <span class="fact__label">Salgy</span>
-            <p class="fact__value">
-              Aşgabat ş., Jepbarow köçesi 40 (Wysokowoltnaýa 40)
+            <p class="contact-panel__foot">
+              <span>Iş wagty: Her gün: 08:00–20:00</span>
+              <span>Hyzmat dilleri: türkmen, rus, iňlis</span>
             </p>
-          </div>
 
-          <div class="fact">
-            <svg class="icon fact__icon" aria-hidden="true"><use href="#i-clock"/></svg>
-            <span class="fact__label">Iş wagty</span>
-            <p class="fact__value">Her gün: 08:00–20:00</p>
-          </div>
-
-          <div class="fact">
-            <svg class="icon fact__icon" aria-hidden="true"><use href="#i-message"/></svg>
-            <span class="fact__label">Hyzmat dilleri</span>
-            <p class="fact__value">türkmen, rus, iňlis</p>
-          </div>
-
-        </div>
-
-        <div class="note">
-          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
-          <div>
-            <p>Ofise gelmezden öň jaň ediň — şonda size ýazgy edip goýarys we garaşmaly bolmarsyňyz.</p>
           </div>
         </div>
           <!-- contacts:end -->
@@ -441,34 +422,32 @@
              она собирает сообщение и даёт его отправить мессенджером,
              почтой или скопировать.
              ============================================================== -->
-        <section class="page-section">
+        <section class="contacts__form">
           <h2>Haýyş galdyryň</h2>
           <p class="text-muted">
-            Formany dolduryň — biz size gysgaça habar taýýarlarys, siz bolsa
-            ony habarçy ýa-da e-poçta arkaly bir düwme bilen iberersiňiz.
+            Formany dolduryň — biz size gysgaça habar taýýarlarys, siz bolsa ony habarçy ýa-da e-poçta arkaly bir düwme bilen iberersiňiz.
           </p>
 
           <form class="form" data-request-form novalidate>
 
             <div class="form__grid">
 
-              <div class="field">
-                <label for="f-name">Adyňyz <span class="field__required" aria-hidden="true">*</span></label>
-                <input type="text" id="f-name" name="name" autocomplete="name"
+              <div class="field field--float">
+                <input placeholder=" " type="text" id="f-name" name="name" autocomplete="name"
                        aria-describedby="e-name" required>
+                <label for="f-name">Adyňyz <span class="field__required" aria-hidden="true">*</span></label>
                 <span class="field__error" id="e-name" role="alert"></span>
               </div>
 
-              <div class="field">
-                <label for="f-phone">Telefon <span class="field__required" aria-hidden="true">*</span></label>
-                <input type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel"
+              <div class="field field--float">
+                <input placeholder=" " type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel"
                        aria-describedby="e-phone h-phone" required>
+                <label for="f-phone">Telefon <span class="field__required" aria-hidden="true">*</span></label>
                 <span class="field__hint" id="h-phone">Size şu belgä jaň ederis.</span>
                 <span class="field__error" id="e-phone" role="alert"></span>
               </div>
 
-              <div class="field">
-                <label for="f-visa">Wiza görnüşi</label>
+              <div class="field field--float field--select">
                 <select id="f-visa" name="visa">
                   <option value="">Saýlaň ýa-da boş goýuň</option>
                   <option>Iş wizasy</option>
@@ -478,26 +457,26 @@
                   <option>Işewürlik wizasy</option>
                   <option>Talyplara bilim maslahaty</option>
                 </select>
+                <label for="f-visa">Wiza görnüşi</label>
               </div>
 
-              <div class="field">
-                <label for="f-country">Haýsy ýurda</label>
-                <input type="text" id="f-country" name="country"
+              <div class="field field--float">
+                <input placeholder=" " type="text" id="f-country" name="country"
                        aria-describedby="h-country">
+                <label for="f-country">Haýsy ýurda</label>
                 <span class="field__hint" id="h-country">Entek kesgitlemedik bolsaňyz, boş goýuň.</span>
               </div>
 
-              <div class="field field--wide">
-                <label for="f-dates">Meýilleşdirilen möhlet</label>
-                <input type="text" id="f-dates" name="dates"
+              <div class="field field--float field--wide">
+                <input placeholder=" " type="text" id="f-dates" name="dates"
                        aria-describedby="h-dates">
+                <label for="f-dates">Meýilleşdirilen möhlet</label>
                 <span class="field__hint" id="h-dates">Takyk bolmasa hem bolýar. Meselem: tomusda, mart aýynda.</span>
               </div>
 
-              <div class="field field--wide">
+              <div class="field field--float field--wide">
+                <textarea placeholder=" " id="f-comment" name="comment" rows="4" aria-describedby="h-comment"></textarea>
                 <label for="f-comment">Bellik</label>
-                <textarea id="f-comment" name="comment" rows="4"
-                          aria-describedby="h-comment"></textarea>
                 <span class="field__hint" id="h-comment">Ýagdaýyňyz barada bilmegimiz gerek bolan zatlar.</span>
               </div>
 
@@ -515,9 +494,13 @@
                 E-poçta bilen ibermek
               </a>
 
+              <!-- После нажатия кнопка на две секунды меняет надпись:
+                   человек должен видеть, что копирование сработало. -->
               <button type="button" class="btn btn--secondary btn--lg" data-action="copy">
-                <svg class="icon icon--sm" aria-hidden="true"><use href="#i-copy"/></svg>
-                Teksti göçürmek
+                <svg class="icon icon--sm btn__icon" aria-hidden="true"><use href="#i-copy"/></svg>
+                <svg class="icon icon--sm btn__icon btn__icon--done" aria-hidden="true"><use href="#i-badge-check"/></svg>
+                <span class="btn__text">Teksti göçürmek</span>
+                <span class="btn__text btn__text--done">Göçürildi</span>
               </button>
             </div>
 
@@ -559,6 +542,37 @@
             </div>
 
           </form>
+        </section>
+
+        </div><!-- /.contacts -->
+
+        <!-- ==============================================================
+             ОФИС. Адрес подставляется из data/site.json по data-site.
+             Карты нет намеренно: ссылку на карту добавим, когда в site.json
+             появится mapUrl. Вести в никуда нельзя.
+             ============================================================== -->
+        <section class="office" data-reveal>
+          <div class="office__body">
+            <p class="eyebrow">Salgy</p>
+            <h2 class="office__title">Ofise geliň</h2>
+            <p class="office__address" data-site="address">Aşgabat ş., Jepbarow köçesi 40 (Wysokowoltnaýa 40)</p>
+            <p class="office__lead">Resminamalary ofisde kabul edýäris. Gelmezden öň jaň ediň — ýazgy edip goýarys we garaşmaly bolmarsyňyz.</p>
+          </div>
+
+          <!-- Не карта, а знак того, что нас можно найти:
+               фирменный пунктир, ведущий к метке. -->
+          <div class="office__mark" aria-hidden="true">
+            <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path class="office__route" d="M18 176 C 90 176, 96 96, 168 84 C 228 74, 244 52, 262 34"
+                    fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 13"/>
+              <circle class="office__start" cx="18" cy="176" r="5"/>
+              <g class="office__pin">
+                <path d="M262 16 c 11 0 20 9 20 20 c 0 15 -20 32 -20 32 s -20 -17 -20 -32 c 0 -11 9 -20 20 -20 z"
+                      fill="none" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="262" cy="36" r="5.5"/>
+              </g>
+            </svg>
+          </div>
         </section>
 
       </div>
@@ -647,6 +661,9 @@
           Ähli hukuklar goralan.
         </p>
         <p class="site-footer__copyright">Wiza merkezi &middot; Aşgabat, Türkmenistan</p>
+        <!-- Ссылка на источники фотографий. Для снимков под CC-BY
+             и CC-BY-SA указание автора — требование лицензии. -->
+        <p class="site-footer__credits"><a href="suratlar.html">Suratlaryň çeşmeleri</a></p>
       </div>
     </div>
 

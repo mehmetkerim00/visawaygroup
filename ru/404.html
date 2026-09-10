@@ -297,31 +297,45 @@
   <!-- header:end -->
 
   <main class="site-main" id="mazmun">
-    <article class="page">
-      <div class="container container--narrow">
+    <article class="page page--notfound">
 
-        <header class="page-head">
-          <p class="eyebrow">404</p>
-          <h1>Такой страницы нет</h1>
-          <p class="lead">Возможно, в адресе опечатка или страницу перенесли. Выберите нужный раздел ниже.</p>
-        </header>
+      <!-- Страница «такой страницы нет». Крупная цифра, оборванный маршрут
+           и два выхода: на главную и к людям. -->
+      <section class="notfound">
 
-        <section class="page-section">
-          <ul class="doclist">
-            <li><a href="index.html">Главная</a></li>
-            <li><a href="wizalar.html">Визы и услуги</a></li>
-            <li><a href="wizalar/bilim-maslahaty.html">Помощь студентам с поступлением</a></li>
-            <li><a href="biz-barada.html">О нас</a></li>
-            <li><a href="habarlasmak.html">Контакты</a></li>
+        <div class="notfound__art" aria-hidden="true">
+          <svg viewBox="0 0 520 220" xmlns="http://www.w3.org/2000/svg" focusable="false">
+            <!-- Маршрут, который обрывается на полпути -->
+            <path class="notfound__route" d="M14 186 C 110 178, 170 96, 268 66"
+                  fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 13"/>
+            <circle class="notfound__start" cx="14" cy="186" r="5"/>
+            <!-- Дальше линии нет: только следы там, где она должна была идти -->
+            <path class="notfound__ghost" d="M300 56 C 380 38, 440 30, 506 22"
+                  fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="2 16"/>
+          </svg>
+        </div>
+
+        <div class="container notfound__inner">
+          <p class="notfound__code" aria-hidden="true">404</p>
+          <h1 class="notfound__title">Такой страницы нет</h1>
+          <p class="notfound__lead">Возможно, адрес набран с ошибкой или страницу перенесли.</p>
+
+          <div class="notfound__actions">
+            <a class="btn btn--primary btn--lg" href="index.html">На главную</a>
+            <a class="btn btn--secondary btn--on-dark btn--lg" href="habarlasmak.html">Связаться</a>
+          </div>
+
+          <p class="notfound__more">Или другие разделы:</p>
+          <ul class="notfound__links">
+              <li><a href="index.html">Главная</a></li>
+              <li><a href="wizalar.html">Визы и услуги</a></li>
+              <li><a href="wizalar/bilim-maslahaty.html">Помощь студентам с поступлением</a></li>
+              <li><a href="biz-barada.html">О нас</a></li>
+              <li><a href="habarlasmak.html">Контакты</a></li>
           </ul>
+        </div>
+      </section>
 
-          <a class="backlink" href="index.html">
-            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-left"/></svg>
-            Вернуться на главную
-          </a>
-        </section>
-
-      </div>
     </article>
   </main>
 
@@ -407,6 +421,9 @@
           Все права защищены.
         </p>
         <p class="site-footer__copyright">Визовый центр &middot; Ашхабад, Туркменистан</p>
+        <!-- Ссылка на источники фотографий. Для снимков под CC-BY
+             и CC-BY-SA указание автора — требование лицензии. -->
+        <p class="site-footer__credits"><a href="suratlar.html">Источники фотографий</a></p>
       </div>
     </div>
 

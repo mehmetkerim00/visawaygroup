@@ -323,26 +323,42 @@
   <!-- header:end -->
 
   <main class="site-main" id="mazmun">
-    <article class="page">
+    <article class="page page--service">
+
+      <!-- Первый экран страницы услуги: тёмная полоса во всю ширину.
+           Вдвое ниже, чем на главной — здесь она представляет раздел,
+           а не открывает сайт. -->
+      <section class="page-hero">
+          <div class="page-hero__art" aria-hidden="true">
+            <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path class="page-hero__line" d="M-10 232 C 90 214, 150 120, 250 88 C 320 66, 360 44, 412 22"
+                    fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 13"/>
+              <circle class="page-hero__ring" cx="352" cy="46" r="17" fill="none" stroke-width="1.5"/>
+              <circle class="page-hero__dot" cx="352" cy="46" r="5.5"/>
+            </svg>
+          </div>
+        <div class="container container--narrow page-hero__inner">
+          <nav class="breadcrumbs" aria-label="Nawigasiýa">
+            <ol>
+              <li><a href="../index.html">Baş sahypa</a></li>
+              <li><a href="../wizalar.html">Wizalar</a></li>
+              <li><span aria-current="page">Talyplara bilim maslahaty</span></li>
+            </ol>
+          </nav>
+
+          <div class="page-hero__head" data-reveal>
+            <p class="eyebrow">Bilim maslahaty</p>
+            <h1>Talyplara bilim maslahaty</h1>
+            <p class="lead">Daşary ýurtda okamak isleýän talyplara ugur we okuw mekdebini
+          saýlamakdan başlap, resminamalary tabşyrmaga, kabul edilmäge we okuw
+          wizasyny almaga çenli kömek edýäris.</p>
+          </div>
+        </div>
+      </section>
+
       <div class="container container--narrow">
 
-        <nav class="breadcrumbs" aria-label="Nawigasiýa">
-          <ol>
-            <li><a href="../index.html">Baş sahypa</a></li>
-            <li><a href="../wizalar.html">Wizalar</a></li>
-            <li><span aria-current="page">Talyplara bilim maslahaty</span></li>
-          </ol>
-        </nav>
-
-        <header class="page-head">
-          <p class="eyebrow">Bilim maslahaty</p>
-          <h1>Talyplara bilim maslahaty</h1>
-          <p class="lead">Daşary ýurtda okamak isleýän talyplara ugur we okuw mekdebini
-        saýlamakdan başlap, resminamalary tabşyrmaga, kabul edilmäge we okuw
-        wizasyny almaga çenli kömek edýäris.</p>
-        </header>
-
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <div class="note">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
             <div>
@@ -356,7 +372,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Kimler üçin</h2>
           <ul class="checklist">
             <li>Mekdebi tamamlaýan we daşary ýurtda okamak isleýän okuwçylar</li>
@@ -367,17 +383,17 @@
           </ul>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Umumy resminamalar</h2>
-          <ul class="doclist">
-            <li>Attestat ýa-da diplom we onuň goşundysy<span>terjimesi we zerur bolsa tassyklamasy bilen</span></li>
-            <li>Dil bilimi barada sertifikat ýa-da synag netijesi<span>maksatnama talap edýän bolsa</span></li>
-            <li>Motiwasion hat<span>näme üçin şu maksatnama we şu uniwersitet</span></li>
-            <li>Maslahat beriş haty<span>mugallymdan ýa-da iş berijiden, talap edilýän bolsa</span></li>
-            <li>Terjimehal (CV)</li>
-            <li>Portfolio<span>döredijilik we binagärlik ugurlary üçin</span></li>
-            <li>Daşary ýurt pasportynyň nusgasy</li>
-            <li>Maliýe ýagdaýyny tassyklaýan resminamalar<span>okuw we ýaşaýyş çykdajylary üçin</span></li>
+          <ul class="doclist" data-reveal-group>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Attestat ýa-da diplom we onuň goşundysy<span>terjimesi we zerur bolsa tassyklamasy bilen</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Dil bilimi barada sertifikat ýa-da synag netijesi<span>maksatnama talap edýän bolsa</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Motiwasion hat<span>näme üçin şu maksatnama we şu uniwersitet</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Maslahat beriş haty<span>mugallymdan ýa-da iş berijiden, talap edilýän bolsa</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Terjimehal (CV)</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Portfolio<span>döredijilik we binagärlik ugurlary üçin</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Daşary ýurt pasportynyň nusgasy</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Maliýe ýagdaýyny tassyklaýan resminamalar<span>okuw we ýaşaýyş çykdajylary üçin</span></span></li>
           </ul>
           <div class="note">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
@@ -390,7 +406,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Tapgyrlar</h2>
           <ol class="steps steps--stack">
 
@@ -453,9 +469,10 @@
           </ol>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Möhletler we bahalar</h2>
           <div class="pricing">
+            <p class="pricing__free">Ilkinji maslahat mugt</p>
             <p class="pricing__lead">Maslahat mugt. Hyzmatyň bahasy her ýagdaýa görä aýratyn kesgitlenýär &mdash; wiza görnüşine, ýurda we resminamalaryň ýagdaýyna bagly. Takyk bahany maslahatda aýdýarys.</p>
 
             <ul class="pricing__list">
@@ -487,7 +504,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Köp berilýän soraglar</h2>
           <div class="faq" data-faq>
 
@@ -678,6 +695,9 @@
           Ähli hukuklar goralan.
         </p>
         <p class="site-footer__copyright">Wiza merkezi &middot; Aşgabat, Türkmenistan</p>
+        <!-- Ссылка на источники фотографий. Для снимков под CC-BY
+             и CC-BY-SA указание автора — требование лицензии. -->
+        <p class="site-footer__credits"><a href="../suratlar.html">Suratlaryň çeşmeleri</a></p>
       </div>
     </div>
 

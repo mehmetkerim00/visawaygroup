@@ -323,24 +323,40 @@
   <!-- header:end -->
 
   <main class="site-main" id="mazmun">
-    <article class="page">
+    <article class="page page--service">
+
+      <!-- Первый экран страницы услуги: тёмная полоса во всю ширину.
+           Вдвое ниже, чем на главной — здесь она представляет раздел,
+           а не открывает сайт. -->
+      <section class="page-hero">
+          <div class="page-hero__art" aria-hidden="true">
+            <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path class="page-hero__line" d="M-10 232 C 90 214, 150 120, 250 88 C 320 66, 360 44, 412 22"
+                    fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 13"/>
+              <circle class="page-hero__ring" cx="352" cy="46" r="17" fill="none" stroke-width="1.5"/>
+              <circle class="page-hero__dot" cx="352" cy="46" r="5.5"/>
+            </svg>
+          </div>
+        <div class="container container--narrow page-hero__inner">
+          <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="../index.html">Home</a></li>
+              <li><a href="../wizalar.html">Visas</a></li>
+              <li><span aria-current="page">Tourist visa</span></li>
+            </ol>
+          </nav>
+
+          <div class="page-hero__head" data-reveal>
+            <p class="eyebrow">Visa type</p>
+            <h1>Tourist visa</h1>
+            <p class="lead">A tourist visa is issued for holidays, travel and sightseeing trips. What matters here is showing convincingly why you are going and that you will return: the itinerary, the accommodation booking, the tickets and your finances.</p>
+          </div>
+        </div>
+      </section>
+
       <div class="container container--narrow">
 
-        <nav class="breadcrumbs" aria-label="Breadcrumb">
-          <ol>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="../wizalar.html">Visas</a></li>
-            <li><span aria-current="page">Tourist visa</span></li>
-          </ol>
-        </nav>
-
-        <header class="page-head">
-          <p class="eyebrow">Visa type</p>
-          <h1>Tourist visa</h1>
-          <p class="lead">A tourist visa is issued for holidays, travel and sightseeing trips. What matters here is showing convincingly why you are going and that you will return: the itinerary, the accommodation booking, the tickets and your finances.</p>
-        </header>
-
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Who it is for</h2>
           <ul class="checklist">
             <li>Anyone travelling on holiday or sightseeing</li>
@@ -351,19 +367,19 @@
           </ul>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>The usual documents</h2>
-          <ul class="doclist">
-            <li>Passport<span>valid for long enough beyond your return date</span></li>
-            <li>A photograph of the required size</li>
-            <li>A completed visa application form</li>
-            <li>Your itinerary or travel plan</li>
-            <li>Accommodation booking<span>hotel or rented accommodation</span></li>
-            <li>Ticket reservations</li>
-            <li>Medical insurance</li>
-            <li>Documents showing your financial position<span>a bank statement</span></li>
-            <li>A letter from your employer or place of study</li>
-            <li>Documents showing your ties to home<span>employment, study, family circumstances</span></li>
+          <ul class="doclist" data-reveal-group>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Passport<span>valid for long enough beyond your return date</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>A photograph of the required size</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>A completed visa application form</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Your itinerary or travel plan</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Accommodation booking<span>hotel or rented accommodation</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Ticket reservations</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Medical insurance</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Documents showing your financial position<span>a bank statement</span></span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>A letter from your employer or place of study</span></li>
+            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg><span>Documents showing your ties to home<span>employment, study, family circumstances</span></span></li>
           </ul>
           <div class="note">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
@@ -373,7 +389,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>How it works</h2>
           <ol class="steps steps--stack">
 
@@ -420,9 +436,10 @@
           </ol>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Timeframes and prices</h2>
           <div class="pricing">
+            <p class="pricing__free">First consultation is free</p>
             <p class="pricing__lead">Free consultation. The fee is set individually &mdash; it depends on the visa type, destination country and the state of your documents. We quote the exact price during the consultation.</p>
 
             <ul class="pricing__list">
@@ -450,7 +467,7 @@
           </div>
         </section>
 
-        <section class="page-section">
+        <section class="page-section" data-reveal>
           <h2>Frequently asked questions</h2>
           <div class="faq" data-faq>
 
@@ -641,6 +658,9 @@
           All rights reserved.
         </p>
         <p class="site-footer__copyright">Visa Centre &middot; Ashgabat, Turkmenistan</p>
+        <!-- Ссылка на источники фотографий. Для снимков под CC-BY
+             и CC-BY-SA указание автора — требование лицензии. -->
+        <p class="site-footer__credits"><a href="../suratlar.html">Photo credits</a></p>
       </div>
     </div>
 

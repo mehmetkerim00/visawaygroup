@@ -369,6 +369,87 @@ function checkAssets() {
 }
 
 /* --------------------------------------------------------------------- */
+/* 7. Источники фотографий                                                */
+/* --------------------------------------------------------------------- */
+
+/* Для снимков под CC-BY и CC-BY-SA указание автора — требование лицензии.
+   Если поле пустое, а снимок на сайте лежит, мы нарушаем условия, под
+   которыми нам его разрешили взять. Поэтому это ошибка, а не замечание. */
+
+function checkPhotoCredits() {
+  const dataFile = path.join(ROOT, "data", "photos.json");
+  const creditsFile = path.join(ROOT, "assets", "photos", "CREDITS.md");
+  const dir = path.join(ROOT, "assets", "photos");
+
+  const onDisk = fs.existsSync(dir)
+    ? fs.readdirSync(dir).filter(f => f.endsWith(".webp"))
+    : [];
+  if (!onDisk.length) {
+    ok("Фотографий городов пока нет — проверять источники не у чего");
+    return;
+  }
+
+  if (!fs.existsSync(dataFile)) {
+    block("Фотографии", "нет data/photos.json — источники снимков не записаны", "data/photos.json");
+    return;
+  }
+
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(dataFile, "utf8"));
+  } catch (e) {
+    block("Фотографии", `data/photos.json не читается: ${e.message}`, "data/photos.json");
+    return;
+  }
+
+  const credits = fs.existsSync(creditsFile) ? fs.readFileSync(creditsFile, "utf8") : "";
+  if (!credits) {
+    block("Фотографии", "нет assets/photos/CREDITS.md — запустите python3 scripts/photos.py",
+          "assets/photos/CREDITS.md");
+  }
+
+  const listed = new Set((data.photos || []).map(p => p.photo));
+  let bad = 0;
+
+  for (const p of data.photos || []) {
+    if (!onDisk.includes(p.photo + ".webp")) continue;   /* снимка нет — и спрашивать не с чего */
+    const where = `data/photos.json → ${p.photo}`;
+    const free = /public domain|cc0/i.test(p.licence || "");
+
+    if (!free && !(p.author || "").trim()) {
+      bad++;
+      block("Фотографии", `не указан автор, а лицензия «${p.licence || "?"}» этого требует`, where);
+    }
+    if (!(p.licence || "").trim()) {
+      bad++;
+      block("Фотографии", "не указана лицензия", where);
+    }
+    if (!/^https?:\/\//.test(p.page || "")) {
+      bad++;
+      block("Фотографии", "нет ссылки на страницу описания снимка", where);
+    }
+    if (credits && credits.indexOf(p.photo + ".webp") === -1) {
+      bad++;
+      block("Фотографии", "снимка нет в CREDITS.md — пересоберите: python3 scripts/photos.py",
+            "assets/photos/CREDITS.md");
+    }
+  }
+
+  /* Файл лежит, а в списке его нет — значит, источник вообще неизвестен */
+  for (const file of onDisk) {
+    const slug = file.replace(/\.webp$/, "");
+    if (!listed.has(slug)) {
+      bad++;
+      block("Фотографии", `снимок есть, а источник неизвестен — впишите его в data/photos.json`,
+            `assets/photos/${file}`);
+    }
+  }
+
+  if (!bad) ok(`У всех фотографий указаны автор, лицензия и ссылка (${onDisk.length} шт.)`);
+}
+
+
+/* --------------------------------------------------------------------- */
 /* 7. Резервная копия                                                     */
 /* --------------------------------------------------------------------- */
 
@@ -483,6 +564,7 @@ function main() {
   checkPricing();
   checkTeam();
   checkAssets();
+  checkPhotoCredits();
   checkBackup();
 
   process.exitCode = printReport();
