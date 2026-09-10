@@ -38,6 +38,7 @@
 
     nav.classList.add("is-open");
     burger.setAttribute("aria-expanded", "true");
+    updateHeader();
     document.body.classList.add("no-scroll");
     if (backdrop) backdrop.classList.add("is-visible");
 
@@ -53,6 +54,7 @@
 
     nav.classList.remove("is-open");
     burger.setAttribute("aria-expanded", "false");
+    updateHeader();
     document.body.classList.remove("no-scroll");
     if (backdrop) backdrop.classList.remove("is-visible");
 
@@ -142,18 +144,27 @@
      чтобы шапка отделялась от содержимого.
      ---------------------------------------------------------------------- */
 
+  /* Функция объявлена здесь, а не внутри блока ниже: её зовёт и меню,
+     когда открывается поверх прозрачной шапки на главной. */
+  function updateHeader() {
+    if (!header) return;
+    /* Шапка становится «плотной» либо от прокрутки, либо когда открыто
+       меню: полупрозрачная шапка над белой панелью меню читалась бы плохо. */
+    header.classList.toggle("is-scrolled", window.scrollY > 8 || isOpen);
+  }
+
   if (header) {
     var ticking = false;
 
-    function updateHeader() {
-      header.classList.toggle("is-scrolled", window.scrollY > 8);
+    function onScroll() {
+      updateHeader();
       ticking = false;
     }
 
     window.addEventListener("scroll", function () {
       // requestAnimationFrame — чтобы не пересчитывать на каждый пиксель
       if (!ticking) {
-        window.requestAnimationFrame(updateHeader);
+        window.requestAnimationFrame(onScroll);
         ticking = true;
       }
     }, { passive: true });
@@ -187,42 +198,7 @@
 
 
   /* ------------------------------------------------------------------------
-     4. ПЛАВНОЕ ПОЯВЛЕНИЕ БЛОКОВ ПРИ ПРОКРУТКЕ
-
-     Два важных условия:
-       • если в системе включено «уменьшить движение» — ничего не делаем;
-       • если JavaScript не отработал — блоки просто видны сразу.
-     Поэтому прятать блоки мы начинаем только здесь, из скрипта.
-     ---------------------------------------------------------------------- */
-
-  var reveals = document.querySelectorAll("[data-reveal]");
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  if (reveals.length && !reduceMotion.matches && "IntersectionObserver" in window) {
-
-    Array.prototype.forEach.call(reveals, function (el) {
-      el.classList.add("is-armed");
-    });
-
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);   // показали один раз — и хватит
-      });
-    }, {
-      rootMargin: "0px 0px -10% 0px",
-      threshold: 0.05
-    });
-
-    Array.prototype.forEach.call(reveals, function (el) {
-      observer.observe(el);
-    });
-  }
-
-
-  /* ------------------------------------------------------------------------
-     5. ГОД В СТРОКЕ КОПИРАЙТА
+     4. ГОД В СТРОКЕ КОПИРАЙТА
      Чтобы год в подвале не пришлось править руками каждый январь.
      ---------------------------------------------------------------------- */
 

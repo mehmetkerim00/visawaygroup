@@ -44,8 +44,13 @@
 
   <!-- Шрифт грузим заранее. Русской версии нужны кириллица и латиница
        (цифры, знаки и название компании). -->
-  <link rel="preload" href="../../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- fonts:start -->
   <link rel="preload" href="../../assets/fonts/inter-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- fonts:end -->
+
+  <!-- boot:start -->
+  <script>document.documentElement.classList.add("js");</script>
+  <!-- boot:end -->
 
   <link rel="stylesheet" href="../../css/tokens.css">
   <link rel="stylesheet" href="../../css/base.css">
@@ -249,9 +254,14 @@
     <div class="container site-header__inner">
 
       <a class="site-header__logo" href="../index.html" aria-label="VisaWay Group — главная страница">
-        <img src="../../assets/logo-horizontal.svg"
+        <!-- Два файла одного логотипа: тёмный для светлой шапки, светлый —
+             для прозрачной шапки поверх тёмного первого экрана.
+             Второй подставляется только там, где он нужен: на остальных
+             страницах его нет и он не грузится. -->
+        <img class="site-header__logo-img"
+             src="../../assets/logo-header.svg"
              alt="VisaWay Group — визовый центр"
-             width="622" height="224">
+             width="690" height="140">
       </a>
 
       <!-- Кнопка-бургер: видна только на телефонах и планшетах -->
@@ -646,6 +656,8 @@
   <!-- footer:end -->
 
   <script src="../../js/main.js" defer></script>
+
+  <script src="../../js/motion.js" defer></script>
   <!-- Микроразметка для поисковиков. Её расставляет scripts/build-seo.js -->
   <!-- jsonld:start -->
   <script type="application/ld+json">

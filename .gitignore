@@ -31,6 +31,5 @@ Thumbs.db
 assets/fonts/full/
 
 # Служебные картинки с раскладкой логотипов, на сайте не используются
-assets/0_proverka_assetov.png
-assets/0_ves_komplekt.png
+assets/0_*.png
 .env*

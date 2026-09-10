@@ -27,12 +27,80 @@ body {
   z-index: var(--z-header);
   background-color: var(--surface);
   border-bottom: 1px solid var(--line);
-  transition: box-shadow var(--transition-base);
+  transition: background-color var(--dur-base) var(--ease-hover),
+              border-color var(--dur-base) var(--ease-hover),
+              box-shadow var(--dur-base) var(--ease-hover);
 }
 
-/* Класс добавляется скриптом, когда страницу прокрутили вниз */
+/* Класс добавляется скриптом, когда страницу прокрутили вниз
+   или когда открыто мобильное меню */
 .site-header.is-scrolled {
   box-shadow: var(--shadow-md);
+}
+
+
+/* --------------------------------------------------------------------------
+   ШАПКА ПОВЕРХ ТЁМНОГО ПЕРВОГО ЭКРАНА (главная)
+
+   Пока страница не прокручена, шапки будто нет: фон прозрачный, надписи
+   светлые, логотип в светлом варианте. Стоит прокрутить — появляется
+   белая подложка с тенью, и шапка становится обычной.
+
+   Прозрачной шапка бывает только при работающих скриптах (класс js):
+   иначе её нечем вернуть в обычный вид при прокрутке, и светлые надписи
+   оказались бы на белом фоне.
+   -------------------------------------------------------------------------- */
+
+/* Первый экран заходит под шапку, поэтому она вынута из потока */
+.site-header--over-dark {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+}
+
+.js .site-header--over-dark:not(.is-scrolled) {
+  background-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+
+/* Логотип: по умолчанию виден тёмный, светлый спрятан.
+   Само правило «спрятан» стоит рядом с размерами логотипа выше —
+   иначе его перебивает display: block из тех же размеров. */
+.js .site-header--over-dark:not(.is-scrolled) .site-header__logo-img {
+  display: none;
+}
+
+.js .site-header--over-dark:not(.is-scrolled) .site-header__logo-img--light {
+  display: block;
+}
+
+/* Надписи и рамки на тёмном фоне */
+.js .site-header--over-dark:not(.is-scrolled) .site-nav__link,
+.js .site-header--over-dark:not(.is-scrolled) .lang-switch__link {
+  color: var(--on-dark);
+}
+
+.js .site-header--over-dark:not(.is-scrolled) .lang-switch {
+  border-color: var(--line-dark);
+  background-color: transparent;
+}
+
+.js .site-header--over-dark:not(.is-scrolled) .burger {
+  border-color: var(--line-dark);
+  background-color: transparent;
+}
+
+.js .site-header--over-dark:not(.is-scrolled) .burger__line {
+  background-color: var(--on-dark);
+}
+
+/* На больших экранах меню — строка прямо в шапке, и разделитель перед
+   переключателем языков тоже должен посветлеть */
+@media (min-width: 64em) {
+  .js .site-header--over-dark:not(.is-scrolled) .site-nav__actions {
+    border-left-color: var(--line-dark);
+  }
 }
 
 .site-header__inner {
@@ -53,16 +121,24 @@ body {
   border-radius: var(--radius-sm);
 }
 
-/* Высота логотипа. Хотите крупнее или мельче — меняйте эти два значения. */
-.site-header__logo img {
-  height: 44px;
+/* Высота логотипа. Хотите крупнее или мельче — меняйте эти два значения.
+   Пропорции файла 690×140, ширина считается сама. */
+.site-header__logo-img {
+  display: block;
+  height: 36px;
   width: auto;
 }
 
 @media (min-width: 768px) {
-  .site-header__logo img {
-    height: 54px;
+  .site-header__logo-img {
+    height: 44px;
   }
+}
+
+/* Светлый вариант логотипа нужен только прозрачной шапке над тёмным
+   первым экраном. Везде остальное время он спрятан. */
+.site-header__logo-img--light {
+  display: none;
 }
 
 
@@ -306,9 +382,42 @@ body {
     border-top: none;
   }
 
+  /* Пункт меню: медное подчёркивание выезжает слева.
+     На телефоне этого нет — там меню выпадающей панелью, наводить нечем. */
   .site-nav__link {
+    position: relative;
     padding: var(--space-2) var(--space-3);
     font-size: var(--text-base);
+  }
+
+  .site-nav__link::after {
+    content: "";
+    position: absolute;
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: 2px;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--copper);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .site-nav__link:hover::after,
+  .site-nav__link:focus-visible::after,
+  .site-nav__link[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+
+  /* Подложка под пунктом больше не нужна: её роль взяло подчёркивание */
+  .site-nav__link:hover {
+    background-color: transparent;
+  }
+
+  /* На тёмном фоне медь высветляем — иначе линия сливается */
+  .js .site-header--over-dark:not(.is-scrolled) .site-nav__link::after {
+    background-color: var(--copper-light);
   }
 
   .site-nav__actions {
@@ -415,8 +524,37 @@ body {
   transition: color var(--transition-fast);
 }
 
+/* Ссылки в списках подвала: та же линия, что и в меню, выезжает слева.
+   Телефон и почта в неё не входят — у них своё оформление. */
+.site-footer__list a {
+  position: relative;
+}
+
+.site-footer__list a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background-color: var(--copper-light);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.site-footer__list a:hover::after,
+.site-footer__list a:focus-visible::after {
+  transform: scaleX(1);
+}
+
 .site-footer a:hover {
   color: var(--on-dark);
+}
+
+/* Там, где выезжающей линии нет, остаётся обычное подчёркивание */
+.site-footer__bottom a:hover,
+.site-footer__contacts a:hover {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }

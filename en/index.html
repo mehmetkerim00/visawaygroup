@@ -50,7 +50,13 @@
 
   <!-- Шрифт грузим заранее. Английской версии хватает латиницы:
        буквы ä ü ý из названия компании тоже в ней. -->
+  <!-- fonts:start -->
   <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- fonts:end -->
+
+  <!-- boot:start -->
+  <script>document.documentElement.classList.add("js");</script>
+  <!-- boot:end -->
 
   <!-- Стили. Порядок важен: сначала переменные, потом всё остальное. -->
   <link rel="stylesheet" href="../css/tokens.css">
@@ -247,17 +253,26 @@
   <!-- icons:end -->
 
 
-  <!-- header:start nav="home" -->
+  <!-- header:start nav="home" over="dark" -->
   <!-- Ссылка для клавиатуры и скринридеров: перейти сразу к содержимому -->
   <a class="skip-link" href="#mazmun">Skip to main content</a>
 
-  <header class="site-header" data-header>
+  <header class="site-header site-header--over-dark" data-header>
     <div class="container site-header__inner">
 
       <a class="site-header__logo" href="index.html" aria-label="VisaWay Group — home page">
-        <img src="../assets/logo-horizontal.svg"
+        <!-- Два файла одного логотипа: тёмный для светлой шапки, светлый —
+             для прозрачной шапки поверх тёмного первого экрана.
+             Второй подставляется только там, где он нужен: на остальных
+             страницах его нет и он не грузится. -->
+        <img class="site-header__logo-img"
+             src="../assets/logo-header.svg"
              alt="VisaWay Group"
-             width="622" height="224">
+             width="690" height="140">
+        <img class="site-header__logo-img site-header__logo-img--light"
+             src="../assets/logo-header-light.svg"
+             alt="" aria-hidden="true"
+             width="690" height="140">
       </a>
 
       <!-- Кнопка-бургер: видна только на телефонах и планшетах -->
@@ -353,37 +368,74 @@
           </p>
         </div>
 
-        <!-- Композиция из тонких линий вместо фотографии.
-             Мотив взят из логотипа: глобус, меридианы, самолёт. -->
-        <div class="hero__art" aria-hidden="true">
-          <svg viewBox="0 0 480 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <!-- Маршрут: единственная иллюстрация первого экрана.
+             Пунктирная дуга из фирменного знака, развёрнутая в путь.
+             Всё движение — в css/home.css, раздел «МАРШРУТ». -->
+        <div class="hero__art">
+          <svg class="route" viewBox="0 0 420 720" xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-label="Routes from Ashgabat to major cities of the world">
 
-            <!-- Фирменная форма: скруглённый квадрат, как у знака.
-                 Радиус 23% стороны — та же логика, что и у кнопок с карточками. -->
-            <rect class="route__plate" x="18" y="18" width="444" height="384" rx="102"
-                  fill="none" stroke-width="1.5"/>
+            <defs>
+              <!-- Пунктир задаёт маска, а не сама линия: у линии
+                   stroke-dasharray занят прорисовкой. Маска неподвижна —
+                   так браузер рисует её один раз и не пересчитывает. -->
+              <mask id="route-dash" maskUnits="userSpaceOnUse"
+                    x="0" y="0" width="420" height="720">
+                <path d="M92 640 C 60 460, 150 250, 330 110" fill="none" stroke="#FFFFFF"
+                      stroke-width="6" stroke-dasharray="5 13"/>
+              </mask>
+            </defs>
 
-            <!-- Маршрут: пунктирная дуга от точки к точке.
-                 Это та же линия, что в знаке, только развёрнутая в путь. -->
-            <path class="route__path" d="M96 318 C 150 190, 214 316, 268 196 S 366 132, 392 108"
-                  fill="none" stroke-width="2" stroke-linecap="round"
-                  stroke-dasharray="5 13"/>
+            <!-- Огни городов: как окна ночного города с высоты -->
+            <g class="route__cities">
+              <circle class="route__city" style="--i: 0" cx="40" cy="210" r="2.6"/>
+              <circle class="route__city" style="--i: 1" cx="150" cy="130" r="2.6"/>
+              <circle class="route__city" style="--i: 2" cx="250" cy="60" r="2.6"/>
+              <circle class="route__city" style="--i: 3" cx="370" cy="210" r="2.6"/>
+              <circle class="route__city" style="--i: 4" cx="396" cy="356" r="2.6"/>
+              <circle class="route__city" style="--i: 5" cx="52" cy="420" r="2.6"/>
+              <circle class="route__city" style="--i: 6" cx="196" cy="470" r="2.6"/>
+              <circle class="route__city" style="--i: 7" cx="320" cy="420" r="2.6"/>
+              <circle class="route__city" style="--i: 8" cx="376" cy="540" r="2.6"/>
+              <circle class="route__city" style="--i: 9" cx="150" cy="620" r="2.6"/>
+            </g>
 
-            <!-- Вторая дуга, тише: даёт ощущение нескольких направлений -->
-            <path class="route__path route__path--soft" d="M96 318 C 178 300, 244 268, 392 108"
-                  fill="none" stroke-width="1.5" stroke-linecap="round"
-                  stroke-dasharray="3 11"/>
+            <!-- Сам маршрут. Линия сплошная, пунктир на неё
+                 накладывает маска; прорисовка — в css/home.css. -->
+            <path class="route__line" d="M92 640 C 60 460, 150 250, 330 110"
+                  fill="none" stroke-width="2" mask="url(#route-dash)"/>
 
-            <!-- Точки маршрута: откуда и куда -->
-            <circle class="route__ring" cx="96" cy="318" r="19" fill="none" stroke-width="1.5"/>
-            <circle class="route__dot"  cx="96" cy="318" r="6"/>
+            <!-- Откуда -->
+            <circle class="route__ring" cx="92" cy="640" r="18"
+                    fill="none" stroke-width="1.5"/>
+            <circle class="route__dot" cx="92" cy="640" r="6"/>
+            <text class="route__label" x="92" y="684" text-anchor="middle">Ashgabat</text>
 
-            <circle class="route__stop" cx="268" cy="196" r="4.5"/>
+            <!-- Куда. Подпись сменяется каждые три секунды -->
+            <circle class="route__pulse" cx="330" cy="110" r="23"
+                    fill="none" stroke-width="1.5"/>
+            <circle class="route__ring" cx="330" cy="110" r="23"
+                    fill="none" stroke-width="1.5"/>
+            <circle class="route__dot route__dot--end" cx="330" cy="110" r="7.5"/>
+            <!-- Подписи лежат друг на друге: видна всегда одна.
+                 Их обёртка нужна, чтобы при выключенном движении
+                 можно было оставить видимой первую. -->
+            <g class="route__labels">
+              <text class="route__label route__label--end" style="--i: 0" x="330" y="70" text-anchor="middle">Istanbul</text>
+              <text class="route__label route__label--end" style="--i: 1" x="330" y="70" text-anchor="middle">Dubai</text>
+              <text class="route__label route__label--end" style="--i: 2" x="330" y="70" text-anchor="middle">Berlin</text>
+              <text class="route__label route__label--end" style="--i: 3" x="330" y="70" text-anchor="middle">Beijing</text>
+              <text class="route__label route__label--end" style="--i: 4" x="330" y="70" text-anchor="middle">Seoul</text>
+              <text class="route__label route__label--end" style="--i: 5" x="330" y="70" text-anchor="middle">Warsaw</text>
+            </g>
 
-            <circle class="route__ring route__ring--end" cx="392" cy="108" r="26" fill="none" stroke-width="1.5"/>
-            <circle class="route__ring route__ring--wide" cx="392" cy="108" r="38" fill="none"
-                    stroke-width="1.5" stroke-dasharray="4 10"/>
-            <circle class="route__dot route__dot--end" cx="392" cy="108" r="8"/>
+            <!-- Самолёт из фирменного знака. Он нарисован носом вверх,
+                 поэтому внутри повёрнут на 90°: вдоль пути летит нос. -->
+            <g class="route__plane">
+              <g transform="rotate(90) scale(0.26)">
+                <path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/>
+              </g>
+            </g>
 
           </svg>
         </div>
@@ -395,7 +447,7 @@
     <!-- ==================================================================
          2. HYZMATLARYMYZ — услуги
          ================================================================== -->
-    <section class="section" id="hyzmatlar">
+    <section class="section" id="hyzmatlar" data-reveal="dash">
       <div class="container">
 
         <div class="section__head" data-reveal>
@@ -406,9 +458,9 @@
           </p>
         </div>
 
-        <div class="cards">
+        <div class="cards" data-reveal-group>
 
-          <article class="card" data-reveal>
+          <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-briefcase"/></svg>
             <h3 class="card__title">Work visa</h3>
             <p class="card__text">
@@ -420,7 +472,7 @@
             </a>
           </article>
 
-          <article class="card" data-reveal>
+          <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-cap"/></svg>
             <h3 class="card__title">Student visa</h3>
             <p class="card__text">
@@ -432,7 +484,7 @@
             </a>
           </article>
 
-          <article class="card" data-reveal>
+          <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-plane"/></svg>
             <h3 class="card__title">Tourist visa</h3>
             <p class="card__text">
@@ -444,7 +496,7 @@
             </a>
           </article>
 
-          <article class="card" data-reveal>
+          <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-users"/></svg>
             <h3 class="card__title">Visitor visa</h3>
             <p class="card__text">
@@ -456,7 +508,7 @@
             </a>
           </article>
 
-          <article class="card" data-reveal>
+          <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-buildings"/></svg>
             <h3 class="card__title">Business visa</h3>
             <p class="card__text">
@@ -468,7 +520,7 @@
             </a>
           </article>
 
-          <article class="card" id="talyplar" data-reveal>
+          <article class="card" id="talyplar">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-book"/></svg>
             <h3 class="card__title">Study abroad advice</h3>
             <p class="card__text">
@@ -488,7 +540,7 @@
     <!-- ==================================================================
          3. NÄHILI IŞLEÝÄRIS — пять шагов
          ================================================================== -->
-    <section class="section" id="nahili-isleyaris">
+    <section class="section" id="nahili-isleyaris" data-reveal="dash">
       <div class="container">
 
         <div class="section__head" data-reveal>
@@ -499,9 +551,9 @@
           </p>
         </div>
 
-        <ol class="steps">
+        <ol class="steps" data-reveal-group>
 
-          <li class="step" data-reveal>
+          <li class="step">
             <div class="step__marker"><span class="step__num">1</span></div>
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-chat"/></svg>
@@ -512,7 +564,7 @@
             </div>
           </li>
 
-          <li class="step" data-reveal>
+          <li class="step">
             <div class="step__marker"><span class="step__num">2</span></div>
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-search-check"/></svg>
@@ -523,7 +575,7 @@
             </div>
           </li>
 
-          <li class="step" data-reveal>
+          <li class="step">
             <div class="step__marker"><span class="step__num">3</span></div>
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-doc"/></svg>
@@ -534,7 +586,7 @@
             </div>
           </li>
 
-          <li class="step" data-reveal>
+          <li class="step">
             <div class="step__marker"><span class="step__num">4</span></div>
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-calendar-check"/></svg>
@@ -545,7 +597,7 @@
             </div>
           </li>
 
-          <li class="step" data-reveal>
+          <li class="step">
             <div class="step__marker"><span class="step__num">5</span></div>
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-badge-check"/></svg>
@@ -564,7 +616,7 @@
     <!-- ==================================================================
          4. NÄME ÜÇIN BIZ
          ================================================================== -->
-    <section class="section" id="biz-barada">
+    <section class="section" id="biz-barada" data-reveal="dash">
       <div class="container">
 
         <div class="section__head" data-reveal>
@@ -575,9 +627,9 @@
           </p>
         </div>
 
-        <div class="features">
+        <div class="features" data-reveal-group>
 
-          <div class="feature" data-reveal>
+          <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-certificate"/></svg>
             <h3 class="feature__title">Officially, under contract</h3>
             <p class="feature__text">
@@ -585,7 +637,7 @@
             </p>
           </div>
 
-          <div class="feature" data-reveal>
+          <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-scales"/></svg>
             <h3 class="feature__title">An honest assessment</h3>
             <p class="feature__text">
@@ -593,7 +645,7 @@
             </p>
           </div>
 
-          <div class="feature" data-reveal>
+          <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-tag"/></svg>
             <h3 class="feature__title">Transparent pricing</h3>
             <p class="feature__text">
@@ -601,7 +653,7 @@
             </p>
           </div>
 
-          <div class="feature" data-reveal>
+          <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-stairs-flag"/></svg>
             <h3 class="feature__title">Support at every step</h3>
             <p class="feature__text">
@@ -617,7 +669,7 @@
     <!-- ==================================================================
          5. UGURLAR — направления
          ================================================================== -->
-    <section class="section" id="ugurlar">
+    <section class="section" id="ugurlar" data-reveal="dash">
       <div class="container">
 
         <div class="section__head" data-reveal>
@@ -629,7 +681,7 @@
         </div>
 
         <div data-reveal>
-          <ul class="tags">
+          <ul class="tags" data-reveal-group>
             <li class="tag">Türkiye</li>
             <li class="tag">Russia</li>
             <li class="tag">UAE</li>
@@ -653,7 +705,7 @@
     <!-- ==================================================================
          6. KÖP BERILÝÄN SORAGLAR
          ================================================================== -->
-    <section class="section" id="soraglar">
+    <section class="section" id="soraglar" data-reveal="dash">
       <div class="container container--narrow">
 
         <div class="section__head" data-reveal>
@@ -877,6 +929,9 @@
 
 
   <script src="../js/main.js" defer></script>
+
+
+  <script src="../js/motion.js" defer></script>
   <!-- Микроразметка для поисковиков. Её расставляет scripts/build-seo.js -->
   <!-- jsonld:start -->
   <script type="application/ld+json">

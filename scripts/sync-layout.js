@@ -426,6 +426,50 @@ function buildLangValues(rel, existing) {
   return { values: v, targets: targets, lang: lang };
 }
 
+/* ==================================================================== */
+/* Предзагрузка шрифтов                                                 */
+/* ==================================================================== */
+
+/* Что предзагружать. Здесь ровно один файл на страницу, и это не жадность,
+   а замер: на 400 Кбит/с каждая предзагрузка шрифта отбирает канал
+   у таблиц стилей, без которых страница не рисуется вовсе.
+
+     один файл    — первый текст через 1,8 с;
+     два файла    — 2,0 с, впритык к сроку;
+     четыре файла — 2,6 с, срок сорван.
+
+   Поэтому предзагружаем только основной шрифт того алфавита, которым набрана
+   страница: им набрано почти всё, что на ней написано. Остальные части —
+   расширенная латиница, кириллица, заголовочный Unbounded — приезжают своим
+   чередом; из-за font-display: swap текст всё это время виден системным
+   шрифтом и на месте.
+
+   Замерять после правок:  node scripts/serve.js  и  node scripts/measure-speed.js  */
+const FONT_PRELOAD = {
+  tk: "inter-latin",      /* туркменский набран латиницей */
+  ru: "inter-cyrillic",   /* русский — кириллицей          */
+  en: "inter-latin"
+};
+
+/* Одна строка, которая должна отработать до первой отрисовки страницы.
+
+   Она ставит классу <html> метку js — «скрипты работают». По ней стили
+   прячут блоки, которые потом плавно появляются. Если JavaScript выключен,
+   метки нет — и ничего не прячется, страница просто показана целиком.
+
+   Почему прямо в HTML, а не отдельным файлом: отдельный файл успел бы
+   загрузиться уже после первой отрисовки, и блоки на миг мигнули бы.  */
+function bootBlock(indent) {
+  return `${indent}<script>document.documentElement.classList.add("js");</script>`;
+}
+
+function fontsBlock(lang, prefix, indent) {
+  const file = FONT_PRELOAD[lang] || FONT_PRELOAD[DEFAULT_LANG];
+  return `${indent}<link rel="preload" href="${prefix}assets/fonts/${file}.woff2"` +
+         ` as="font" type="font/woff2" crossorigin>`;
+}
+
+
 function hreflangBlock(rel, existing, siteUrl, indent) {
   const relPosix = rel.split(path.sep).join("/");
   const lang = langOf(relPosix);
@@ -479,6 +523,18 @@ function syncFile(file, partials, site, valuesByLang, existing) {
     /* Микроразметку заполняет build-seo.js — партиала для неё нет */
     if (name === "jsonld") return whole;
 
+    /* Строка, которая должна отработать до первой отрисовки */
+    if (name === "boot") {
+      blocks++;
+      return `${indent}<!-- boot:start -->\n${bootBlock(indent)}\n${indent}<!-- boot:end -->`;
+    }
+
+    /* Список шрифтов зависит только от языка страницы — партиал не нужен */
+    if (name === "fonts") {
+      blocks++;
+      return `${indent}<!-- fonts:start -->\n${fontsBlock(lang, prefix, indent)}\n${indent}<!-- fonts:end -->`;
+    }
+
     /* hreflang собирается скриптом, файла-партиала для него нет */
     if (name === "hreflang") {
       blocks++;
@@ -496,7 +552,9 @@ function syncFile(file, partials, site, valuesByLang, existing) {
 
     let body = body0;
     body = fixPaths(body, relPosix, lang, prefix);
-    body = expandConditions(body, site, values);
+    /* В условиях <!-- if:… --> видны и поля site.json, и атрибуты самой метки:
+       так одна и та же шапка знает, лежит ли под ней тёмный первый экран. */
+    body = expandConditions(body, site, Object.assign({}, values, attrs));
     body = expandLoops(body, site, lang);
     body = substitute(body, Object.assign({}, values, langInfo.values, attrs));
     body = markActiveNav(body, attrs.nav);

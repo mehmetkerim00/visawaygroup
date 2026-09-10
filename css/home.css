@@ -79,16 +79,33 @@
 
 
 /* ==========================================================================
-   1. HERO
+   1. ПЕРВЫЙ ЭКРАН
+
+   Тёмная полоса во всю ширину — единственное тёмное место в верхней половине
+   сайта. Дальше страница светлая, и этот перепад работает вместо картинки:
+   первый экран читается как обложка, а не как начало ленты.
+
+   Иллюстрация здесь одна — маршрут из Ашхабада. Ни фотографий, ни глобусов.
    ========================================================================== */
 
 .hero {
-  padding-block: var(--space-7) var(--space-8);
+  position: relative;
+  background-color: var(--dark);
+  color: var(--on-dark);
+  /* Шапка над этим экраном прозрачная и вынута из потока,
+     поэтому отступ сверху закладываем сами. */
+  padding-block: calc(var(--header-h) + var(--space-7)) var(--space-8);
+  overflow: hidden;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 900px) {
   .hero {
-    padding-block: var(--space-8) var(--space-9);
+    display: flex;
+    align-items: center;
+    /* Экран целиком, но не выше разумного: на очень высоком мониторе
+       растягивать первый экран не за чем. */
+    min-height: min(100svh, 900px);
+    padding-block: calc(var(--header-h) + var(--space-8)) var(--space-8);
   }
 }
 
@@ -107,24 +124,37 @@
 
 @media (min-width: 900px) {
   .hero__grid {
+    width: 100%;
     grid-template-columns: 1.05fr 0.95fr;
     gap: var(--space-8);
   }
 }
 
+/* --- Левая колонка --------------------------------------------------------- */
+
+.hero .eyebrow {
+  color: var(--copper-on-dark);
+}
+
+.hero .eyebrow::before {
+  background-color: var(--copper-light);
+}
+
 .hero__title {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-5);
+  color: var(--on-dark);
 }
 
 .hero__lead {
   font-size: var(--text-lg);
-  color: var(--muted);
-  max-width: 52ch;
+  color: var(--on-dark-muted);
+  max-width: 46ch;
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-3);
   margin-top: var(--space-6);
 }
@@ -138,6 +168,30 @@
   }
 }
 
+/* Вторая кнопка на тёмном: медная рамка светлеет, надпись — светлая */
+.hero .btn--secondary {
+  border-color: var(--copper-light);
+  color: var(--on-dark);
+}
+
+.hero .btn--secondary:hover {
+  background-color: rgba(204, 123, 80, 0.16);
+  border-color: var(--copper-on-dark);
+  color: var(--on-dark);
+}
+
+/* Плашка «первая консультация бесплатно» — самое важное обещание
+   на первом экране, поэтому у неё медная рамка, а не тихая подложка. */
+.hero .badge {
+  background-color: rgba(204, 123, 80, 0.14);
+  border: 1px solid var(--copper-light);
+  color: var(--on-dark);
+}
+
+.hero .badge .icon {
+  color: var(--copper-on-dark);
+}
+
 /* Честная приписка под кнопками: решение принимает консульство */
 .hero__note {
   display: flex;
@@ -146,49 +200,213 @@
   max-width: 54ch;
   margin-top: var(--space-6);
   padding-top: var(--space-5);
-  border-top: 1px solid var(--line);
-  color: var(--muted);
+  border-top: 1px solid var(--line-dark);
+  color: var(--on-dark-muted);
   font-size: var(--text-sm);
 }
 
 .hero__note .icon {
-  color: var(--copper);
+  color: var(--copper-on-dark);
   margin-top: 2px;
 }
 
-/* Композиция из тонких линий вместо фотографии */
+.hero :focus-visible {
+  outline-color: var(--copper-on-dark);
+}
+
+
+/* ==========================================================================
+   МАРШРУТ — единственная иллюстрация первого экрана
+
+   Пунктирная дуга из фирменного знака, развёрнутая в путь: из Ашхабада
+   в город назначения. Линия прорисовывается при загрузке, по ней летит
+   самолёт из знака, подпись конечной точки сменяется каждые три секунды.
+   Вокруг — огни городов: еле заметные точки с медленной пульсацией.
+
+   Всё движение живёт в CSS. При системной настройке «уменьшить движение»
+   общее правило в base.css обнуляет длительности: линия видна целиком,
+   самолёт стоит в начале пути, подписи не мигают.
+   ========================================================================== */
+
 .hero__art {
   display: flex;
   justify-content: center;
 }
 
-.hero__art svg {
+.hero__art .route {
   width: 100%;
-  max-width: 300px;
+  max-width: 240px;
   height: auto;
 }
 
 @media (min-width: 600px) {
-  .hero__art svg {
-    max-width: 380px;
+  .hero__art .route {
+    max-width: 280px;
   }
 }
 
+/* На большом экране маршрут задан не шириной, а высотой: он должен идти
+   во всю высоту первого экрана, а ширину подберёт сам по пропорциям. */
 @media (min-width: 900px) {
-  .hero__art svg {
-    max-width: 460px;
+  .hero__art {
+    align-items: center;
+  }
+
+  .hero__art .route {
+    width: auto;
+    max-width: 100%;
+    height: min(74svh, 720px);
   }
 }
 
-/* Композиция первого экрана: пунктирный маршрут между точками.
-   Живёт из знака — та же скруглённая форма и тот же пунктир. */
-.route__plate            { stroke: var(--line); }
-.route__path             { stroke: var(--copper); opacity: 0.75; }
-.route__path--soft       { stroke: var(--muted); opacity: 0.35; }
-.route__ring             { stroke: var(--copper); opacity: 0.55; }
-.route__ring--wide       { stroke: var(--copper); opacity: 0.3; }
-.route__dot              { fill: var(--copper); }
-.route__stop             { fill: var(--muted); opacity: 0.55; }
+/* --- Линия маршрута -------------------------------------------------------
+
+   Линия выезжает из Ашхабада: классическая прорисовка через stroke-dashoffset.
+   Штрихи при этом даёт маска — если бы пунктир был на самой линии, её
+   stroke-dasharray был бы занят и рисовать стало бы нечем.
+
+   Раньше было наоборот: пунктир на линии, прорисовка внутри маски.
+   Так не работает — Chrome перестаёт пересчитывать содержимое маски
+   на ходу, и линия замирала недорисованной. Анимация должна жить
+   на видимом элементе, а маска — стоять на месте.
+
+   Число 615 — длина кривой в единицах viewBox с небольшим запасом.
+   Поменяете кривую — пересчитайте и его. */
+
+.route__line {
+  stroke: var(--copper-light);
+  stroke-dasharray: 615;
+  stroke-dashoffset: 615;
+  animation: route-draw 1800ms var(--ease-out) 200ms forwards;
+}
+
+@keyframes route-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+
+/* --- Точки маршрута -------------------------------------------------------- */
+
+.route__ring        { stroke: var(--copper-light); opacity: 0.5; }
+.route__dot         { fill: var(--copper-on-dark); }
+.route__dot--end    { fill: var(--copper-on-dark); }
+
+/* Круг, расходящийся от точки назначения */
+.route__pulse {
+  stroke: var(--copper-light);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: route-pulse 3s var(--ease-hover) infinite;
+}
+
+@keyframes route-pulse {
+  0%   { opacity: 0.5;  transform: scale(1); }
+  70%  { opacity: 0;    transform: scale(1.9); }
+  100% { opacity: 0;    transform: scale(1.9); }
+}
+
+/* --- Огни городов ---------------------------------------------------------- */
+
+.route__city {
+  fill: var(--on-dark);
+  opacity: 0.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  /* Отрицательная задержка: каждая точка вступает не с начала,
+     поэтому огни мигают вразнобой, а не хором. */
+  animation: city-glow 4.5s var(--ease-hover) infinite;
+  animation-delay: calc(var(--i, 0) * -0.7s);
+}
+
+@keyframes city-glow {
+  0%, 100% { opacity: 0.16; transform: scale(1); }
+  50%      { opacity: 0.5;  transform: scale(1.25); }
+}
+
+/* --- Самолёт --------------------------------------------------------------- */
+
+.route__plane {
+  fill: var(--copper-on-dark);
+  /* Путь тот же, что у линии маршрута. Меняете кривую — меняйте здесь тоже. */
+  offset-path: path("M92 640 C 60 460, 150 250, 330 110");
+  offset-rotate: auto;
+  offset-distance: 0%;
+  animation: plane-fly 11s cubic-bezier(0.45, 0, 0.55, 1) 1400ms infinite;
+}
+
+@keyframes plane-fly {
+  0%   { offset-distance: 0%;   opacity: 0; }
+  6%   { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+/* --- Подписи --------------------------------------------------------------- */
+
+.route__label {
+  fill: var(--on-dark);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
+}
+
+/* Город назначения. Подписи лежат друг на друге, видна всегда одна:
+   каждая показывается три секунды, всего их шесть — круг 18 секунд. */
+.route__label--end {
+  fill: var(--copper-on-dark);
+  opacity: 0;
+  animation: label-cycle 18s linear infinite;
+  animation-delay: calc(var(--i, 0) * 3s);
+}
+
+@keyframes label-cycle {
+  0%      { opacity: 0; }
+  1.6%    { opacity: 1; }
+  15%     { opacity: 1; }
+  16.667% { opacity: 0; }
+  100%    { opacity: 0; }
+}
+
+/* Движение выключено в системе — маршрут должен остаться осмысленной
+   картинкой, а не обрывком незаконченной анимации.
+   Показываем: линию целиком, самолёт в начале пути, первый город.
+   Остальные подписи прячем совсем — иначе все шесть легли бы друг на друга
+   нечитаемой кашей. */
+@media (prefers-reduced-motion: reduce) {
+
+  .route__line {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .route__plane {
+    animation: none;
+    /* Не в самом начале пути, а в полёте: так картинка выглядит
+       законченной, а не остановленной на полуслове. */
+    offset-distance: 46%;
+    opacity: 1;
+  }
+
+  .route__pulse {
+    animation: none;
+    opacity: 0;
+  }
+
+  .route__city {
+    animation: none;
+    opacity: 0.22;
+  }
+
+  .route__label--end {
+    animation: none;
+    opacity: 0;
+  }
+
+  .route__labels > .route__label--end:first-child {
+    opacity: 1;
+  }
+}
 
 
 /* ==========================================================================
@@ -698,6 +916,37 @@
   .section + .section > .container::before,
   .section + .section > .container--narrow::before {
     margin-bottom: var(--space-8);
+  }
+}
+
+/* Пунктир оживает, когда секция входит в кадр: штрихи медленно «пробегают»
+   слева направо и останавливаются. Эффект намеренно почти незаметный —
+   разделитель должен отмечать границу, а не отвлекать.
+
+   Пунктир нарисован повторяющимся градиентом, поэтому бежит он сдвигом
+   фона: 156px — это ровно двенадцать шагов узора, так что в конце
+   пробега рисунок совпадает сам с собой и остановка не заметна. */
+@media (prefers-reduced-motion: no-preference) {
+
+  .js .section[data-reveal="dash"] > .container::before,
+  .js .section[data-reveal="dash"] > .container--narrow::before {
+    opacity: 0;
+  }
+
+  .js .section[data-reveal="dash"].is-visible > .container::before,
+  .js .section[data-reveal="dash"].is-visible > .container--narrow::before {
+    animation: dash-run 1600ms var(--ease-out) both;
+  }
+
+  @keyframes dash-run {
+    from {
+      background-position-x: -156px;
+      opacity: 0;
+    }
+    to {
+      background-position-x: 0;
+      opacity: var(--dash-opacity);
+    }
   }
 }
 

@@ -14,7 +14,7 @@
 @font-face {
   font-family: "Inter";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400 700;
   font-display: swap;
   src: url("../assets/fonts/inter-latin.woff2") format("woff2");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
@@ -26,7 +26,7 @@
 @font-face {
   font-family: "Inter";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400 700;
   font-display: swap;
   src: url("../assets/fonts/inter-latin-ext.woff2") format("woff2");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
@@ -38,9 +38,49 @@
 @font-face {
   font-family: "Inter";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400 700;
   font-display: swap;
   src: url("../assets/fonts/inter-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/* --------------------------------------------------------------------------
+   Unbounded — акцидентный шрифт, только заголовки h1 и h2.
+
+   Файл один на оба начертания: это переменный шрифт, у которого ось веса
+   заранее обрезана до 600–700. Двух отдельных файлов не нужно, а весит
+   он немногим больше одного.
+
+   Разбит на те же три части, что и Inter: браузер скачивает только ту,
+   буквы из которой действительно стоят на странице.
+   -------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url("../assets/fonts/unbounded-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url("../assets/fonts/unbounded-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Unbounded";
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url("../assets/fonts/unbounded-cyrillic.woff2") format("woff2");
   unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 
@@ -137,8 +177,22 @@ h1, h2, h3, h4 {
   text-wrap: balance;   /* заголовок не оставляет одно слово на строке */
 }
 
-h1 { font-size: var(--text-h1); }
-h2 { font-size: var(--text-h2); }
+/* h1 и h2 — акцидентным шрифтом. Он широкий, поэтому разрядка не
+   отрицательная, как у Inter, а нулевая: буквам нужен воздух. */
+h1, h2 {
+  font-family: var(--font-display);
+  letter-spacing: -0.005em;
+}
+
+h1 { font-size: var(--text-h1); font-weight: var(--weight-bold); }
+h2 { font-size: var(--text-h2); font-weight: var(--weight-semibold); }
+
+/* Исключение: заголовки колонок в подвале набраны прописными вразрядку —
+   там акцидентный шрифт мешает, оставляем Inter. */
+.site-footer__heading {
+  font-family: var(--font-sans);
+  letter-spacing: 0.08em;
+}
 h3 { font-size: var(--text-h3); font-weight: var(--weight-semibold); letter-spacing: -0.01em; }
 h4 { font-size: var(--text-h4); font-weight: var(--weight-semibold); letter-spacing: 0; }
 
@@ -235,11 +289,8 @@ small {
   transition: background-color var(--transition-fast),
               border-color var(--transition-fast),
               color var(--transition-fast),
+              box-shadow var(--transition-fast),
               transform var(--transition-fast);
-}
-
-.btn:active {
-  transform: translateY(1px);
 }
 
 .btn--primary {
@@ -380,6 +431,98 @@ small {
    На бумаге не нужны меню, подвал и кнопки — нужен чёрный текст на белом
    и адреса ссылок, чтобы по распечатке можно было что-то найти.
    ========================================================================== */
+
+/* ==========================================================================
+   ДВИЖЕНИЕ
+
+   Одна система на весь сайт. Правила лежат здесь, а не в скриптах:
+   JavaScript только сообщает, что блок попал в кадр, всё остальное делает CSS.
+
+   Два принципа, которые нельзя нарушать:
+     • без JavaScript страница выглядит нормально — прятать блоки начинает
+       только скрипт, поэтому «сломанный» скрипт ничего не скроет;
+     • при системной настройке «уменьшить движение» всё стоит на месте
+       (общее правило в разделе 2 обнуляет длительности).
+   ========================================================================== */
+
+/* --- Появление блока при прокрутке ---------------------------------------
+   Разметка описана в js/motion.js. Скрытие включает класс js у <html>:
+   его ставит строка в <head>, поэтому без JavaScript ничего не прячется,
+   а с ним — прячется ещё до первой отрисовки, без мигания.               */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .js [data-reveal],
+  .js [data-reveal-group] > * {
+    opacity: 0;
+    transform: translateY(var(--reveal-shift));
+    transition: opacity var(--dur-slow) var(--ease-out),
+                transform var(--dur-slow) var(--ease-out);
+    /* Переменную --i проставляет детям списка js/motion.js: 0, 1, 2… */
+    transition-delay: calc(var(--i, 0) * var(--stagger));
+  }
+
+  .js [data-reveal].is-visible,
+  .js [data-reveal-group] > .is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Без подъёма: для крупных плашек, которым движение снизу не идёт */
+  .js [data-reveal="fade"] {
+    transform: none;
+  }
+
+  /* Служебное значение: сам блок стоит на месте, движется только
+     пунктирный разделитель над ним (правило — в css/home.css). */
+  .js [data-reveal="dash"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* --- Наведение: кнопки и карточки чуть поднимаются -------------------------
+   Только там, где есть настоящий курсор: на телефоне «наведения» не бывает,
+   а :hover после нажатия залипает. */
+
+@media (hover: hover) {
+
+  .btn:hover {
+    transform: translateY(calc(var(--lift) * -1));
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn--secondary:hover {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* Нажали — кнопка возвращается на место и теряет тень */
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+
+/* --- Смена страниц --------------------------------------------------------
+   View Transitions: браузер сам показывает плавное затухание между
+   страницами. Кто не умеет — просто не поймёт это правило и покажет
+   обычный переход; проверять поддержку скриптом не нужно.               */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dur-base);
+  animation-timing-function: var(--ease-hover);
+}
+
 
 @media print {
 

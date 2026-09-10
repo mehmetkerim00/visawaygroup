@@ -1,13 +1,24 @@
   <!-- Ссылка для клавиатуры и скринридеров: перейти сразу к содержимому -->
   <a class="skip-link" href="#mazmun">Skip to main content</a>
 
-  <header class="site-header" data-header>
+  <header class="site-header<!-- if:over --> site-header--over-dark<!-- endif -->" data-header>
     <div class="container site-header__inner">
 
       <a class="site-header__logo" href="index.html" aria-label="VisaWay Group — home page">
-        <img src="assets/logo-horizontal.svg"
+        <!-- Два файла одного логотипа: тёмный для светлой шапки, светлый —
+             для прозрачной шапки поверх тёмного первого экрана.
+             Второй подставляется только там, где он нужен: на остальных
+             страницах его нет и он не грузится. -->
+        <img class="site-header__logo-img"
+             src="assets/logo-header.svg"
              alt="VisaWay Group"
-             width="622" height="224">
+             width="690" height="140">
+        <!-- if:over -->
+        <img class="site-header__logo-img site-header__logo-img--light"
+             src="assets/logo-header-light.svg"
+             alt="" aria-hidden="true"
+             width="690" height="140">
+        <!-- endif -->
       </a>
 
       <!-- Кнопка-бургер: видна только на телефонах и планшетах -->
