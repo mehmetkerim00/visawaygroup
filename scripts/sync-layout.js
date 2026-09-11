@@ -786,6 +786,135 @@ function parseAttrs(raw) {
 }
 
 /* ==================================================================== */
+/* Маршруты первого экрана                                              */
+/* ==================================================================== */
+
+/* Из Ашхабада расходятся веером несколько маршрутов, у каждого свой
+   самолёт. Города берутся из data/countries.json по ключу photo, поэтому
+   подписи переводятся сами — здесь их писать не надо.
+
+   Кривые и длины посчитаны заранее и проверены: линии нигде не сходятся
+   ближе чем на 27 единиц рамки и не выходят за её край. Меняете кривую —
+   пересчитайте длину, иначе прорисовка оборвётся или не дойдёт до конца.
+
+   Вариантов два. Широкий, 420×720, с четырьмя маршрутами — для планшета
+   и монитора. Узкий, 420×260, с двумя самыми разнесёнными — для телефона:
+   там маршрут лежит под текстом полосой, и четыре линии в неё не влезут.
+   Показывает нужный медиазапрос в css/home.css, второй при этом
+   display:none, то есть его анимации не идут вовсе. */
+
+const ROUTE_CITIES = [
+  /* фоновые огни: неяркие точки, у каждой свой сдвиг мигания */
+  { x: 40, y: 210 }, { x: 150, y: 130 }, { x: 250, y: 60 }, { x: 370, y: 210 },
+  { x: 396, y: 356 }, { x: 52, y: 420 }, { x: 196, y: 470 }, { x: 320, y: 420 },
+  { x: 376, y: 540 }, { x: 150, y: 620 }
+];
+
+const ROUTE_SETS = {
+  wide: {
+    box: [420, 720],
+    from: { x: 196, y: 648, labelY: 692 },
+    cities: ROUTE_CITIES,
+    /* draw — когда начинает рисоваться линия; delay — когда вылетает
+       самолёт; dur — сколько длится один полёт. Вылеты разведены
+       примерно на секунду, длительности разные: иначе четыре самолёта
+       идут строем, как на параде. */
+    routes: [
+      { key: "istanbul", d: "M196 648 C 110 596, 46 470, 74 360", len: 333, x: 74,  y: 360, labelY: 322, draw: 200,  delay: 1400, dur: "9s" },
+      { key: "berlin",   d: "M196 648 C 150 500, 60 300, 86 120",  len: 544, x: 86,  y: 120, labelY: 82,  draw: 500,  delay: 2400, dur: "11s" },
+      { key: "beijing",  d: "M196 648 C 250 520, 330 320, 344 152", len: 520, x: 344, y: 152, labelY: 114, draw: 800,  delay: 3500, dur: "12.5s" },
+      { key: "dubai",    d: "M196 648 C 286 604, 352 540, 350 430", len: 284, x: 350, y: 430, labelY: 392, draw: 1100, delay: 4600, dur: "10s" }
+    ]
+  },
+  narrow: {
+    box: [420, 260],
+    from: { x: 210, y: 214, labelY: 246 },
+    cities: [
+      { x: 46, y: 150 }, { x: 120, y: 60 }, { x: 300, y: 42 }, { x: 392, y: 150 },
+      { x: 96, y: 226 }, { x: 330, y: 224 }
+    ],
+    routes: [
+      { key: "istanbul", d: "M210 214 C 160 182, 96 150, 60 84",  len: 201, x: 60,  y: 84, labelY: 52, draw: 200, delay: 1400, dur: "9s" },
+      { key: "beijing",  d: "M210 214 C 262 184, 330 156, 360 96", len: 194, x: 360, y: 96, labelY: 64, draw: 600, delay: 2400, dur: "11.5s" }
+    ]
+  }
+};
+
+const PLANE_PATH = "M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z";
+
+function routeSvg(kind, lang, countries, labels, indent) {
+  const set = ROUTE_SETS[kind];
+  const [W, H] = set.box;
+  const i = indent;
+  const cityName = key => {
+    const c = countries.find(x => x.photo === key);
+    if (!c) throw new Error(`в data/countries.json нет города с photo="${key}"`);
+    return c.city[lang];
+  };
+  const L = k => labels[k][lang];
+  const out = [];
+
+  out.push(`${i}<svg class="route route--${kind}" viewBox="0 0 ${W} ${H}"`);
+  out.push(`${i}     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${L("routeMap")}">`);
+  out.push(`${i}  <defs>`);
+  out.push(`${i}    <!-- Пунктир задаёт неподвижная маска: у самих линий`);
+  out.push(`${i}         stroke-dasharray занят прорисовкой. -->`);
+  out.push(`${i}    <mask id="route-dash-${kind}" maskUnits="userSpaceOnUse" x="0" y="0" width="${W}" height="${H}">`);
+  for (const r of set.routes) {
+    out.push(`${i}      <path d="${r.d}" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>`);
+  }
+  out.push(`${i}    </mask>`);
+  out.push(`${i}  </defs>`);
+
+  out.push(`${i}  <!-- Огни городов: как окна ночного города с высоты -->`);
+  out.push(`${i}  <g class="route__cities">`);
+  set.cities.forEach((c, n) => {
+    out.push(`${i}    <circle class="route__city" style="--i: ${n}" cx="${c.x}" cy="${c.y}" r="2.6"/>`);
+  });
+  out.push(`${i}  </g>`);
+
+  out.push(`${i}  <g class="route__lines" mask="url(#route-dash-${kind})">`);
+  set.routes.forEach(r => {
+    out.push(`${i}    <path class="route__line" style="--len: ${r.len}; --draw: ${r.draw}ms" d="${r.d}" fill="none" stroke-width="2"/>`);
+  });
+  out.push(`${i}  </g>`);
+
+  out.push(`${i}  <!-- Откуда: единственная точка отправления -->`);
+  out.push(`${i}  <circle class="route__ring" cx="${set.from.x}" cy="${set.from.y}" r="18" fill="none" stroke-width="1.5"/>`);
+  out.push(`${i}  <circle class="route__dot" cx="${set.from.x}" cy="${set.from.y}" r="6"/>`);
+  out.push(`${i}  <text class="route__label" x="${set.from.x}" y="${set.from.labelY}" text-anchor="middle">${L("routeFrom")}</text>`);
+
+  out.push(`${i}  <!-- Куда: у каждой точки своя подпись, она не сменяется -->`);
+  set.routes.forEach((r, n) => {
+    out.push(`${i}  <g class="route__stop" style="--i: ${n}">`);
+    out.push(`${i}    <circle class="route__pulse" cx="${r.x}" cy="${r.y}" r="20" fill="none" stroke-width="1.5"/>`);
+    out.push(`${i}    <circle class="route__ring" cx="${r.x}" cy="${r.y}" r="20" fill="none" stroke-width="1.5"/>`);
+    out.push(`${i}    <circle class="route__dot route__dot--end" cx="${r.x}" cy="${r.y}" r="6.5"/>`);
+    out.push(`${i}    <text class="route__label route__label--end" x="${r.x}" y="${r.labelY}" text-anchor="middle">${cityName(r.key)}</text>`);
+    out.push(`${i}  </g>`);
+  });
+
+  out.push(`${i}  <!-- Самолёты. Знак нарисован носом вверх, поэтому внутри`);
+  out.push(`${i}       повёрнут на 90°: вдоль пути летит нос. -->`);
+  set.routes.forEach(r => {
+    out.push(`${i}  <g class="route__plane" style="--path: path('${r.d}'); --dur: ${r.dur}; --delay: ${r.delay}ms">`);
+    out.push(`${i}    <g transform="rotate(90) scale(0.26)"><path d="${PLANE_PATH}"/></g>`);
+    out.push(`${i}  </g>`);
+  });
+
+  out.push(`${i}</svg>`);
+  return out.join("\n");
+}
+
+function routeBlock(indent, lang) {
+  const data = loadCountries();
+  return ["wide", "narrow"]
+    .map(kind => routeSvg(kind, lang, data.countries, data.labels, indent))
+    .join("\n");
+}
+
+
+/* ==================================================================== */
 /* Версия в адресах стилей и скриптов                                   */
 /* ==================================================================== */
 
@@ -846,6 +975,13 @@ function syncFile(file, partials, site, valuesByLang, existing) {
     if (name === "photos") {
       blocks++;
       return `${indent}<!-- photos:start -->\n${photosBlock(lang, prefix, indent)}\n${indent}<!-- photos:end -->`;
+    }
+
+    /* Маршруты первого экрана — тоже из data/countries.json,
+       поэтому подписи городов переводятся сами */
+    if (name === "route") {
+      blocks++;
+      return `${indent}<!-- route:start -->\n${routeBlock(indent, lang)}\n${indent}<!-- route:end -->`;
     }
 
     /* Сетка стран и фильтр — из data/countries.json */

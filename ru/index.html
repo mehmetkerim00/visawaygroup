@@ -62,7 +62,7 @@
   <link rel="stylesheet" href="../css/tokens.css?v=9a4e9787">
   <link rel="stylesheet" href="../css/base.css?v=7d6a24fe">
   <link rel="stylesheet" href="../css/layout.css?v=859ad792">
-  <link rel="stylesheet" href="../css/home.css?v=edf7286e">
+  <link rel="stylesheet" href="../css/home.css?v=ad1f1d40">
 </head>
 
 <body>
@@ -377,7 +377,15 @@
           </p>
 
           <div class="hero__actions">
-            <a class="btn btn--primary btn--lg" href="habarlasmak.html">Получить консультацию</a>
+            <!-- Вокруг главного действия по контуру летит самолётик из знака.
+                 Путь ему считает js/motion.js по настоящему размеру кнопки:
+                 надписи на трёх языках разной длины, на глаз не подогнать. -->
+            <span class="orbit">
+              <a class="btn btn--lg btn--secondary btn--on-dark" href="habarlasmak.html">Получить консультацию</a>
+              <svg class="orbit__plane" viewBox="-44 -44 88 88" aria-hidden="true" focusable="false">
+                <path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/>
+              </svg>
+            </span>
             <p class="badge">
               Первая консультация бесплатная
             </p>
@@ -395,20 +403,19 @@
              Пунктирная дуга из фирменного знака, развёрнутая в путь.
              Всё движение — в css/home.css, раздел «МАРШРУТ». -->
         <div class="hero__art">
-          <svg class="route" viewBox="0 0 420 720" xmlns="http://www.w3.org/2000/svg"
-               role="img" aria-label="Направления из Ашхабада в крупные города мира">
-
+          <!-- route:start -->
+          <svg class="route route--wide" viewBox="0 0 420 720"
+               xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Направления из Ашхабада в крупные города мира">
             <defs>
-              <!-- Пунктир задаёт маска, а не сама линия: у линии
-                   stroke-dasharray занят прорисовкой. Маска неподвижна —
-                   так браузер рисует её один раз и не пересчитывает. -->
-              <mask id="route-dash" maskUnits="userSpaceOnUse"
-                    x="0" y="0" width="420" height="720">
-                <path d="M92 640 C 60 460, 150 250, 330 110" fill="none" stroke="#FFFFFF"
-                      stroke-width="6" stroke-dasharray="5 13"/>
+              <!-- Пунктир задаёт неподвижная маска: у самих линий
+                   stroke-dasharray занят прорисовкой. -->
+              <mask id="route-dash-wide" maskUnits="userSpaceOnUse" x="0" y="0" width="420" height="720">
+                <path d="M196 648 C 110 596, 46 470, 74 360" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
+                <path d="M196 648 C 150 500, 60 300, 86 120" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
+                <path d="M196 648 C 250 520, 330 320, 344 152" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
+                <path d="M196 648 C 286 604, 352 540, 350 430" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
               </mask>
             </defs>
-
             <!-- Огни городов: как окна ночного города с высоты -->
             <g class="route__cities">
               <circle class="route__city" style="--i: 0" cx="40" cy="210" r="2.6"/>
@@ -422,45 +429,106 @@
               <circle class="route__city" style="--i: 8" cx="376" cy="540" r="2.6"/>
               <circle class="route__city" style="--i: 9" cx="150" cy="620" r="2.6"/>
             </g>
-
-            <!-- Сам маршрут. Линия сплошная, пунктир на неё
-                 накладывает маска; прорисовка — в css/home.css. -->
-            <path class="route__line" d="M92 640 C 60 460, 150 250, 330 110"
-                  fill="none" stroke-width="2" mask="url(#route-dash)"/>
-
-            <!-- Откуда -->
-            <circle class="route__ring" cx="92" cy="640" r="18"
-                    fill="none" stroke-width="1.5"/>
-            <circle class="route__dot" cx="92" cy="640" r="6"/>
-            <text class="route__label" x="92" y="684" text-anchor="middle">Ашхабад</text>
-
-            <!-- Куда. Подпись сменяется каждые три секунды -->
-            <circle class="route__pulse" cx="330" cy="110" r="23"
-                    fill="none" stroke-width="1.5"/>
-            <circle class="route__ring" cx="330" cy="110" r="23"
-                    fill="none" stroke-width="1.5"/>
-            <circle class="route__dot route__dot--end" cx="330" cy="110" r="7.5"/>
-            <!-- Подписи лежат друг на друге: видна всегда одна.
-                 Их обёртка нужна, чтобы при выключенном движении
-                 можно было оставить видимой первую. -->
-            <g class="route__labels">
-              <text class="route__label route__label--end" style="--i: 0" x="330" y="70" text-anchor="middle">Стамбул</text>
-              <text class="route__label route__label--end" style="--i: 1" x="330" y="70" text-anchor="middle">Дубай</text>
-              <text class="route__label route__label--end" style="--i: 2" x="330" y="70" text-anchor="middle">Берлин</text>
-              <text class="route__label route__label--end" style="--i: 3" x="330" y="70" text-anchor="middle">Пекин</text>
-              <text class="route__label route__label--end" style="--i: 4" x="330" y="70" text-anchor="middle">Сеул</text>
-              <text class="route__label route__label--end" style="--i: 5" x="330" y="70" text-anchor="middle">Варшава</text>
+            <g class="route__lines" mask="url(#route-dash-wide)">
+              <path class="route__line" style="--len: 333; --draw: 200ms" d="M196 648 C 110 596, 46 470, 74 360" fill="none" stroke-width="2"/>
+              <path class="route__line" style="--len: 544; --draw: 500ms" d="M196 648 C 150 500, 60 300, 86 120" fill="none" stroke-width="2"/>
+              <path class="route__line" style="--len: 520; --draw: 800ms" d="M196 648 C 250 520, 330 320, 344 152" fill="none" stroke-width="2"/>
+              <path class="route__line" style="--len: 284; --draw: 1100ms" d="M196 648 C 286 604, 352 540, 350 430" fill="none" stroke-width="2"/>
             </g>
-
-            <!-- Самолёт из фирменного знака. Он нарисован носом вверх,
-                 поэтому внутри повёрнут на 90°: вдоль пути летит нос. -->
-            <g class="route__plane">
-              <g transform="rotate(90) scale(0.26)">
-                <path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/>
-              </g>
+            <!-- Откуда: единственная точка отправления -->
+            <circle class="route__ring" cx="196" cy="648" r="18" fill="none" stroke-width="1.5"/>
+            <circle class="route__dot" cx="196" cy="648" r="6"/>
+            <text class="route__label" x="196" y="692" text-anchor="middle">Ашхабад</text>
+            <!-- Куда: у каждой точки своя подпись, она не сменяется -->
+            <g class="route__stop" style="--i: 0">
+              <circle class="route__pulse" cx="74" cy="360" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__ring" cx="74" cy="360" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__dot route__dot--end" cx="74" cy="360" r="6.5"/>
+              <text class="route__label route__label--end" x="74" y="322" text-anchor="middle">Стамбул</text>
             </g>
-
+            <g class="route__stop" style="--i: 1">
+              <circle class="route__pulse" cx="86" cy="120" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__ring" cx="86" cy="120" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__dot route__dot--end" cx="86" cy="120" r="6.5"/>
+              <text class="route__label route__label--end" x="86" y="82" text-anchor="middle">Берлин</text>
+            </g>
+            <g class="route__stop" style="--i: 2">
+              <circle class="route__pulse" cx="344" cy="152" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__ring" cx="344" cy="152" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__dot route__dot--end" cx="344" cy="152" r="6.5"/>
+              <text class="route__label route__label--end" x="344" y="114" text-anchor="middle">Пекин</text>
+            </g>
+            <g class="route__stop" style="--i: 3">
+              <circle class="route__pulse" cx="350" cy="430" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__ring" cx="350" cy="430" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__dot route__dot--end" cx="350" cy="430" r="6.5"/>
+              <text class="route__label route__label--end" x="350" y="392" text-anchor="middle">Дубай</text>
+            </g>
+            <!-- Самолёты. Знак нарисован носом вверх, поэтому внутри
+                 повёрнут на 90°: вдоль пути летит нос. -->
+            <g class="route__plane" style="--path: path('M196 648 C 110 596, 46 470, 74 360'); --dur: 9s; --delay: 1400ms">
+              <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
+            </g>
+            <g class="route__plane" style="--path: path('M196 648 C 150 500, 60 300, 86 120'); --dur: 11s; --delay: 2400ms">
+              <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
+            </g>
+            <g class="route__plane" style="--path: path('M196 648 C 250 520, 330 320, 344 152'); --dur: 12.5s; --delay: 3500ms">
+              <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
+            </g>
+            <g class="route__plane" style="--path: path('M196 648 C 286 604, 352 540, 350 430'); --dur: 10s; --delay: 4600ms">
+              <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
+            </g>
           </svg>
+          <svg class="route route--narrow" viewBox="0 0 420 260"
+               xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Направления из Ашхабада в крупные города мира">
+            <defs>
+              <!-- Пунктир задаёт неподвижная маска: у самих линий
+                   stroke-dasharray занят прорисовкой. -->
+              <mask id="route-dash-narrow" maskUnits="userSpaceOnUse" x="0" y="0" width="420" height="260">
+                <path d="M210 214 C 160 182, 96 150, 60 84" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
+                <path d="M210 214 C 262 184, 330 156, 360 96" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
+              </mask>
+            </defs>
+            <!-- Огни городов: как окна ночного города с высоты -->
+            <g class="route__cities">
+              <circle class="route__city" style="--i: 0" cx="46" cy="150" r="2.6"/>
+              <circle class="route__city" style="--i: 1" cx="120" cy="60" r="2.6"/>
+              <circle class="route__city" style="--i: 2" cx="300" cy="42" r="2.6"/>
+              <circle class="route__city" style="--i: 3" cx="392" cy="150" r="2.6"/>
+              <circle class="route__city" style="--i: 4" cx="96" cy="226" r="2.6"/>
+              <circle class="route__city" style="--i: 5" cx="330" cy="224" r="2.6"/>
+            </g>
+            <g class="route__lines" mask="url(#route-dash-narrow)">
+              <path class="route__line" style="--len: 201; --draw: 200ms" d="M210 214 C 160 182, 96 150, 60 84" fill="none" stroke-width="2"/>
+              <path class="route__line" style="--len: 194; --draw: 600ms" d="M210 214 C 262 184, 330 156, 360 96" fill="none" stroke-width="2"/>
+            </g>
+            <!-- Откуда: единственная точка отправления -->
+            <circle class="route__ring" cx="210" cy="214" r="18" fill="none" stroke-width="1.5"/>
+            <circle class="route__dot" cx="210" cy="214" r="6"/>
+            <text class="route__label" x="210" y="246" text-anchor="middle">Ашхабад</text>
+            <!-- Куда: у каждой точки своя подпись, она не сменяется -->
+            <g class="route__stop" style="--i: 0">
+              <circle class="route__pulse" cx="60" cy="84" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__ring" cx="60" cy="84" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__dot route__dot--end" cx="60" cy="84" r="6.5"/>
+              <text class="route__label route__label--end" x="60" y="52" text-anchor="middle">Стамбул</text>
+            </g>
+            <g class="route__stop" style="--i: 1">
+              <circle class="route__pulse" cx="360" cy="96" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__ring" cx="360" cy="96" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__dot route__dot--end" cx="360" cy="96" r="6.5"/>
+              <text class="route__label route__label--end" x="360" y="64" text-anchor="middle">Пекин</text>
+            </g>
+            <!-- Самолёты. Знак нарисован носом вверх, поэтому внутри
+                 повёрнут на 90°: вдоль пути летит нос. -->
+            <g class="route__plane" style="--path: path('M210 214 C 160 182, 96 150, 60 84'); --dur: 9s; --delay: 1400ms">
+              <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
+            </g>
+            <g class="route__plane" style="--path: path('M210 214 C 262 184, 330 156, 360 96'); --dur: 11.5s; --delay: 2400ms">
+              <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
+            </g>
+          </svg>
+          <!-- route:end -->
         </div>
 
       </div>
@@ -1143,7 +1211,7 @@
   <script src="../js/main.js?v=37af4146" defer></script>
 
 
-  <script src="../js/motion.js?v=bdc94fe9" defer></script>
+  <script src="../js/motion.js?v=5d77f01b" defer></script>
   <!-- Микроразметка для поисковиков. Её расставляет scripts/build-seo.js -->
   <!-- jsonld:start -->
   <script type="application/ld+json">

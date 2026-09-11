@@ -92,3 +92,109 @@
   });
 
 })();
+
+/* ==========================================================================
+   Первый экран: самолётик вокруг кнопки и остановка вечного движения.
+
+   Отдельный кусок, а не отдельный файл. Наблюдатель выше показывает блок
+   один раз и перестаёт следить; здесь нужен другой — он следит постоянно,
+   потому что первый экран уходит и возвращается.
+
+   Что делает:
+     1. считает путь самолётику по настоящему размеру кнопки и
+        пересчитывает его, когда размер меняется;
+     2. ставит первому экрану метку is-still, когда он ушёл с глаз или
+        вкладку свернули. По метке css/home.css замораживает бесконечные
+        анимации — они не тратят батарею, пока на них никто не смотрит.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  /* --- Путь вокруг кнопки ------------------------------------------------- */
+
+  /* Скруглённый прямоугольник по контуру кнопки. Координаты считаются от
+     угла обёртки: самолёт лежит в ней абсолютно, и offset-path отсчитывает
+     путь именно оттуда. Надписи на трёх языках разной длины, поэтому путь
+     нельзя записать в стилях числом — только посчитать по месту. */
+  function roundedRect(x, y, w, h, r) {
+    r = Math.min(r, w / 2, h / 2);
+    var n = function (v) { return Math.round(v * 10) / 10; };
+    var x0 = n(x), y0 = n(y), x1 = n(x + w), y1 = n(y + h), k = n(r);
+    var a = k + " " + k + " 0 0 1 ";
+    return 'path("M' + n(x0 + k) + " " + y0 +
+           " H" + n(x1 - k) + " A" + a + x1 + " " + n(y0 + k) +
+           " V" + n(y1 - k) + " A" + a + n(x1 - k) + " " + y1 +
+           " H" + n(x0 + k) + " A" + a + x0 + " " + n(y1 - k) +
+           " V" + n(y0 + k) + " A" + a + n(x0 + k) + " " + y0 + ' Z")';
+  }
+
+  var orbits = Array.prototype.slice.call(document.querySelectorAll(".orbit"));
+
+  function sync(orbit) {
+    var btn = orbit.querySelector(".btn");
+    if (!btn) return;
+    var ob = orbit.getBoundingClientRect();
+    var bb = btn.getBoundingClientRect();
+    if (!bb.width || !bb.height) return;
+    var radius = parseFloat(getComputedStyle(btn).borderTopLeftRadius) || 0;
+    orbit.style.setProperty("--orbit-path",
+      roundedRect(bb.left - ob.left, bb.top - ob.top, bb.width, bb.height, radius));
+    orbit.classList.add("is-ready");
+  }
+
+  function syncAll() {
+    orbits.forEach(sync);
+  }
+
+  if (orbits.length) {
+    syncAll();
+
+    /* Размер кнопки меняется не только от ширины окна: сначала надпись
+       набрана запасным шрифтом, потом приезжает фирменный и кнопка
+       становится другой. ResizeObserver ловит и то и другое. */
+    if ("ResizeObserver" in window) {
+      var ro = new ResizeObserver(function (entries) {
+        entries.forEach(function (e) {
+          var orbit = e.target.closest ? e.target.closest(".orbit") : null;
+          if (orbit) sync(orbit);
+        });
+      });
+      orbits.forEach(function (orbit) {
+        var btn = orbit.querySelector(".btn");
+        if (btn) ro.observe(btn);
+      });
+    } else {
+      window.addEventListener("resize", syncAll);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncAll);
+    }
+  }
+
+  /* --- Вечное движение спит, пока на него не смотрят ----------------------- */
+
+  var hero = document.querySelector(".hero");
+  if (!hero) return;
+
+  var наГлазах = true;
+  var вкладкаАктивна = !document.hidden;
+
+  function пересчитать() {
+    var идёт = наГлазах && вкладкаАктивна;
+    hero.classList.toggle("is-still", !идёт);
+  }
+
+  if ("IntersectionObserver" in window) {
+    /* Свой наблюдатель: этот следит постоянно, а не один раз */
+    new IntersectionObserver(function (entries) {
+      наГлазах = entries[0].isIntersecting;
+      пересчитать();
+    }, { threshold: 0 }).observe(hero);
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    вкладкаАктивна = !document.hidden;
+    пересчитать();
+  });
+
+  пересчитать();
+})();

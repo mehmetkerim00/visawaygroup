@@ -13,84 +13,272 @@
     "Как добавить страну: скопируйте любую запись, поменяйте значения,",
     "положите флаг в assets/flags/ и фотографию в assets/photos/."
   ],
-
   "regions": [
-    { "key": "all",         "tk": "Ählisi",         "ru": "Все",            "en": "All" },
-    { "key": "europe",      "tk": "Ýewropa",        "ru": "Европа",         "en": "Europe" },
-    { "key": "asia",        "tk": "Aziýa",          "ru": "Азия",           "en": "Asia" },
-    { "key": "middle-east", "tk": "Ýakyn Gündogar", "ru": "Ближний Восток", "en": "Middle East" },
-    { "key": "cis",         "tk": "GDA",            "ru": "СНГ",            "en": "CIS" }
-  ],
-
-  "countries": [
     {
-      "flag": "tr", "photo": "istanbul", "query": "Istanbul Hagia Sophia Bosphorus", "region": "middle-east",
-      "country": { "tk": "Türkiýe",    "ru": "Турция",     "en": "Türkiye" },
-      "city":    { "tk": "Stambul",    "ru": "Стамбул",    "en": "Istanbul" }
+      "key": "all",
+      "tk": "Ählisi",
+      "ru": "Все",
+      "en": "All"
     },
     {
-      "flag": "ru", "photo": "moscow", "query": "Moscow Red Square", "region": "cis",
-      "country": { "tk": "Russiýa",    "ru": "Россия",     "en": "Russia" },
-      "city":    { "tk": "Moskwa",     "ru": "Москва",     "en": "Moscow" }
+      "key": "europe",
+      "tk": "Ýewropa",
+      "ru": "Европа",
+      "en": "Europe"
     },
     {
-      "flag": "ae", "photo": "dubai", "query": "Dubai skyline Burj Khalifa", "region": "middle-east",
-      "country": { "tk": "BAE",        "ru": "ОАЭ",        "en": "UAE" },
-      "city":    { "tk": "Dubaý",      "ru": "Дубай",      "en": "Dubai" }
+      "key": "asia",
+      "tk": "Aziýa",
+      "ru": "Азия",
+      "en": "Asia"
     },
     {
-      "flag": "cn", "photo": "beijing", "query": "Beijing Forbidden City", "region": "asia",
-      "country": { "tk": "Hytaý",      "ru": "Китай",      "en": "China" },
-      "city":    { "tk": "Pekin",      "ru": "Пекин",      "en": "Beijing" }
+      "key": "middle-east",
+      "tk": "Ýakyn Gündogar",
+      "ru": "Ближний Восток",
+      "en": "Middle East"
     },
     {
-      "flag": "de", "photo": "berlin", "query": "Berlin Brandenburg Gate", "region": "europe",
-      "country": { "tk": "Germaniýa",  "ru": "Германия",   "en": "Germany" },
-      "city":    { "tk": "Berlin",     "ru": "Берлин",     "en": "Berlin" }
-    },
-    {
-      "flag": "it", "photo": "rome", "query": "Rome Colosseum", "region": "europe",
-      "country": { "tk": "Italiýa",    "ru": "Италия",     "en": "Italy" },
-      "city":    { "tk": "Rim",        "ru": "Рим",        "en": "Rome" }
-    },
-    {
-      "flag": "pl", "photo": "warsaw", "query": "Warsaw old town", "region": "europe",
-      "country": { "tk": "Polşa",      "ru": "Польша",     "en": "Poland" },
-      "city":    { "tk": "Warşawa",    "ru": "Варшава",    "en": "Warsaw" }
-    },
-    {
-      "flag": "cz", "photo": "prague", "query": "Prague Charles Bridge", "region": "europe",
-      "country": { "tk": "Çehiýa",     "ru": "Чехия",      "en": "Czechia" },
-      "city":    { "tk": "Praga",      "ru": "Прага",      "en": "Prague" }
-    },
-    {
-      "flag": "my", "photo": "kuala-lumpur", "query": "Kuala Lumpur Petronas Towers", "region": "asia",
-      "country": { "tk": "Malaýziýa",  "ru": "Малайзия",   "en": "Malaysia" },
-      "city":    { "tk": "Kuala-Lumpur", "ru": "Куала-Лумпур", "en": "Kuala Lumpur" }
-    },
-    {
-      "flag": "kr", "photo": "seoul", "query": "Seoul Gyeongbokgung palace", "region": "asia",
-      "country": { "tk": "Koreýa",     "ru": "Корея",      "en": "South Korea" },
-      "city":    { "tk": "Seul",       "ru": "Сеул",       "en": "Seoul" }
-    },
-    {
-      "flag": "kz", "photo": "almaty", "query": "Almaty city mountains", "region": "cis",
-      "country": { "tk": "Gazagystan", "ru": "Казахстан",  "en": "Kazakhstan" },
-      "city":    { "tk": "Almaty",     "ru": "Алматы",     "en": "Almaty" }
-    },
-    {
-      "flag": "by", "photo": "minsk", "query": "Minsk city", "region": "cis",
-      "country": { "tk": "Belarus",    "ru": "Беларусь",   "en": "Belarus" },
-      "city":    { "tk": "Minsk",      "ru": "Минск",      "en": "Minsk" }
+      "key": "cis",
+      "tk": "GDA",
+      "ru": "СНГ",
+      "en": "CIS"
     }
   ],
-
+  "countries": [
+    {
+      "flag": "tr",
+      "photo": "istanbul",
+      "query": "Istanbul Hagia Sophia Bosphorus",
+      "region": "middle-east",
+      "country": {
+        "tk": "Türkiýe",
+        "ru": "Турция",
+        "en": "Türkiye"
+      },
+      "city": {
+        "tk": "Stambul",
+        "ru": "Стамбул",
+        "en": "Istanbul"
+      }
+    },
+    {
+      "flag": "ru",
+      "photo": "moscow",
+      "query": "Moscow Red Square",
+      "region": "cis",
+      "country": {
+        "tk": "Russiýa",
+        "ru": "Россия",
+        "en": "Russia"
+      },
+      "city": {
+        "tk": "Moskwa",
+        "ru": "Москва",
+        "en": "Moscow"
+      }
+    },
+    {
+      "flag": "ae",
+      "photo": "dubai",
+      "query": "Dubai skyline Burj Khalifa",
+      "region": "middle-east",
+      "country": {
+        "tk": "BAE",
+        "ru": "ОАЭ",
+        "en": "UAE"
+      },
+      "city": {
+        "tk": "Dubaý",
+        "ru": "Дубай",
+        "en": "Dubai"
+      }
+    },
+    {
+      "flag": "cn",
+      "photo": "beijing",
+      "query": "Beijing Forbidden City",
+      "region": "asia",
+      "country": {
+        "tk": "Hytaý",
+        "ru": "Китай",
+        "en": "China"
+      },
+      "city": {
+        "tk": "Pekin",
+        "ru": "Пекин",
+        "en": "Beijing"
+      }
+    },
+    {
+      "flag": "de",
+      "photo": "berlin",
+      "query": "Berlin Brandenburg Gate",
+      "region": "europe",
+      "country": {
+        "tk": "Germaniýa",
+        "ru": "Германия",
+        "en": "Germany"
+      },
+      "city": {
+        "tk": "Berlin",
+        "ru": "Берлин",
+        "en": "Berlin"
+      }
+    },
+    {
+      "flag": "it",
+      "photo": "rome",
+      "query": "Rome Colosseum",
+      "region": "europe",
+      "country": {
+        "tk": "Italiýa",
+        "ru": "Италия",
+        "en": "Italy"
+      },
+      "city": {
+        "tk": "Rim",
+        "ru": "Рим",
+        "en": "Rome"
+      }
+    },
+    {
+      "flag": "pl",
+      "photo": "warsaw",
+      "query": "Warsaw old town",
+      "region": "europe",
+      "country": {
+        "tk": "Polşa",
+        "ru": "Польша",
+        "en": "Poland"
+      },
+      "city": {
+        "tk": "Warşawa",
+        "ru": "Варшава",
+        "en": "Warsaw"
+      }
+    },
+    {
+      "flag": "cz",
+      "photo": "prague",
+      "query": "Prague Charles Bridge",
+      "region": "europe",
+      "country": {
+        "tk": "Çehiýa",
+        "ru": "Чехия",
+        "en": "Czechia"
+      },
+      "city": {
+        "tk": "Praga",
+        "ru": "Прага",
+        "en": "Prague"
+      }
+    },
+    {
+      "flag": "my",
+      "photo": "kuala-lumpur",
+      "query": "Kuala Lumpur Petronas Towers",
+      "region": "asia",
+      "country": {
+        "tk": "Malaýziýa",
+        "ru": "Малайзия",
+        "en": "Malaysia"
+      },
+      "city": {
+        "tk": "Kuala-Lumpur",
+        "ru": "Куала-Лумпур",
+        "en": "Kuala Lumpur"
+      }
+    },
+    {
+      "flag": "kr",
+      "photo": "seoul",
+      "query": "Seoul Gyeongbokgung palace",
+      "region": "asia",
+      "country": {
+        "tk": "Koreýa",
+        "ru": "Корея",
+        "en": "South Korea"
+      },
+      "city": {
+        "tk": "Seul",
+        "ru": "Сеул",
+        "en": "Seoul"
+      }
+    },
+    {
+      "flag": "kz",
+      "photo": "almaty",
+      "query": "Almaty city mountains",
+      "region": "cis",
+      "country": {
+        "tk": "Gazagystan",
+        "ru": "Казахстан",
+        "en": "Kazakhstan"
+      },
+      "city": {
+        "tk": "Almaty",
+        "ru": "Алматы",
+        "en": "Almaty"
+      }
+    },
+    {
+      "flag": "by",
+      "photo": "minsk",
+      "query": "Minsk city",
+      "region": "cis",
+      "country": {
+        "tk": "Belarus",
+        "ru": "Беларусь",
+        "en": "Belarus"
+      },
+      "city": {
+        "tk": "Minsk",
+        "ru": "Минск",
+        "en": "Minsk"
+      }
+    }
+  ],
   "labels": {
-    "list":    { "tk": "Ugurlaryň sanawy", "ru": "Список направлений", "en": "List of destinations" },
-    "filter":  { "tk": "Sebit boýunça saýlaň", "ru": "Выбор по региону", "en": "Choose a region" },
-    "more":    { "tk": "Sanawda ýurduňyzy görmediňizmi?", "ru": "Не нашли свою страну в списке?", "en": "Not on the list?" },
-    "moreCta": { "tk": "Soraň — barlarys", "ru": "Спросите — проверим", "en": "Ask us — we will check" },
-    "photoOf": { "tk": "{{city}} şäheri", "ru": "Город {{city}}", "en": "The city of {{city}}" },
-    "empty":   { "tk": "Bu sebit boýunça ýurt ýok.", "ru": "В этом регионе стран нет.", "en": "No countries in this region." }
+    "list": {
+      "tk": "Ugurlaryň sanawy",
+      "ru": "Список направлений",
+      "en": "List of destinations"
+    },
+    "filter": {
+      "tk": "Sebit boýunça saýlaň",
+      "ru": "Выбор по региону",
+      "en": "Choose a region"
+    },
+    "more": {
+      "tk": "Sanawda ýurduňyzy görmediňizmi?",
+      "ru": "Не нашли свою страну в списке?",
+      "en": "Not on the list?"
+    },
+    "moreCta": {
+      "tk": "Soraň — barlarys",
+      "ru": "Спросите — проверим",
+      "en": "Ask us — we will check"
+    },
+    "photoOf": {
+      "tk": "{{city}} şäheri",
+      "ru": "Город {{city}}",
+      "en": "The city of {{city}}"
+    },
+    "empty": {
+      "tk": "Bu sebit boýunça ýurt ýok.",
+      "ru": "В этом регионе стран нет.",
+      "en": "No countries in this region."
+    },
+    "routeMap": {
+      "tk": "Aşgabatdan dünýäniň iri şäherlerine ugurlar",
+      "ru": "Направления из Ашхабада в крупные города мира",
+      "en": "Routes from Ashgabat to major cities of the world"
+    },
+    "routeFrom": {
+      "tk": "Aşgabat",
+      "ru": "Ашхабад",
+      "en": "Ashgabat"
+    }
   }
 }
