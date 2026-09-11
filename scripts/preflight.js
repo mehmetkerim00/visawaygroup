@@ -165,7 +165,11 @@ function checkLinks() {
         continue;
       }
       checked++;
-      const [filePart, anchor] = value.split("#");
+      const [pathPart, anchor] = value.split("#");
+      /* В адресах стилей и скриптов стоит отпечаток содержимого: css/base.css?v=7d6a24fe.
+         Его дописывает sync-layout, чтобы браузер не подсунул старый файл из кэша.
+         Для поиска файла на диске строку запроса надо отбросить. */
+      const filePart = pathPart.split("?")[0];
       if (!filePart) continue;
       const target = path.posix.normalize(path.posix.join(dir === "." ? "" : dir, filePart));
       if (!fs.existsSync(path.join(ROOT, target))) {
