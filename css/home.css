@@ -3,68 +3,6 @@
    Ничего нового в цветах: всё берётся из css/tokens.css.
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   Иконки. Рисуются тонкой линией и наследуют цвет от родителя,
-   поэтому отдельного цвета им задавать не нужно.
-   -------------------------------------------------------------------------- */
-
-.sprite {
-  display: none;
-}
-
-.icon {
-  width: 32px;
-  height: 32px;
-  flex: none;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.icon--lg {
-  width: 40px;
-  height: 40px;
-}
-
-.icon--sm {
-  width: 18px;
-  height: 18px;
-}
-
-
-/* --------------------------------------------------------------------------
-   Надзаголовок секции: короткая медная чёрточка и мелкие прописные буквы
-   -------------------------------------------------------------------------- */
-
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
-  color: var(--copper-dark);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.eyebrow::before {
-  content: "";
-  flex: none;
-  width: 24px;
-  height: 1px;
-  background-color: var(--copper);
-}
-
-/* base.css задаёт большой отступ для "абзац, за которым идёт заголовок".
-   Для надзаголовка это лишнее — он часть заголовочного блока. */
-.eyebrow + h1,
-.eyebrow + h2,
-.eyebrow + h3 {
-  margin-top: 0;
-}
 
 .section__head {
   max-width: 720px;

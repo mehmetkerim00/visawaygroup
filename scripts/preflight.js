@@ -376,15 +376,26 @@ function checkAssets() {
    Если поле пустое, а снимок на сайте лежит, мы нарушаем условия, под
    которыми нам его разрешили взять. Поэтому это ошибка, а не замечание. */
 
+/* «1 файл», «2 файла», «5 файлов» — иначе отчёт читается как машинный. */
+function plural(n, one, few, many) {
+  const a = Math.abs(n) % 100;
+  const b = a % 10;
+  if (a > 10 && a < 20) return many;
+  if (b > 1 && b < 5) return few;
+  if (b === 1) return one;
+  return many;
+}
+
 function checkPhotoCredits() {
   const dataFile = path.join(ROOT, "data", "photos.json");
   const creditsFile = path.join(ROOT, "assets", "photos", "CREDITS.md");
   const dir = path.join(ROOT, "assets", "photos");
 
-  /* Файлы вида istanbul@2x.webp — это тот же снимок для экранов высокой
-     чёткости, а не новый. Источник у них общий, спрашивать его отдельно
+  /* Файлы вида istanbul@2x.webp и istanbul@sm.webp — это тот же снимок
+     в другом размере: крупный для экранов высокой чёткости, мелкий для
+     списка источников. Источник у них общий, спрашивать его отдельно
      не за чем. */
-  const variant = f => f.replace(/@\dx(?=\.webp$)/, "");
+  const variant = f => f.replace(/@(?:\d+x|sm)(?=\.webp$)/, "");
   const onDisk = fs.existsSync(dir)
     ? fs.readdirSync(dir).filter(f => f.endsWith(".webp"))
     : [];
@@ -453,7 +464,7 @@ function checkPhotoCredits() {
   if (!bad) {
     const extra = onDisk.length - bases.length;
     ok(`У всех фотографий указаны автор, лицензия и ссылка (${bases.length} шт.` +
-       (extra ? `, плюс ${extra} для экранов высокой чёткости` : "") + ")");
+       (extra ? `, плюс ${extra} ${plural(extra, "файл", "файла", "файлов")} других размеров` : "") + ")");
   }
 }
 

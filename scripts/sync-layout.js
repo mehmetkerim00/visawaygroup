@@ -465,8 +465,17 @@ function photosBlock(lang, prefix, indent) {
     if (p.shareAlike) note += " " + pick(notice.shareAlike);
 
     out.push(`${i}  <li class="credit">`);
-    out.push(`${i}    <img class="credit__thumb" src="${prefix}assets/photos/${p.photo}.webp"` +
-             ` alt="" width="480" height="320" loading="lazy" decoding="async">`);
+    /* Превью в списке источников показывается квадратиком 96×64 и нужно
+       только чтобы опознать снимок. Поэтому здесь отдельный мелкий файл
+       на 5–6 КБ, а не карточный на 22: двенадцать таких делали служебную
+       страницу самой тяжёлой на сайте. Если мелкого файла нет, берём
+       обычный — страница соберётся, просто будет тяжелее. */
+    const smallFile = path.join(ROOT, "assets", "photos", p.photo + "@sm.webp");
+    const small = fs.existsSync(smallFile);
+    out.push(`${i}    <img class="credit__thumb"` +
+             ` src="${prefix}assets/photos/${p.photo}${small ? "@sm" : ""}.webp"` +
+             ` alt="" width="${small ? 192 : 480}" height="${small ? 128 : 320}"` +
+             ` loading="lazy" decoding="async">`);
     out.push(`${i}    <div class="credit__body">`);
     out.push(`${i}      <p class="credit__city">${city}</p>`);
     out.push(`${i}      <p class="credit__author">${escapeAttr(p.author)}</p>`);

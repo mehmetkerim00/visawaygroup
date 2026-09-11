@@ -19,7 +19,6 @@
   <!-- hreflang:end -->
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" media="(prefers-color-scheme: light)">
   <link rel="icon" href="assets/favicon-light.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)">
   <!-- Иконка для экрана «Домой» на iPhone и iPad -->
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -55,7 +54,10 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
-  <link rel="stylesheet" href="css/home.css">
+  <!-- Стилей главной (home.css) здесь нет намеренно: на этой странице
+       нет ни карточек, ни вопросов, ни блока призыва, а 12 КБ на
+       медленном интернете заметны. Общее — метка, значки, контейнеры —
+       лежит в base.css. -->
   <link rel="stylesheet" href="css/page.css">
 </head>
 
@@ -343,7 +345,7 @@
         <!-- photos:start -->
         <ul class="credits" data-reveal-group>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/istanbul.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/istanbul@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Stambul</p>
               <p class="credit__author">Moonik</p>
@@ -355,7 +357,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/moscow.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/moscow@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Moskwa</p>
               <p class="credit__author">Юрий Д.К.</p>
@@ -367,7 +369,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/dubai.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/dubai@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Dubaý</p>
               <p class="credit__author">Norlando Pobre</p>
@@ -379,7 +381,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/beijing.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/beijing@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Pekin</p>
               <p class="credit__author">Ermell</p>
@@ -391,7 +393,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/berlin.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/berlin@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Berlin</p>
               <p class="credit__author">Daniel Schwen</p>
@@ -403,7 +405,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/rome.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/rome@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Rim</p>
               <p class="credit__author">Dietmar Rabich</p>
@@ -415,7 +417,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/warsaw.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/warsaw@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Warşawa</p>
               <p class="credit__author">Marcin Białek</p>
@@ -427,7 +429,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/prague.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/prague@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Praga</p>
               <p class="credit__author">Suicasmo</p>
@@ -439,7 +441,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/kuala-lumpur.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/kuala-lumpur@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Kuala-Lumpur</p>
               <p class="credit__author">Renek78</p>
@@ -451,7 +453,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/seoul.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/seoul@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Seul</p>
               <p class="credit__author">Basile Morin</p>
@@ -463,7 +465,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/almaty.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/almaty@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Almaty</p>
               <p class="credit__author">Nikolai Bulykin</p>
@@ -475,7 +477,7 @@
             </div>
           </li>
           <li class="credit">
-            <img class="credit__thumb" src="assets/photos/minsk.webp" alt="" width="480" height="320" loading="lazy" decoding="async">
+            <img class="credit__thumb" src="assets/photos/minsk@sm.webp" alt="" width="192" height="128" loading="lazy" decoding="async">
             <div class="credit__body">
               <p class="credit__city">Minsk</p>
               <p class="credit__author">Liilia Moroz</p>
