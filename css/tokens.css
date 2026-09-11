@@ -184,6 +184,7 @@
   --z-header:   100;
   --z-backdrop: 90;
   --z-skiplink: 200;
+  --z-splash:   1000;  /* заставка выше всего: она закрывает страницу */
 }
 
 @media (min-width: 48em) {

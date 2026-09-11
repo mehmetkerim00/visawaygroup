@@ -765,8 +765,47 @@ a
   list-style: none;
 }
 
+/* Первый номер в списке — главный: он в выделенной карточке и крупнее.
+   Какой номер главный, решает порядок в data/site.json, а не эти стили. */
+.phones li:first-child {
+  padding: var(--space-3) var(--space-4);
+  background-color: rgba(204, 123, 80, 0.12);
+  border: 1px solid var(--copper-light);
+  border-radius: var(--radius-md);
+  /* Карточка сама себе мерка. Иначе кегль считается от ширины всей панели
+     и не знает про отступы карточки — номер вылезает за рамку. */
+  container-type: inline-size;
+  container-name: phonecard;
+}
+
+/* Запасной размер для браузеров без контейнерных запросов */
+.phones li:first-child .phones__link {
+  font-size: clamp(1.1rem, 4.4vw, 2.25rem);
+}
+
+@container phonecard (min-width: 0px) {
+  .phones li:first-child .phones__link {
+    font-size: clamp(1.1rem, 9cqi, 2.25rem);
+  }
+}
+
 .phones li + li {
   margin-top: var(--space-3);
+  padding-inline: var(--space-4);
+}
+
+/* Второй номер тише: он рабочий, но не тот, по которому звонят первым.
+   Нижняя граница ниже, чем у главного номера, иначе на узком экране
+   оба упираются в неё и разница в размере пропадает. */
+.phones li + li .phones__link {
+  font-size: clamp(0.95rem, 5.5cqi, 1.5rem);
+  color: var(--on-dark-muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .phones li + li .phones__link:hover {
+    color: var(--on-dark);
+  }
 }
 
 .phones__link {

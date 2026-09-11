@@ -632,8 +632,72 @@ function fontsBlock(lang, prefix, indent) {
 }
 
 
+/* ==================================================================== */
+/* Экран загрузки                                                       */
+/* ==================================================================== */
+
+/* Знак нарисован прямо в разметке: отдельный файл пришлось бы ждать,
+   а заставка должна появиться раньше всего остального. Контуры настоящие,
+   те же, что в assets/logo-mark.svg.
+
+   Показывается заставка ТОЛЬКО когда строка в <head> поставила <html>
+   класс is-splash. Нет скриптов — нет класса — заставки нет вовсе,
+   и содержимое при этом ничем не закрыто.                              */
+function splashBlock(indent) {
+  const i = indent;
+  return [
+    `${i}<div class="splash" aria-hidden="true">`,
+    `${i}  <div class="splash__inner">`,
+    `${i}    <svg class="splash__mark" viewBox="0 0 512 512"`,
+    `${i}         xmlns="http://www.w3.org/2000/svg" focusable="false">`,
+    `${i}      <defs>`,
+    `${i}        <!-- Точки на дуге даёт неподвижная маска, а прорисовывается`,
+    `${i}             сама дуга: у неё stroke-dasharray свободен. -->`,
+    `${i}        <mask id="splash-dots" maskUnits="userSpaceOnUse"`,
+    `${i}              x="0" y="0" width="512" height="512">`,
+    `${i}          <path d="M133.04 375.48 Q 256.00 424.66 347.41 365.04" fill="none" stroke="#FFFFFF"`,
+    `${i}                stroke-width="10" stroke-dasharray="1 21.09" stroke-linecap="round"/>`,
+    `${i}        </mask>`,
+    `${i}      </defs>`,
+    `${i}      <rect class="splash__square" x="24" y="24" width="464" height="464" rx="52.9"/>`,
+    `${i}      <path class="splash__vw" transform="translate(107.12,298.22)" d="M1.46 -135.11L54.1 0L74.58 0L126.89 -135.11L100.55 -135.11L64.16 -32.36L27.79 -135.11L1.46 -135.11ZM134.52 -135.11L174.2 0L193.94 0L216.25 -89.41L237.98 0L257.92 0L297.4 -135.11L271.8 -135.11L247.87 -40.76L225.19 -135.11L206.9 -135.11L183.88 -40.76L160.11 -135.11L134.52 -135.11Z"/>`,
+    `${i}      <path class="splash__arc" d="M133.04 375.48 Q 256.00 424.66 347.41 365.04" fill="none"`,
+    `${i}            stroke-width="8.07" stroke-linecap="round" mask="url(#splash-dots)"/>`,
+    `${i}      <g class="splash__plane"><g transform="rotate(90) scale(0.5266)">`,
+    `${i}        <path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/>`,
+    `${i}      </g></g>`,
+    `${i}    </svg>`,
+    `${i}    <p class="splash__word">VisaWay<span>Group</span></p>`,
+    `${i}  </div>`,
+    `${i}</div>`
+  ].join("\n");
+}
+
+
 function bootBlock(indent) {
-  return `${indent}<script>document.documentElement.classList.add("js");</script>`;
+  /* Всё одной строкой: это первое, что исполняет браузер, и оно должно
+     стоить как можно дешевле.
+
+     Что делает: ставит классу <html> метку js (по ней стили прячут блоки,
+     которые потом плавно появляются) и решает, показывать ли заставку.
+     Заставка положена один раз за сессию и только если человек не просил
+     уменьшить движение. Движение длится 700 мс и доигрывается целиком:
+     если страница готова раньше, заставка ждёт конца анимации и уходит,
+     если позже — её всё равно снимает потолок в 900 мс. Предохранитель
+     на 1200 мс стоит на случай, если первый таймер почему-то не сработал.
+     Потолок никогда не отменяется: дольше 900 мс заставки не бывает. */
+  const js =
+    '(function(d,w){d.classList.add("js");try{' +
+    'if(sessionStorage.getItem("vw-splash"))return;' +
+    'if(w.matchMedia&&w.matchMedia("(prefers-reduced-motion: reduce)").matches)return;' +
+    'sessionStorage.setItem("vw-splash","1");d.classList.add("is-splash");' +
+    'var t0=Date.now();var off=function(){d.classList.remove("is-splash")};' +
+    'setTimeout(off,900);setTimeout(off,1200);' +
+    'var done=function(){var left=700-(Date.now()-t0);setTimeout(off,left>0?left:0)};' +
+    'if(d.ownerDocument.readyState==="complete")done();' +
+    'else w.addEventListener("load",done,{once:true});' +
+    '}catch(e){d.classList.remove("is-splash")}})(document.documentElement,window);';
+  return `${indent}<script>${js}</script>`;
 }
 
 function hreflangBlock(rel, existing, siteUrl, indent) {
@@ -699,6 +763,13 @@ function syncFile(file, partials, site, valuesByLang, existing) {
     if (name === "countries") {
       blocks++;
       return `${indent}<!-- countries:start -->\n${countriesBlock(lang, prefix, indent, relPosix)}\n${indent}<!-- countries:end -->`;
+    }
+
+    /* Экран загрузки. Разметка есть всегда, показывают её стили
+       и только по метке, которую ставит строка из <head>. */
+    if (name === "splash") {
+      blocks++;
+      return `${indent}<!-- splash:start -->\n${splashBlock(indent)}\n${indent}<!-- splash:end -->`;
     }
 
     /* Строка, которая должна отработать до первой отрисовки */

@@ -44,7 +44,7 @@
   <!-- fonts:end -->
 
   <!-- boot:start -->
-  <script>document.documentElement.classList.add("js");</script>
+  <script>(function(d,w){d.classList.add("js");try{if(sessionStorage.getItem("vw-splash"))return;if(w.matchMedia&&w.matchMedia("(prefers-reduced-motion: reduce)").matches)return;sessionStorage.setItem("vw-splash","1");d.classList.add("is-splash");var t0=Date.now();var off=function(){d.classList.remove("is-splash")};setTimeout(off,900);setTimeout(off,1200);var done=function(){var left=700-(Date.now()-t0);setTimeout(off,left>0?left:0)};if(d.ownerDocument.readyState==="complete")done();else w.addEventListener("load",done,{once:true});}catch(e){d.classList.remove("is-splash")}})(document.documentElement,window);</script>
   <!-- boot:end -->
 
   <link rel="stylesheet" href="../css/tokens.css">
@@ -55,6 +55,33 @@
 </head>
 
 <body>
+
+  <!-- splash:start -->
+  <div class="splash" aria-hidden="true">
+    <div class="splash__inner">
+      <svg class="splash__mark" viewBox="0 0 512 512"
+           xmlns="http://www.w3.org/2000/svg" focusable="false">
+        <defs>
+          <!-- Точки на дуге даёт неподвижная маска, а прорисовывается
+               сама дуга: у неё stroke-dasharray свободен. -->
+          <mask id="splash-dots" maskUnits="userSpaceOnUse"
+                x="0" y="0" width="512" height="512">
+            <path d="M133.04 375.48 Q 256.00 424.66 347.41 365.04" fill="none" stroke="#FFFFFF"
+                  stroke-width="10" stroke-dasharray="1 21.09" stroke-linecap="round"/>
+          </mask>
+        </defs>
+        <rect class="splash__square" x="24" y="24" width="464" height="464" rx="52.9"/>
+        <path class="splash__vw" transform="translate(107.12,298.22)" d="M1.46 -135.11L54.1 0L74.58 0L126.89 -135.11L100.55 -135.11L64.16 -32.36L27.79 -135.11L1.46 -135.11ZM134.52 -135.11L174.2 0L193.94 0L216.25 -89.41L237.98 0L257.92 0L297.4 -135.11L271.8 -135.11L247.87 -40.76L225.19 -135.11L206.9 -135.11L183.88 -40.76L160.11 -135.11L134.52 -135.11Z"/>
+        <path class="splash__arc" d="M133.04 375.48 Q 256.00 424.66 347.41 365.04" fill="none"
+              stroke-width="8.07" stroke-linecap="round" mask="url(#splash-dots)"/>
+        <g class="splash__plane"><g transform="rotate(90) scale(0.5266)">
+          <path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/>
+        </g></g>
+      </svg>
+      <p class="splash__word">VisaWay<span>Group</span></p>
+    </div>
+  </div>
+  <!-- splash:end -->
 
   <!-- icons:start -->
   <!--
@@ -377,8 +404,8 @@
             <!-- Телефоны — главное на странице, поэтому и крупнее всего.
                  Сколько номеров в data/site.json, столько и покажется. -->
             <ul class="phones">
-              <li><a class="phones__link" href="tel:+99361121888">+993 61 12 18 88</a></li>
               <li><a class="phones__link" href="tel:+99362944157">+993 62 94 41 57</a></li>
+              <li><a class="phones__link" href="tel:+99361121888">+993 61 12 18 88</a></li>
             </ul>
 
             <p class="contact-panel__subtitle">Напишите</p>
@@ -626,8 +653,8 @@
             <span class="site-footer__contact-label">Телефон</span>
             <!-- Телефоны берутся из списка phones в data/site.json.
                  Сколько там записей — столько и покажется. -->
-            <a class="site-footer__phone" href="tel:+99361121888">+993 61 12 18 88</a>
             <a class="site-footer__phone" href="tel:+99362944157">+993 62 94 41 57</a>
+            <a class="site-footer__phone" href="tel:+99361121888">+993 61 12 18 88</a>
           </div>
 
           <div>
@@ -683,7 +710,7 @@
             "ru",
             "en"
           ],
-          "telephone": "+993 61 12 18 88",
+          "telephone": "+993 62 94 41 57",
           "email": "visawaygroup@gmail.com",
           "address": {
             "@type": "PostalAddress",
