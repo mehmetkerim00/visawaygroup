@@ -1,0 +1,361 @@
+{
+  "_comment": [
+    "Требования по странам внутри каждого типа визы.",
+    "Одна запись — это пара «виза + страна». Из неё собирается страница",
+    "wizalar/{виза}/{страна}.html на трёх языках.",
+    "",
+    "САМОЕ ВАЖНОЕ — ПОЛЕ status:",
+    "  draft    — черновик. На опубликованный сайт НЕ попадает вообще:",
+    "             ни страницей, ни ссылкой, ни в карту сайта. Увидеть его",
+    "             можно только в предпросмотре: node scripts/build.js --drafts",
+    "  verified — проверено специалистом. Только такие записи уезжают на сайт.",
+    "",
+    "Как читать и править — в SPECIALIST.md, там по шагам и без терминов.",
+    "Что заполнено и что осталось — node scripts/requirements-status.js",
+    "",
+    "visa    — имя файла типа визы без расширения: okuw-wizasy, is-wizasy и так далее;",
+    "country — код страны из data/countries.json (поле flag);",
+    "summary — одним абзацем: что это за виза именно для этой страны;",
+    "audience — кому подходит, по пунктам;",
+    "documents — список документов. required: true — обязательный,",
+    "          false — нужен не всегда; note — уточнение мелким шрифтом;",
+    "where   — где подаётся: консульство в Ашхабаде или в другой стране;",
+    "prepDays — сколько мы готовим документы;",
+    "reviewDays — сколько рассматривает консульство;",
+    "fee     — консульский сбор;",
+    "notes   — особенности;",
+    "refusals — частые причины отказа;",
+    "checkedOn — дата последней проверки, вида 2026-09-12;",
+    "checkedBy — кто проверил. Пока не проверено — так и написано.",
+    "",
+    "СРОКИ И СБОРЫ НЕ ПРИДУМЫВАЮТСЯ. Пустое поле честнее выдуманного числа:",
+    "пустое видно сразу, а выдуманное выглядит как правда. Заполняет их",
+    "специалист по действующим правилам консульства.",
+    "",
+    "Метка УТОЧНИТЬ: внутри текста — вопрос специалисту. Пока в записи",
+    "осталась хоть одна такая метка, ставить ей verified нельзя: preflight",
+    "не даст опубликовать."
+  ],
+  "labels": {
+    "pickCountry": {
+      "tk": "Ýurdy saýlaň",
+      "ru": "Выберите страну",
+      "en": "Choose a country"
+    },
+    "checkedCount": {
+      "tk": "Barlanan ýurt: {{n}}",
+      "ru": "Проверено стран: {{n}}",
+      "en": "Countries verified: {{n}}"
+    },
+    "notListed": {
+      "tk": "Bu ýurt sanawda ýok bolsa — soraň, maslahatda aýdýarys.",
+      "ru": "Если вашей страны нет в списке — спросите, расскажем на консультации.",
+      "en": "If your country is not on the list, just ask — we will cover it in the consultation."
+    },
+    "noneYet": {
+      "tk": "Ugurlar boýunça takyk talaplary maslahatda aýdýarys.",
+      "ru": "Точные требования по направлениям расскажем на консультации.",
+      "en": "We will go through the exact requirements for your destination in the consultation."
+    },
+    "askUs": {
+      "tk": "Maslahat almak",
+      "ru": "Получить консультацию",
+      "en": "Get a consultation"
+    },
+    "eyebrow": {
+      "tk": "Ýurt boýunça talaplar",
+      "ru": "Требования по стране",
+      "en": "Requirements by country"
+    },
+    "audience": {
+      "tk": "Kimler üçin",
+      "ru": "Кому подходит",
+      "en": "Who it suits"
+    },
+    "documents": {
+      "tk": "Resminamalar",
+      "ru": "Документы",
+      "en": "Documents"
+    },
+    "optional": {
+      "tk": "hemişe talap edilmeýär",
+      "ru": "нужен не всегда",
+      "en": "not always required"
+    },
+    "where": {
+      "tk": "Nirä tabşyrylýar",
+      "ru": "Куда подаётся",
+      "en": "Where to apply"
+    },
+    "termsAndFee": {
+      "tk": "Möhletler we ýygym",
+      "ru": "Сроки и сбор",
+      "en": "Timing and fee"
+    },
+    "prepDays": {
+      "tk": "Resminamalary taýýarlaýan möhletimiz",
+      "ru": "Срок подготовки документов у нас",
+      "en": "How long we prepare the documents"
+    },
+    "reviewDays": {
+      "tk": "Konsullygyň seredýän möhleti",
+      "ru": "Срок рассмотрения консульством",
+      "en": "Consular processing time"
+    },
+    "fee": {
+      "tk": "Konsullyk ýygymy",
+      "ru": "Консульский сбор",
+      "en": "Consular fee"
+    },
+    "notes": {
+      "tk": "Aýratynlyklar",
+      "ru": "Особенности",
+      "en": "Things to know"
+    },
+    "refusals": {
+      "tk": "Ýygy-ýygydan ret edilmegiň sebäpleri",
+      "ru": "Частые причины отказа",
+      "en": "Common reasons for refusal"
+    },
+    "checked": {
+      "tk": "Barlanan",
+      "ru": "Проверено",
+      "en": "Verified"
+    },
+    "notChecked": {
+      "tk": "barlanmadyk",
+      "ru": "не проверено",
+      "en": "not verified"
+    },
+    "empty": {
+      "tk": "konsullygyň häzirki düzgünlerine görä takyklanýar",
+      "ru": "уточняется по действующим правилам консульства",
+      "en": "to be confirmed against the consulate's current rules"
+    },
+    "backToVisa": {
+      "tk": "Ähli ýurtlara dolan",
+      "ru": "Ко всем странам",
+      "en": "Back to all countries"
+    },
+    "ctaTitle": {
+      "tk": "Ýagdaýyňyzy bilelikde seredeliň",
+      "ru": "Разберём вашу ситуацию вместе",
+      "en": "Let's look at your case together"
+    },
+    "ctaText": {
+      "tk": "Ilkinji maslahat mugt. Bu ýurt boýunça size haýsy resminamalaryň gerekdigini we nämeden başlamalydygyny düşündireris.",
+      "ru": "Первая консультация бесплатная. Расскажем, какие документы нужны именно вам по этой стране и с чего начать.",
+      "en": "The first consultation is free. We will explain which documents you need for this country and where to start."
+    }
+  },
+  "entries": [
+    {
+      "visa": "okuw-wizasy",
+      "country": "tr",
+      "status": "draft",
+      "summary": {
+        "tk": "Türkiýäniň uniwersitetinde, kollejinde ýa-da dil kursunda okamak üçin talyp wizasy. Esasy resminama — okuw mekdebinden alnan kabul haty; onuň ýanyna okuwyň tölegi we ýaşaýyş çykdajylary boýunça maliýe subutnamasy soralýar.",
+        "ru": "Студенческая виза для учёбы в университете, колледже или на языковых курсах Турции. Главный документ — письмо о зачислении из учебного заведения; к нему просят подтверждение оплаты обучения и финансов на проживание.",
+        "en": "A student visa for studying at a university, college or language course in Türkiye. The key document is the letter of acceptance from the institution, together with proof of tuition payment and funds for living costs."
+      },
+      "audience": [
+        {
+          "tk": "Türkiýäniň uniwersitetine ýa-da kollejine kabul edilen talyplar",
+          "ru": "Студенты, зачисленные в университет или колледж Турции",
+          "en": "Students admitted to a Turkish university or college"
+        },
+        {
+          "tk": "Türk dili kursuna ýa-da taýýarlyk maksatnamasyna gidýänler",
+          "ru": "Едущие на курсы турецкого языка или подготовительную программу",
+          "en": "Those going to a Turkish language course or a foundation programme"
+        },
+        {
+          "tk": "Magistratura we aspirantura okuwyna girýänler",
+          "ru": "Поступающие в магистратуру и аспирантуру",
+          "en": "Applicants to master's and doctoral programmes"
+        },
+        {
+          "tk": "Alyş-çalyş maksatnamasy boýunça okamaga gidýänler",
+          "ru": "Едущие учиться по программе обмена",
+          "en": "Those going on an exchange programme"
+        }
+      ],
+      "documents": [
+        {
+          "required": true,
+          "text": {
+            "tk": "Daşary ýurt pasporty",
+            "ru": "Загранпаспорт",
+            "en": "International passport"
+          },
+          "note": {
+            "tk": "möhleti okuw döwrüni örtmeli",
+            "ru": "срок действия должен покрывать период обучения",
+            "en": "valid for the whole period of study"
+          }
+        },
+        {
+          "required": true,
+          "text": {
+            "tk": "Bellenen ölçegdäki surat",
+            "ru": "Фотография установленного размера",
+            "en": "Photograph of the required size"
+          }
+        },
+        {
+          "required": true,
+          "text": {
+            "tk": "Doldurylan wiza anketasy",
+            "ru": "Заполненная визовая анкета",
+            "en": "Completed visa application form"
+          }
+        },
+        {
+          "required": true,
+          "text": {
+            "tk": "Okuw mekdebinden kabul haty",
+            "ru": "Письмо о зачислении из учебного заведения",
+            "en": "Letter of acceptance from the institution"
+          }
+        },
+        {
+          "required": true,
+          "text": {
+            "tk": "Okuwyň tölegi barada resminama",
+            "ru": "Документ об оплате обучения",
+            "en": "Proof of tuition payment"
+          },
+          "note": {
+            "tk": "tölenendigi ýa-da töleg şertleri barada",
+            "ru": "об оплате или об условиях оплаты",
+            "en": "payment made or the agreed payment terms"
+          }
+        },
+        {
+          "required": true,
+          "text": {
+            "tk": "Maliýe ýagdaýyňyzy tassyklaýan resminamalar",
+            "ru": "Подтверждение финансов",
+            "en": "Proof of funds"
+          },
+          "note": {
+            "tk": "öz hasabyňyz ýa-da hemaýatkäriň resminamalary",
+            "ru": "свой счёт или документы спонсора",
+            "en": "your own account or a sponsor's documents"
+          }
+        },
+        {
+          "required": true,
+          "text": {
+            "tk": "Ýaşaýyş jaýy barada maglumat",
+            "ru": "Подтверждение проживания",
+            "en": "Proof of accommodation"
+          },
+          "note": {
+            "tk": "umumy ýaşaýyş jaýy ýa-da kireýine alnan jaý",
+            "ru": "общежитие или съёмное жильё",
+            "en": "dormitory or rented accommodation"
+          }
+        },
+        {
+          "required": true,
+          "text": {
+            "tk": "Saglyk ätiýaçlandyryşy",
+            "ru": "Медицинская страховка",
+            "en": "Health insurance"
+          }
+        },
+        {
+          "required": true,
+          "text": {
+            "tk": "Öňki bilim resminamalary",
+            "ru": "Документы о предыдущем образовании",
+            "en": "Previous education documents"
+          },
+          "note": {
+            "tk": "attestat, diplom we goşundylary, terjimesi bilen",
+            "ru": "аттестат, диплом и приложения, с переводом",
+            "en": "school certificate, diploma and transcripts, with translation"
+          }
+        },
+        {
+          "required": false,
+          "text": {
+            "tk": "Dil bilimi barada resminama",
+            "ru": "Документ о знании языка",
+            "en": "Language certificate"
+          },
+          "note": {
+            "tk": "talap edilýän bolsa",
+            "ru": "если требуется программой",
+            "en": "if the programme requires one"
+          }
+        },
+        {
+          "required": false,
+          "text": {
+            "tk": "Kämillik ýaşyna ýetmedikler üçin ata-enäniň notarial razylygy",
+            "ru": "Нотариальное согласие родителей для несовершеннолетних",
+            "en": "Notarised parental consent for minors"
+          }
+        }
+      ],
+      "where": {
+        "tk": "УТОЧНИТЬ: подаётся ли заявление в консульство Турции в Ашхабаде лично, нужна ли предварительная запись и есть ли обязательная онлайн-анкета до визита",
+        "ru": "УТОЧНИТЬ: подаётся ли заявление в консульство Турции в Ашхабаде лично, нужна ли предварительная запись и есть ли обязательная онлайн-анкета до визита",
+        "en": "УТОЧНИТЬ: подаётся ли заявление в консульство Турции в Ашхабаде лично, нужна ли предварительная запись и есть ли обязательная онлайн-анкета до визита"
+      },
+      "prepDays": {
+        "tk": "",
+        "ru": "",
+        "en": ""
+      },
+      "reviewDays": {
+        "tk": "",
+        "ru": "",
+        "en": ""
+      },
+      "fee": {
+        "tk": "",
+        "ru": "",
+        "en": ""
+      },
+      "notes": [
+        {
+          "tk": "УТОЧНИТЬ: нужно ли подтверждение зачисления заверять или легализовать и в каком виде его принимает консульство",
+          "ru": "УТОЧНИТЬ: нужно ли подтверждение зачисления заверять или легализовать и в каком виде его принимает консульство",
+          "en": "УТОЧНИТЬ: нужно ли подтверждение зачисления заверять или легализовать и в каком виде его принимает консульство"
+        },
+        {
+          "tk": "УТОЧНИТЬ: оформляется ли вид на жительство уже в Турции после приезда и в какой срок",
+          "ru": "УТОЧНИТЬ: оформляется ли вид на жительство уже в Турции после приезда и в какой срок",
+          "en": "УТОЧНИТЬ: оформляется ли вид на жительство уже в Турции после приезда и в какой срок"
+        }
+      ],
+      "refusals": [
+        {
+          "tk": "Maliýe subutnamasy okuwyň we ýaşaýşyň çykdajylaryny doly örtmeýär",
+          "ru": "Подтверждение финансов не покрывает расходы на обучение и проживание",
+          "en": "Proof of funds does not cover tuition and living costs"
+        },
+        {
+          "tk": "Kabul haty bilen anketadaky maglumatlar gabat gelmeýär",
+          "ru": "Данные в письме о зачислении и в анкете не совпадают",
+          "en": "The acceptance letter and the application form do not match"
+        },
+        {
+          "tk": "Bilim resminamalarynyň terjimesi ýa-da tassyklanyşy talaplara laýyk däl",
+          "ru": "Перевод или заверение документов об образовании не соответствует требованиям",
+          "en": "Translation or certification of education documents does not meet the requirements"
+        },
+        {
+          "tk": "Pasportyň möhleti okuw döwrüni örtmeýär",
+          "ru": "Срок действия паспорта не покрывает период обучения",
+          "en": "The passport does not stay valid for the whole period of study"
+        }
+      ],
+      "checkedOn": "",
+      "checkedBy": "не проверено"
+    }
+  ]
+}

@@ -5,6 +5,7 @@
     "правьте только этот файл, потом запустите node scripts/sync-layout.js.",
     "",
     "flag   — имя файла в assets/flags/ без расширения (код страны);",
+    "slug   — кусок адреса страницы требований: wizalar/okuw-wizasy/turkiye.html.",
     "photo  — имя файла в assets/photos/ без расширения. Если файла нет,",
     "         карточка соберётся без фотографии и вёрстка не сломается;",
     "query  — что искать на Unsplash: этим пользуется scripts/photos.py;",
@@ -48,6 +49,7 @@
   "countries": [
     {
       "flag": "tr",
+      "slug": "turkiye",
       "photo": "istanbul",
       "query": "Istanbul Hagia Sophia Bosphorus",
       "region": "middle-east",
@@ -64,6 +66,7 @@
     },
     {
       "flag": "ru",
+      "slug": "russiya",
       "photo": "moscow",
       "query": "Moscow Red Square",
       "region": "cis",
@@ -80,6 +83,7 @@
     },
     {
       "flag": "ae",
+      "slug": "bae",
       "photo": "dubai",
       "query": "Dubai skyline Burj Khalifa",
       "region": "middle-east",
@@ -96,6 +100,7 @@
     },
     {
       "flag": "cn",
+      "slug": "hytay",
       "photo": "beijing",
       "query": "Beijing Forbidden City",
       "region": "asia",
@@ -112,6 +117,7 @@
     },
     {
       "flag": "de",
+      "slug": "germaniya",
       "photo": "berlin",
       "query": "Berlin Brandenburg Gate",
       "region": "europe",
@@ -128,6 +134,7 @@
     },
     {
       "flag": "it",
+      "slug": "italiya",
       "photo": "rome",
       "query": "Rome Colosseum",
       "region": "europe",
@@ -144,6 +151,7 @@
     },
     {
       "flag": "pl",
+      "slug": "polsa",
       "photo": "warsaw",
       "query": "Warsaw old town",
       "region": "europe",
@@ -160,6 +168,7 @@
     },
     {
       "flag": "cz",
+      "slug": "cehiya",
       "photo": "prague",
       "query": "Prague Charles Bridge",
       "region": "europe",
@@ -176,6 +185,7 @@
     },
     {
       "flag": "my",
+      "slug": "malayziya",
       "photo": "kuala-lumpur",
       "query": "Kuala Lumpur Petronas Towers",
       "region": "asia",
@@ -192,6 +202,7 @@
     },
     {
       "flag": "kr",
+      "slug": "koreya",
       "photo": "seoul",
       "query": "Seoul Gyeongbokgung palace",
       "region": "asia",
@@ -208,6 +219,7 @@
     },
     {
       "flag": "kz",
+      "slug": "gazagystan",
       "photo": "almaty",
       "query": "Almaty city mountains",
       "region": "cis",
@@ -224,6 +236,7 @@
     },
     {
       "flag": "by",
+      "slug": "belarus",
       "photo": "minsk",
       "query": "Minsk city",
       "region": "cis",

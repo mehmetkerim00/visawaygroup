@@ -57,6 +57,7 @@
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const requirements = require("./requirements");
 
 const ROOT = path.resolve(__dirname, "..");
 const PARTIALS_DIR = path.join(ROOT, "partials");
@@ -954,6 +955,12 @@ function stampAssets(html, relPosix) {
 }
 
 
+/* Собирают ли сейчас вместе с черновиками. Ставит scripts/build.js
+   при запуске с --drafts; обычная сборка эту переменную не задаёт,
+   и черновиков не видит ни один блок. */
+const WITH_DRAFTS = process.env.VW_DRAFTS === "1";
+
+
 function syncFile(file, partials, site, valuesByLang, existing) {
   const original = fs.readFileSync(file, "utf8");
   const relative = path.relative(ROOT, file);
@@ -982,6 +989,16 @@ function syncFile(file, partials, site, valuesByLang, existing) {
     if (name === "route") {
       blocks++;
       return `${indent}<!-- route:start -->\n${routeBlock(indent, lang)}\n${indent}<!-- route:end -->`;
+    }
+
+    /* Выбор страны на странице визы — из data/requirements.json.
+       Черновики сюда попадают только в предпросмотре: сборщик
+       ставит VW_DRAFTS=1, обычная сборка этого не делает. */
+    if (name === "reqcountries") {
+      blocks++;
+      const visa = (rawAttrs.match(/visa="([^"]+)"/) || [])[1] || "";
+      const body = requirements.pickerBlock(lang, visa, indent, relPosix, prefix, WITH_DRAFTS);
+      return `${indent}<!-- reqcountries:start visa="${visa}" -->\n${body}\n${indent}<!-- reqcountries:end -->`;
     }
 
     /* Сетка стран и фильтр — из data/countries.json */

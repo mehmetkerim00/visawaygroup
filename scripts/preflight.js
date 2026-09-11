@@ -145,6 +145,85 @@ function checkDomain(site) {
 
 const EXTERNAL = /^(#|mailto:|tel:|https?:|\/\/|data:)/i;
 
+
+/* --------------------------------------------------------------------- */
+/* Черновики требований                                                   */
+/* --------------------------------------------------------------------- */
+
+/* Записи со статусом draft на сайт попадать не должны вовсе. Проверяем
+   двумя независимыми способами, потому что цена ошибки высокая: человек
+   принимает решения по визе, читая непроверенные требования.
+
+   Первый способ — по данным: для каждой записи draft смотрим, не лежит ли
+   её страница на диске. Второй — по самим файлам: ищем в собранных
+   страницах красную полосу черновика. Второй ловит и то, чего нет в
+   data/requirements.json: например, страницу, оставшуюся от старой записи. */
+function checkDrafts() {
+  let requirements;
+  try {
+    requirements = require("./requirements");
+  } catch (e) {
+    block("Черновики", "не читается scripts/requirements.js: " + e.message, "");
+    return;
+  }
+
+  let data;
+  try {
+    data = requirements.load();
+  } catch (e) {
+    block("Черновики", e.message, "data/requirements.json");
+    return;
+  }
+
+  const entries = data.req.entries || [];
+  let leaked = 0;
+
+  for (const e of entries) {
+    if (e.status === "verified") continue;
+    for (const lang of L.LANGS) {
+      const rel = requirements.pagePath(e, lang, data);
+      if (fs.existsSync(path.join(ROOT, rel))) {
+        leaked++;
+        block("Черновики", "черновик попал в сборку — пересоберите: node scripts/build.js", rel);
+      }
+    }
+  }
+
+  for (const rel of pages()) {
+    const html = fs.readFileSync(path.join(ROOT, rel), "utf8");
+    if (html.includes("class=\"draftbar\"")) {
+      leaked++;
+      block("Черновики", "на странице стоит полоса черновика", rel);
+    }
+  }
+
+  /* Обратная сторона: verified с незакрытыми вопросами или пустыми
+     сроками — это тоже нельзя публиковать, только беда тут другая.
+     Пустое поле на живой странице выглядит как недоделка, а метка
+     УТОЧНИТЬ — как записка специалисту, случайно попавшая на сайт. */
+  for (const e of entries) {
+    if (e.status !== "verified") continue;
+    const id = `${e.visa}/${e.country}`;
+    const t = requirements.todos(e);
+    if (t.length) {
+      block("Черновики", `в проверенной записи осталось меток УТОЧНИТЬ: ${t.length}`, "data/requirements.json: " + id);
+    }
+    const empty = requirements.emptyFields(e);
+    if (empty.length) {
+      block("Черновики", "в проверенной записи пустые поля: " + empty.join(", "), "data/requirements.json: " + id);
+    }
+    if (!String(e.checkedOn || "").trim()) {
+      block("Черновики", "в проверенной записи нет даты проверки", "data/requirements.json: " + id);
+    }
+  }
+
+  if (!leaked) {
+    const drafts = entries.filter(e => e.status !== "verified").length;
+    const verified = entries.length - drafts;
+    ok(`Черновиков требований в сборке нет (проверено ${verified}, в работе ${drafts})`);
+  }
+}
+
 function checkLinks() {
   let broken = 0, checked = 0;
 
@@ -589,6 +668,7 @@ function main() {
   checkTeam();
   checkAssets();
   checkPhotoCredits();
+  checkDrafts();
   checkBackup();
 
   process.exitCode = printReport();
