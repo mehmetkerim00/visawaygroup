@@ -138,8 +138,20 @@ const CHECKS = function () {
     add("прокрутка вбок", document.body, `${doc.scrollWidth} при окне ${W}`);
   }
 
+  /* Лежит ли элемент внутри ленты, которую листают вбок. В такой ленте
+     выход за край экрана — это и есть замысел: следующая карточка должна
+     выглядывать. Ругаться на неё нельзя, а на всё остальное — нужно. */
+  function inScroller(el) {
+    for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+      const o = getComputedStyle(p).overflowX;
+      if (o === "auto" || o === "scroll") return true;
+    }
+    return false;
+  }
+
   /* --- 2. Блок вылезает за экран или за родителя ---------------------- */
   for (const el of visible) {
+    if (inScroller(el)) continue;
     const r = el.getBoundingClientRect();
     const st = getComputedStyle(el);
 
@@ -161,6 +173,10 @@ const CHECKS = function () {
     const ps = getComputedStyle(parent);
     if (/hidden|clip|auto|scroll/.test(ps.overflowX)) continue;
     if (ps.display === "contents") continue;
+    /* Отрицательный боковой отступ — это намеренный выход за поля
+       контейнера: так ленты и полноширинные полосы доходят до края
+       экрана. Родитель при этом не «прорван», его просто обошли. */
+    if (parseFloat(st.marginLeft) < 0 || parseFloat(st.marginRight) < 0) continue;
     const pr = parent.getBoundingClientRect();
     const out = Math.max(pr.left - r.left, r.right - pr.right);
     if (out > 2) {

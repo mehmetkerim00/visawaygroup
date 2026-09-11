@@ -288,7 +288,91 @@
 
 
   /* ------------------------------------------------------------------------
-     5. ГОД В СТРОКЕ КОПИРАЙТА
+     5. ПОЛОСА ЗВОНКА ВНИЗУ ЭКРАНА (только на телефоне, только на главной)
+
+     Появляется, когда первый экран ушёл вверх: пока человек его читает,
+     полоса не нужна и только закрывает содержимое. Пропадает, пока открыто
+     меню, — иначе она наложилась бы на выехавшую панель.
+
+     Ширину экрана проверяет CSS: полоса просто не показана на больших.
+     Скрипт отвечает только за «когда», а не за «где».
+     ---------------------------------------------------------------------- */
+
+  var callbar = document.querySelector("[data-callbar]");
+
+  if (callbar) {
+    var hero = document.querySelector(".hero");
+    var callbarTicking = false;
+
+    function updateCallbar() {
+      /* Порог — низ первого экрана. Нет первого экрана (другая страница) —
+         показываем после первой же прокрутки. */
+      var limit = hero ? hero.offsetHeight - 120 : 200;
+      var show = window.scrollY > limit && !isOpen;
+      callbar.hidden = !show;
+      callbar.classList.toggle("is-shown", show);
+      callbarTicking = false;
+    }
+
+    window.addEventListener("scroll", function () {
+      if (!callbarTicking) {
+        window.requestAnimationFrame(updateCallbar);
+        callbarTicking = true;
+      }
+    }, { passive: true });
+
+    /* Меню открылось или закрылось — пересчитываем сразу */
+    document.addEventListener("click", function () {
+      window.requestAnimationFrame(updateCallbar);
+    });
+
+    updateCallbar();
+  }
+
+
+  /* ------------------------------------------------------------------------
+     6. СВЁРНУТЫЕ КОЛОНКИ ПОДВАЛА НА ТЕЛЕФОНЕ
+
+     В разметке они открыты: без скриптов подвал должен работать как обычно,
+     и на большом экране колонки тоже стоят раскрытыми. Здесь мы только
+     закрываем их на узком экране, где они занимали пол-экрана повторением
+     того же меню, что и в шапке.
+     ---------------------------------------------------------------------- */
+
+  var folds = document.querySelectorAll(".footer-fold");
+  var narrowQuery = window.matchMedia("(max-width: 47.99em)");
+
+  function syncFolds(matches) {
+    Array.prototype.forEach.call(folds, function (fold) {
+      /* Открыл человек сам — не трогаем */
+      if (fold.dataset.touched) return;
+      fold.open = !matches;
+    });
+  }
+
+  if (folds.length) {
+    Array.prototype.forEach.call(folds, function (fold) {
+      fold.addEventListener("toggle", function () {
+        /* На большом экране колонка не сворачивается: там это просто
+           заголовок, и случайный клик по нему не должен прятать меню. */
+        if (!narrowQuery.matches) {
+          if (!fold.open) fold.open = true;
+          return;
+        }
+        fold.dataset.touched = "1";
+      });
+    });
+    syncFolds(narrowQuery.matches);
+    if (typeof narrowQuery.addEventListener === "function") {
+      narrowQuery.addEventListener("change", function (e) { syncFolds(e.matches); });
+    } else if (typeof narrowQuery.addListener === "function") {
+      narrowQuery.addListener(function (e) { syncFolds(e.matches); });
+    }
+  }
+
+
+  /* ------------------------------------------------------------------------
+     7. ГОД В СТРОКЕ КОПИРАЙТА
      Чтобы год в подвале не пришлось править руками каждый январь.
      ---------------------------------------------------------------------- */
 

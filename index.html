@@ -354,21 +354,17 @@
 
           <div class="hero__actions">
             <a class="btn btn--primary btn--lg" href="habarlasmak.html">Maslahat almak</a>
-            <a class="btn btn--secondary btn--on-dark btn--lg" href="#hyzmatlar">Wiza görnüşleri</a>
             <p class="badge">
-              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-badge-check"/></svg>
               Ilkinji maslahat mugt
             </p>
           </div>
 
-          <p class="hero__note">
-            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
-            <span>
-              Wizanyň berilmegi baradaky karary diňe konsullyk kabul edýär.
-              Biz resminamalaryňyzy talaplara laýyk we doly taýýarlamaga kömek
-              edýäris.
-            </span>
-          </p>
+          <!-- Вторая ссылка нарочно не кнопка: на первом экране
+               должно быть одно очевидное действие. -->
+          <a class="hero__more" href="#hyzmatlar">
+            Wiza görnüşleri
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          </a>
         </div>
 
         <!-- Маршрут: единственная иллюстрация первого экрана.
@@ -456,7 +452,7 @@
         <div class="section__head" data-reveal>
           <p class="eyebrow">Hyzmatlarymyz</p>
           <h2>Wiza görnüşleri we bilim maslahaty</h2>
-          <p class="lead">
+          <p class="lead lead--wide">
             Her wiza görnüşiniň öz talaplary bar. Size haýsysynyň
             gerekdigini maslahat wagtynda bilelikde kesgitleýäris.
           </p>
@@ -467,6 +463,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-briefcase"/></svg>
             <h3 class="card__title">Iş wizasy</h3>
+            <p class="card__short">Daşary ýurtda resmi işlemek</p>
             <p class="card__text">
               Daşary ýurtda resmi işlemek üçin. Iş çakylygyňyzy, şertnamaňyzy
               we hünär resminamalaryňyzy talaplara laýyk getirýäris.
@@ -480,6 +477,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-cap"/></svg>
             <h3 class="card__title">Okuw wizasy</h3>
+            <p class="card__short">Uniwersitet, kollež, dil kursy</p>
             <p class="card__text">
               Uniwersitetde, kolležde ýa-da dil kursunda okamak üçin. Kabul
               hatyňyz, maliýe subutnamalaryňyz we terjimeler bilen işleýäris.
@@ -493,6 +491,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-plane"/></svg>
             <h3 class="card__title">Syýahat wizasy</h3>
+            <p class="card__short">Dynç alyş we syýahat</p>
             <p class="card__text">
               Dynç alyş we syýahat üçin. Marşrutyňyzy, ýaşaýyş jaýyňyzyň
               bronuny we ätiýaçlandyryşyňyzy bir bitewi topluma jemleýäris.
@@ -506,6 +505,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-users"/></svg>
             <h3 class="card__title">Myhmançylyk wizasy</h3>
+            <p class="card__short">Garyndaşlara we dostlara barmak</p>
             <p class="card__text">
               Garyndaşlaryňyza ýa-da dostlaryňyza barmak üçin. Çakylyk hatyny
               we garyndaşlyk gatnaşygyny tassyklaýan resminamalary
@@ -520,6 +520,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-buildings"/></svg>
             <h3 class="card__title">Işewürlik wizasy</h3>
+            <p class="card__short">Gepleşikler, sergiler, iş saparlary</p>
             <p class="card__text">
               Gepleşikler, sergiler we iş saparlary üçin. Kompaniýanyň
               çakylygyny we saparyň işewürlik maksadyny tassyklaýan
@@ -534,6 +535,7 @@
           <article class="card" id="talyplar">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-book"/></svg>
             <h3 class="card__title">Talyplara bilim maslahaty</h3>
+            <p class="card__short">Okuw mekdebini saýlamakdan tabşyrmaga çenli</p>
             <p class="card__text">
               Daşary ýurt ýokary okuw mekdebini saýlamakdan resminamalary
               tabşyrmaga çenli. Ugur, býujet we dil talaplary boýunça
@@ -571,10 +573,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-chat"/></svg>
               <h3 class="step__title">Maslahat</h3>
-              <p class="step__text">
-                Saparyňyzyň maksadyny, möhletini we ýagdaýyňyzy jikme-jik
-                diňleýäris. Şondan soň haýsy wizanyň size laýykdygyny aýdýarys.
-              </p>
+              <p class="step__text">Maksadyňyzy diňleýäris we haýsy wizanyň gerekdigini aýdýarys.</p>
             </div>
           </li>
 
@@ -583,10 +582,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-search-check"/></svg>
               <h3 class="step__title">Mümkinçilikleri baholamak</h3>
-              <p class="step__text">
-                Resminamalaryňyzyň güýçli we gowşak taraplaryny açyk aýdýarys.
-                Mümkinçilik pes bolsa, muny hem gizlemeýäris.
-              </p>
+              <p class="step__text">Resminamalaryňyzyň güýçli we gowşak taraplaryny açyk aýdýarys.</p>
             </div>
           </li>
 
@@ -595,10 +591,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-doc"/></svg>
               <h3 class="step__title">Resminamalary taýýarlamak</h3>
-              <p class="step__text">
-                Sanawy düzýäris, anketany dolduryp, terjimeleri we
-                kepilnamalary talaplara laýyk getirýäris.
-              </p>
+              <p class="step__text">Sanaw, anketa, terjimeler we kepilnamalar — hemmesi talaplara laýyk.</p>
             </div>
           </li>
 
@@ -607,10 +600,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-calendar-check"/></svg>
               <h3 class="step__title">Nobat we tabşyryş</h3>
-              <p class="step__text">
-                Konsullyga ýa-da wiza merkezine nobat alýarys, tabşyryş gününe
-                we söhbetdeşlige taýýarlaýarys.
-              </p>
+              <p class="step__text">Nobat alýarys we tabşyryş gününe taýýarlaýarys.</p>
             </div>
           </li>
 
@@ -619,10 +609,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-badge-check"/></svg>
               <h3 class="step__title">Netije we goldaw</h3>
-              <p class="step__text">
-                Netijäni bilelikde alýarys. Ret edilen ýagdaýynda sebäplerini
-                seljerip, gaýtadan tabşyrmaga taýýarlanýarys.
-              </p>
+              <p class="step__text">Netijäni bilelikde alýarys, ret edilse — gaýtadan taýýarlanýarys.</p>
             </div>
           </li>
 
@@ -651,37 +638,25 @@
           <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-certificate"/></svg>
             <h3 class="feature__title">Şertnama esasynda</h3>
-            <p class="feature__text">
-              Resmi hasaba alnan kompaniýa. Her hyzmat şertnama esasynda
-              ýerine ýetirilýär.
-            </p>
+            <p class="feature__text">Resmi hasaba alnan kompaniýa, her hyzmat şertnama esasynda.</p>
           </div>
 
           <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-scales"/></svg>
             <h3 class="feature__title">Dogruçyl baha</h3>
-            <p class="feature__text">
-              Wizanyň beriljekdigini hiç kim kepillendirip bilmeýär — karary
-              konsullyk kabul edýär. Biz hakyky mümkinçiligiňizi aýdýarys.
-            </p>
+            <p class="feature__text">Wizanyň beriljekdigini hiç kim kepillendirip bilmeýär — karary konsullyk kabul edýär.</p>
           </div>
 
           <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-tag"/></svg>
             <h3 class="feature__title">Aç-açan bahalar</h3>
-            <p class="feature__text">
-              Bahany işe başlamazdan öň doly aýdýarys we şertnamada ýazýarys.
-              Ýol ugrunda gizlin goşmaça töleg ýüze çykmaýar.
-            </p>
+            <p class="feature__text">Bahany işe başlamazdan öň doly aýdýarys we şertnamada ýazýarys.</p>
           </div>
 
           <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-stairs-flag"/></svg>
             <h3 class="feature__title">Ähli tapgyrda goldaw</h3>
-            <p class="feature__text">
-              Resminamalary tabşyranyňyzdan soň hem ýanyňyzda. Netije
-              çykýança soraglaryňyza jogap berýäris.
-            </p>
+            <p class="feature__text">Netije çykýança ýanyňyzda: soraglaryňyza jogap berýäris.</p>
           </div>
 
         </div>
@@ -698,7 +673,7 @@
         <div class="section__head" data-reveal>
           <p class="eyebrow">Ugurlar</p>
           <h2>Iň köp ýüz tutulýan ýurtlar</h2>
-          <p class="lead">
+          <p class="lead lead--wide">
             Aşakdaky ugurlar boýunça işleýäris. Sanawda görmedik ýurduňyz
             bolsa, soraň — mümkinçiligi barlarys.
           </p>
@@ -713,7 +688,7 @@
             <button class="chip" type="button" data-region="middle-east" aria-pressed="false">Ýakyn Gündogar</button>
             <button class="chip" type="button" data-region="cis" aria-pressed="false">GDA</button>
           </div>
-          <ul class="countries__grid" data-countries-grid>
+          <ul class="countries__grid" data-countries-grid tabindex="0" role="group" aria-label="Ugurlaryň sanawy">
             <li class="country" data-region="middle-east">
               <div class="country__photo">
                 <picture>
@@ -1042,7 +1017,7 @@
 
         <div class="container cta__inner" data-reveal="fade">
 
-          <p class="cta__badge">Ilkinji maslahat mugt</p>
+          <p class="badge">Ilkinji maslahat mugt</p>
 
           <h2 class="cta__title">Ýagdaýyňyzy bilelikde seredeliň</h2>
 
@@ -1075,8 +1050,8 @@
         </p>
       </div>
 
-      <div>
-        <h2 class="site-footer__heading">Bölümler</h2>
+      <details class="footer-fold" open>
+        <summary class="site-footer__heading">Bölümler</summary>
         <ul class="site-footer__list">
           <li><a href="index.html">Baş sahypa</a></li>
           <li><a href="wizalar.html">Wizalar</a></li>
@@ -1084,10 +1059,10 @@
           <li><a href="biz-barada.html">Biz barada</a></li>
           <li><a href="habarlasmak.html">Habarlaşmak</a></li>
         </ul>
-      </div>
+      </details>
 
-      <div>
-        <h2 class="site-footer__heading">Hyzmatlar</h2>
+      <details class="footer-fold" open>
+        <summary class="site-footer__heading">Hyzmatlar</summary>
         <ul class="site-footer__list">
           <li><a href="wizalar/is-wizasy.html">Iş wizasy</a></li>
           <li><a href="wizalar/okuw-wizasy.html">Okuw wizasy</a></li>
@@ -1095,7 +1070,7 @@
           <li><a href="wizalar/myhmancylyk-wizasy.html">Myhmançylyk wizasy</a></li>
           <li><a href="wizalar/isewurlik-wizasy.html">Işewürlik wizasy</a></li>
         </ul>
-      </div>
+      </details>
 
       <div>
         <h2 class="site-footer__heading">Habarlaşmak</h2>
@@ -1151,6 +1126,26 @@
   </footer>
   <!-- footer:end -->
 
+
+  <!-- callbar:start -->
+  <!--
+    Полоса звонка внизу экрана. Только на телефоне и только на главной:
+    здесь человек листает и решает, а телефон — главный канал связи.
+    Номер берётся из data/site.json, править здесь не надо.
+
+    Показывает и прячет её js/main.js: она появляется, когда первый экран
+    ушёл вверх, и убирается, пока открыто меню.
+  -->
+
+  <div class="callbar" data-callbar role="group" aria-label="Çalt habarlaşmak" hidden>
+    <a class="callbar__call" href="tel:+99361121888">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-phone"/></svg>
+      <span class="callbar__label">Jaň ediň</span>
+      <span class="callbar__number">+993 61 12 18 88</span>
+    </a>
+    <a class="callbar__form" href="habarlasmak.html">Haýyş</a>
+  </div>
+  <!-- callbar:end -->
 
   <script src="js/main.js" defer></script>
 

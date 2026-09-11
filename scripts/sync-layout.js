@@ -545,7 +545,11 @@ function countriesBlock(lang, prefix, indent, relPosix) {
   }
   out.push(`${i}  </div>`);
 
-  out.push(`${i}  <ul class="countries__grid" data-countries-grid>`);
+  /* Лента прокручивается пальцем, поэтому у неё должен быть способ
+     прокрутки и с клавиатуры: tabindex делает её точкой фокуса,
+     и стрелки начинают листать карточки. */
+  out.push(`${i}  <ul class="countries__grid" data-countries-grid` +
+           ` tabindex="0" role="group" aria-label="${escapeAttr(pick(L.list))}">`);
   for (const c of data.countries) {
     const country = pick(c.country);
     const city = pick(c.city);

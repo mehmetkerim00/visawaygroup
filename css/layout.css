@@ -574,6 +574,69 @@ body {
   text-underline-offset: 0.2em;
 }
 
+/* --- Свёрнутые колонки подвала на телефоне ---------------------------------
+   Разметка открыта по умолчанию, закрывает их js/main.js на узком экране.
+   На большом экране заголовок выглядит как раньше: ни стрелки, ни курсора
+   «нажми меня» там быть не должно. */
+
+.footer-fold > summary {
+  list-style: none;
+  cursor: pointer;
+  /* summary нажимается всегда, даже когда колонка раскрыта и на большом
+     экране выглядит обычным заголовком. Значит, и палец по нему должен
+     попадать: область растёт вниз, в уже существующий отступ, поэтому
+     сама надпись не сдвигается. */
+  display: flex;
+  align-items: flex-start;
+  min-height: var(--tap);
+  margin-bottom: var(--space-2);
+}
+
+.footer-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (max-width: 47.99em) {
+  .footer-fold {
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .footer-fold > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--tap);
+    margin: 0;
+    padding-block: var(--space-2);
+  }
+
+  /* Плюс, который превращается в минус — как в вопросах */
+  .footer-fold > summary::after {
+    content: "";
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-right: 1.5px solid var(--on-dark-muted);
+    border-bottom: 1.5px solid var(--on-dark-muted);
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .footer-fold[open] > summary::after {
+    transform: rotate(225deg) translate(-3px, -3px);
+  }
+
+  .footer-fold > .site-footer__list {
+    padding-bottom: var(--space-4);
+  }
+}
+
+@media (min-width: 48em) {
+  .footer-fold > summary {
+    cursor: default;
+  }
+}
+
 /* Ссылка на источники фотографий: мелко, но не спрятана —
    это требование лицензий CC-BY и CC-BY-SA. */
 .site-footer__credits {
@@ -617,6 +680,11 @@ body {
 
 .site-footer a.site-footer__phone {
   color: var(--on-dark);
+  /* Не inline-flex: общее правило целей нажатия ставит его всем ссылкам,
+     и два телефона вставали в одну строку. Здесь нужен блочный flex —
+     каждый номер со своей строки. */
+  display: flex;
+  align-items: center;
 }
 
 /* При наведении подчёркиваем, а не подсвечиваем: осветлённый медный
@@ -646,4 +714,108 @@ body {
 .site-footer__copyright {
   margin: 0;
   max-width: none;
+}
+
+
+/* ==========================================================================
+   ПОЛОСА ЗВОНКА ВНИЗУ ЭКРАНА
+
+   Только на телефоне и только на главной: там человек листает и решает,
+   а звонок — главный канал. На большом экране телефон и так виден
+   в шапке, и полоса только мешала бы.
+
+   Появление и скрытие — в js/main.js. Здесь только вид и то, что полоса
+   не показывается на широких экранах вовсе.
+   ========================================================================== */
+
+.callbar {
+  position: fixed;
+  z-index: var(--z-header);
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  /* Снизу — либо обычный отступ, либо полоса жестов у iPhone */
+  padding: var(--space-3) max(var(--space-4), var(--safe-left))
+           max(var(--space-3), var(--safe-bottom)) max(var(--space-4), var(--safe-right));
+  background-color: var(--dark);
+  border-top: 1px solid var(--line-dark);
+  color: var(--on-dark);
+  box-shadow: 0 -6px 24px rgba(20, 22, 26, 0.28);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .callbar {
+    transform: translateY(100%);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .callbar.is-shown {
+    transform: none;
+  }
+}
+
+/* На большом экране полосы нет: hidden снимает скрипт, поэтому
+   прячем её здесь жёстко. */
+@media (min-width: 48em) {
+  .callbar {
+    display: none !important;
+  }
+}
+
+.callbar__call {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--space-3);
+  flex: 1;
+  min-height: var(--tap);
+  color: var(--on-dark);
+  text-decoration: none;
+}
+
+.callbar__call .icon {
+  grid-row: 1 / span 2;
+  color: var(--copper-on-dark);
+}
+
+.callbar__label {
+  color: var(--on-dark-muted);
+  font-size: var(--text-xs);
+  line-height: 1.2;
+}
+
+.callbar__number {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.callbar__form {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  min-height: var(--tap);
+  padding-inline: var(--space-4);
+  background-color: var(--copper);
+  border-radius: var(--radius-md);
+  color: #FFFFFF;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+.callbar :focus-visible {
+  outline-color: var(--copper-on-dark);
+}
+
+/* Полоса лежит поверх страницы, поэтому подвалу нужен запас снизу:
+   иначе последняя строка копирайта окажется под ней. */
+@media (max-width: 47.99em) {
+  body:has([data-callbar]) .site-footer {
+    padding-bottom: calc(var(--safe-bottom) + 4.75rem);
+  }
 }

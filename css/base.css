@@ -593,13 +593,17 @@ small {
 }
 
 /* Вертикальные отступы секции */
+/* Отступы между секциями растут вместе с экраном: на телефоне воздух
+   между блоками стоит целых полэкрана прокрутки, на мониторе он нужен. */
 .section {
-  padding-block: var(--space-7);
+  padding-block: clamp(var(--space-6), 5vw, var(--space-9));
 }
 
-@media (min-width: 48em) {
-  .section {
-    padding-block: var(--space-9);
+/* Вводный абзац, который на телефоне не нужен: заголовок и сами карточки
+   говорят то же самое, а строка занимает четверть экрана. */
+@media (max-width: 47.99em) {
+  .lead--wide {
+    display: none;
   }
 }
 
@@ -801,7 +805,7 @@ small {
     break-after: avoid;
   }
 
-  p, li, .card__text, .step__text, .feature__text, .fact__value, .faq__a {
+  p, li, .card__text, .step__text, .feature__text, .faq__a {
     color: #000;
   }
 
@@ -812,7 +816,7 @@ small {
   }
 
   /* Карточки и блоки — без заливок и рамок, только тонкая линия сверху */
-  .card, .pricing, .note, .warn, .nolist li, .team__member, .contact-card {
+  .card, .pricing, .note, .warn, .nolist li {
     background: transparent;
     border: none;
     border-top: 1px solid #999;
@@ -820,7 +824,7 @@ small {
     padding: 8pt 0;
   }
 
-  .cards, .features, .team, .contact-list, .factlist, .steps {
+  .cards, .features, .steps, .doclist, .credits {
     display: block;
   }
 
@@ -862,7 +866,7 @@ small {
   }
 
   /* Значки на бумаге только мешают */
-  .icon, .step__icon, .feature__icon, .card__icon, .fact__icon, .cta__mark {
+  .icon, .step__icon, .feature__icon, .card__icon, .doclist__icon {
     display: none;
   }
 

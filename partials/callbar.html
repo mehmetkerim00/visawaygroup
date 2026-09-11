@@ -1,0 +1,17 @@
+  <!--
+    Полоса звонка внизу экрана. Только на телефоне и только на главной:
+    здесь человек листает и решает, а телефон — главный канал связи.
+    Номер берётся из data/site.json, править здесь не надо.
+
+    Показывает и прячет её js/main.js: она появляется, когда первый экран
+    ушёл вверх, и убирается, пока открыто меню.
+  -->
+
+  <div class="callbar" data-callbar role="group" aria-label="Çalt habarlaşmak" hidden>
+    <a class="callbar__call" href="{{phoneHref}}">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-phone"/></svg>
+      <span class="callbar__label">Jaň ediň</span>
+      <span class="callbar__number">{{phone}}</span>
+    </a>
+    <a class="callbar__form" href="habarlasmak.html">Haýyş</a>
+  </div>

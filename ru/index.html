@@ -352,19 +352,17 @@
 
           <div class="hero__actions">
             <a class="btn btn--primary btn--lg" href="habarlasmak.html">Получить консультацию</a>
-            <a class="btn btn--secondary btn--on-dark btn--lg" href="#hyzmatlar">Виды виз</a>
             <p class="badge">
-              <svg class="icon icon--sm" aria-hidden="true"><use href="#i-badge-check"/></svg>
               Первая консультация бесплатная
             </p>
           </div>
 
-          <p class="hero__note">
-            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-info"/></svg>
-            <span>
-              Решение о выдаче визы принимает исключительно консульство. Мы помогаем подготовить документы полностью и по требованиям.
-            </span>
-          </p>
+          <!-- Вторая ссылка нарочно не кнопка: на первом экране
+               должно быть одно очевидное действие. -->
+          <a class="hero__more" href="#hyzmatlar">
+            Виды виз
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          </a>
         </div>
 
         <!-- Маршрут: единственная иллюстрация первого экрана.
@@ -452,7 +450,7 @@
         <div class="section__head" data-reveal>
           <p class="eyebrow">Наши услуги</p>
           <h2>Виды виз и помощь с поступлением</h2>
-          <p class="lead">
+          <p class="lead lead--wide">
             У каждого типа визы свои требования. Какой нужен именно вам, определим вместе на консультации.
           </p>
         </div>
@@ -462,6 +460,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-briefcase"/></svg>
             <h3 class="card__title">Рабочая виза</h3>
+            <p class="card__short">Официальная работа за рубежом</p>
             <p class="card__text">
               Для официальной работы за рубежом. Приводим приглашение, договор и документы о квалификации в соответствие с требованиями.
             </p>
@@ -474,6 +473,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-cap"/></svg>
             <h3 class="card__title">Учебная виза</h3>
+            <p class="card__short">Университет, колледж, языковые курсы</p>
             <p class="card__text">
               Для учёбы в университете, колледже или на языковых курсах. Работаем с письмом о зачислении, подтверждением финансов и переводами.
             </p>
@@ -486,6 +486,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-plane"/></svg>
             <h3 class="card__title">Туристическая виза</h3>
+            <p class="card__short">Отдых и путешествия</p>
             <p class="card__text">
               Для отдыха и путешествий. Собираем маршрут, бронь жилья и страховку в единый комплект.
             </p>
@@ -498,6 +499,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-users"/></svg>
             <h3 class="card__title">Гостевая виза</h3>
+            <p class="card__short">Поездка к родным и друзьям</p>
             <p class="card__text">
               Для поездки к родственникам или друзьям. Оформляем приглашение и документы, подтверждающие родство или знакомство.
             </p>
@@ -510,6 +512,7 @@
           <article class="card">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-buildings"/></svg>
             <h3 class="card__title">Деловая виза</h3>
+            <p class="card__short">Переговоры, выставки, командировки</p>
             <p class="card__text">
               Для переговоров, выставок и командировок. Готовим приглашение компании и документы, подтверждающие деловую цель поездки.
             </p>
@@ -522,6 +525,7 @@
           <article class="card" id="talyplar">
             <svg class="icon icon--lg card__icon" aria-hidden="true"><use href="#i-book"/></svg>
             <h3 class="card__title">Помощь студентам с поступлением</h3>
+            <p class="card__short">От выбора вуза до подачи документов</p>
             <p class="card__text">
               От выбора зарубежного вуза до подачи документов. Консультируем по направлению, бюджету и языковым требованиям.
             </p>
@@ -557,9 +561,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-chat"/></svg>
               <h3 class="step__title">Консультация</h3>
-              <p class="step__text">
-                Подробно разбираем цель поездки, сроки и вашу ситуацию. После этого говорим, какая виза вам подходит.
-              </p>
+              <p class="step__text">Разбираем цель поездки и говорим, какая виза вам нужна.</p>
             </div>
           </li>
 
@@ -568,9 +570,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-search-check"/></svg>
               <h3 class="step__title">Оценка шансов</h3>
-              <p class="step__text">
-                Открыто говорим о сильных и слабых местах ваших документов. Если шансы низкие, мы этого не скрываем.
-              </p>
+              <p class="step__text">Открыто говорим о сильных и слабых местах ваших документов.</p>
             </div>
           </li>
 
@@ -579,9 +579,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-doc"/></svg>
               <h3 class="step__title">Подготовка документов</h3>
-              <p class="step__text">
-                Составляем список, заполняем анкету, приводим переводы и справки в соответствие с требованиями.
-              </p>
+              <p class="step__text">Список, анкета, переводы и справки — всё по требованиям.</p>
             </div>
           </li>
 
@@ -590,9 +588,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-calendar-check"/></svg>
               <h3 class="step__title">Запись на подачу и подача</h3>
-              <p class="step__text">
-                Записываем в консульство или визовый центр, готовим ко дню подачи и к собеседованию.
-              </p>
+              <p class="step__text">Записываем в консульство и готовим ко дню подачи.</p>
             </div>
           </li>
 
@@ -601,9 +597,7 @@
             <div class="step__body">
               <svg class="icon step__icon" aria-hidden="true"><use href="#i-badge-check"/></svg>
               <h3 class="step__title">Результат и поддержка</h3>
-              <p class="step__text">
-                Забираем результат вместе. При отказе разбираем причины и готовим повторную подачу.
-              </p>
+              <p class="step__text">Забираем результат вместе, при отказе готовим повторную подачу.</p>
             </div>
           </li>
 
@@ -631,33 +625,25 @@
           <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-certificate"/></svg>
             <h3 class="feature__title">Официально, по договору</h3>
-            <p class="feature__text">
-              Официально зарегистрированная компания. Каждая услуга оказывается по договору.
-            </p>
+            <p class="feature__text">Официально зарегистрированная компания, каждая услуга по договору.</p>
           </div>
 
           <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-scales"/></svg>
             <h3 class="feature__title">Честная оценка шансов</h3>
-            <p class="feature__text">
-              Никто не может гарантировать выдачу визы — решение принимает консульство. Мы говорим о ваших реальных шансах.
-            </p>
+            <p class="feature__text">Никто не может гарантировать выдачу визы — решение принимает консульство.</p>
           </div>
 
           <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-tag"/></svg>
             <h3 class="feature__title">Прозрачные цены</h3>
-            <p class="feature__text">
-              Цену называем до начала работы и фиксируем в договоре. Скрытых доплат по ходу дела не появляется.
-            </p>
+            <p class="feature__text">Цену называем до начала работы и фиксируем в договоре.</p>
           </div>
 
           <div class="feature">
             <svg class="icon feature__icon" aria-hidden="true"><use href="#i-stairs-flag"/></svg>
             <h3 class="feature__title">Поддержка на каждом этапе</h3>
-            <p class="feature__text">
-              Мы рядом и после подачи документов. Отвечаем на ваши вопросы, пока не будет результата.
-            </p>
+            <p class="feature__text">Мы рядом, пока не будет результата, и отвечаем на вопросы.</p>
           </div>
 
         </div>
@@ -674,7 +660,7 @@
         <div class="section__head" data-reveal>
           <p class="eyebrow">Направления</p>
           <h2>Страны, о которых спрашивают чаще всего</h2>
-          <p class="lead">
+          <p class="lead lead--wide">
             Работаем по этим направлениям. Если вашей страны в списке нет, спросите — проверим возможность.
           </p>
         </div>
@@ -688,7 +674,7 @@
             <button class="chip" type="button" data-region="middle-east" aria-pressed="false">Ближний Восток</button>
             <button class="chip" type="button" data-region="cis" aria-pressed="false">СНГ</button>
           </div>
-          <ul class="countries__grid" data-countries-grid>
+          <ul class="countries__grid" data-countries-grid tabindex="0" role="group" aria-label="Список направлений">
             <li class="country" data-region="middle-east">
               <div class="country__photo">
                 <picture>
@@ -998,7 +984,7 @@
 
         <div class="container cta__inner" data-reveal="fade">
 
-          <p class="cta__badge">Первая консультация бесплатная</p>
+          <p class="badge">Первая консультация бесплатная</p>
 
           <h2 class="cta__title">Разберём вашу ситуацию вместе</h2>
 
@@ -1031,8 +1017,8 @@
         </p>
       </div>
 
-      <div>
-        <h2 class="site-footer__heading">Разделы</h2>
+      <details class="footer-fold" open>
+        <summary class="site-footer__heading">Разделы</summary>
         <ul class="site-footer__list">
           <li><a href="index.html">Главная</a></li>
           <li><a href="wizalar.html">Визы</a></li>
@@ -1040,10 +1026,10 @@
           <li><a href="biz-barada.html">О нас</a></li>
           <li><a href="habarlasmak.html">Контакты</a></li>
         </ul>
-      </div>
+      </details>
 
-      <div>
-        <h2 class="site-footer__heading">Услуги</h2>
+      <details class="footer-fold" open>
+        <summary class="site-footer__heading">Услуги</summary>
         <ul class="site-footer__list">
           <li><a href="wizalar/is-wizasy.html">Рабочая виза</a></li>
           <li><a href="wizalar/okuw-wizasy.html">Учебная виза</a></li>
@@ -1051,7 +1037,7 @@
           <li><a href="wizalar/myhmancylyk-wizasy.html">Гостевая виза</a></li>
           <li><a href="wizalar/isewurlik-wizasy.html">Деловая виза</a></li>
         </ul>
-      </div>
+      </details>
 
       <div>
         <h2 class="site-footer__heading">Контакты</h2>
@@ -1107,6 +1093,26 @@
   </footer>
   <!-- footer:end -->
 
+
+  <!-- callbar:start -->
+  <!--
+    Полоса звонка внизу экрана. Только на телефоне и только на главной:
+    здесь человек листает и решает, а телефон — главный канал связи.
+    Номер берётся из data/site.json, править здесь не надо.
+
+    Показывает и прячет её js/main.js: она появляется, когда первый экран
+    ушёл вверх, и убирается, пока открыто меню.
+  -->
+
+  <div class="callbar" data-callbar role="group" aria-label="Быстрая связь" hidden>
+    <a class="callbar__call" href="tel:+99361121888">
+      <svg class="icon icon--sm" aria-hidden="true"><use href="#i-phone"/></svg>
+      <span class="callbar__label">Позвонить</span>
+      <span class="callbar__number">+993 61 12 18 88</span>
+    </a>
+    <a class="callbar__form" href="habarlasmak.html">Заявка</a>
+  </div>
+  <!-- callbar:end -->
 
   <script src="../js/main.js" defer></script>
 

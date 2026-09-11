@@ -188,10 +188,6 @@
   border-radius: var(--radius-lg);
 }
 
-.pricing--todo {
-  border: 1px dashed var(--copper);
-}
-
 @media (min-width: 48em) {
   .pricing {
     padding: var(--space-6);
@@ -251,10 +247,6 @@
 }
 
 /* Значение, которое владельцам ещё предстоит вписать */
-.pricing__value--todo {
-  color: var(--copper-dark);
-  font-weight: var(--weight-semibold);
-}
 
 /* --------------------------------------------------------------------------
    Шаги на внутренних страницах всегда идут столбиком —
@@ -361,11 +353,6 @@ a
   .field--wide {
     grid-column: 1 / -1;
   }
-}
-
-/* Заголовок следующей группы способов связи */
-.contact-group {
-  margin-top: var(--space-7);
 }
 
 .field label {

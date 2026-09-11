@@ -86,6 +86,7 @@
   ],
 
   "labels": {
+    "list":    { "tk": "Ugurlaryň sanawy", "ru": "Список направлений", "en": "List of destinations" },
     "filter":  { "tk": "Sebit boýunça saýlaň", "ru": "Выбор по региону", "en": "Choose a region" },
     "more":    { "tk": "Sanawda ýurduňyzy görmediňizmi?", "ru": "Не нашли свою страну в списке?", "en": "Not on the list?" },
     "moreCta": { "tk": "Soraň — barlarys", "ru": "Спросите — проверим", "en": "Ask us — we will check" },

@@ -32,7 +32,7 @@
   color: var(--on-dark);
   /* Шапка над этим экраном прозрачная и вынута из потока,
      поэтому отступ сверху закладываем сами. */
-  padding-block: calc(var(--header-h) + var(--space-7)) var(--space-8);
+  padding-block: calc(var(--header-h) + var(--space-5)) var(--space-6);
   overflow: hidden;
 }
 
@@ -64,11 +64,6 @@
   .hero__art .route {
     height: auto;
     max-width: 200px;
-  }
-
-  .hero__note {
-    margin-top: var(--space-4);
-    padding-top: var(--space-4);
   }
 }
 
@@ -161,34 +156,31 @@
 /* Вторая кнопка на тёмном оформлена модификатором btn--on-dark
    в css/base.css — здесь дублировать не нужно. */
 
-/* Плашка «первая консультация бесплатно» — самое важное обещание
-   на первом экране, поэтому у неё медная рамка, а не тихая подложка. */
-.hero .badge {
-  background-color: rgba(204, 123, 80, 0.14);
-  border: 1px solid var(--copper-light);
-  color: var(--on-dark);
-}
-
-.hero .badge .icon {
+/* Второе действие на первом экране — не кнопка, а ссылка со стрелкой:
+   выбор должен быть один и очевидный, остальное — подсказка. */
+.hero__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap);
+  margin-top: var(--space-4);
   color: var(--copper-on-dark);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
 }
 
-/* Честная приписка под кнопками: решение принимает консульство */
-.hero__note {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  max-width: 54ch;
-  margin-top: var(--space-6);
-  padding-top: var(--space-5);
-  border-top: 1px solid var(--line-dark);
-  color: var(--on-dark-muted);
-  font-size: var(--text-sm);
+.hero__more .icon {
+  transition: transform var(--transition-fast);
 }
 
-.hero__note .icon {
-  color: var(--copper-on-dark);
-  margin-top: 2px;
+@media (hover: hover) and (pointer: fine) {
+  .hero__more:hover {
+    color: var(--on-dark);
+  }
+
+  .hero__more:hover .icon {
+    transform: translateX(3px);
+  }
 }
 
 .hero :focus-visible {
@@ -214,15 +206,19 @@
   justify-content: center;
 }
 
+/* На телефоне маршрут не выкидывается, а сжимается: это главный приём
+   оформления, без него первый экран становится обычной страницей текста.
+   Высота — примерно треть экрана, ширина подбирается по пропорциям. */
 .hero__art .route {
-  width: 100%;
-  max-width: 240px;
-  height: auto;
+  width: auto;
+  max-width: 100%;
+  height: clamp(140px, 26svh, 220px);
+  margin-top: var(--space-4);
 }
 
 @media (min-width: 37.5em) {
   .hero__art .route {
-    max-width: 280px;
+    height: clamp(200px, 34svh, 320px);
   }
 }
 
@@ -473,6 +469,92 @@
 }
 
 
+/* --- Услуги на телефоне: строки вместо карточек ----------------------------
+
+   На маленьком экране шесть карточек с абзацами занимали два с половиной
+   экрана. Полные описания и так лежат на страницах услуг, поэтому здесь
+   остаётся строка: значок, название, три-пять слов и стрелка. Нажимается
+   вся строка целиком — ссылка растянута на неё псевдоэлементом, поэтому
+   вложенных ссылок не появляется и разметка остаётся прежней.
+
+   На экране от 48em карточки возвращаются в прежнем виде.               */
+
+.card__short {
+  display: none;
+}
+
+@media (max-width: 47.99em) {
+
+  .card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--space-4);
+    /* Строка примерно в 72 пункта: палец попадает, а шесть строк
+       умещаются в один экран. */
+    min-height: 72px;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    position: relative;
+  }
+
+  .card__icon {
+    width: 26px;
+    height: 26px;
+    margin: 0;
+  }
+
+  .card__title {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    letter-spacing: 0;
+  }
+
+  .card__short {
+    display: block;
+    grid-column: 2;
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: var(--text-xs);
+    line-height: var(--leading-snug);
+  }
+
+  .card__icon {
+    grid-row: 1 / span 2;
+  }
+
+  /* От ссылки остаётся одна стрелка, а нажимается вся строка */
+  .card__link {
+    grid-row: 1 / span 2;
+    grid-column: 3;
+    align-self: center;
+    justify-content: center;
+    min-width: var(--tap);
+    min-height: var(--tap);
+    margin: 0;
+    padding: 0;
+    font-size: 0;              /* прячем надпись, значок остаётся */
+    color: var(--copper);
+  }
+
+  .card__link .icon {
+    font-size: var(--text-base);
+  }
+
+  .card__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .card__text {
+    display: none;
+  }
+}
+
+
 /* ==========================================================================
    3. NÄHILI IŞLEÝÄRIS — пять шагов
    ========================================================================== */
@@ -577,19 +659,34 @@
   gap: var(--space-6) clamp(var(--space-5), 2vw, var(--space-6));
 }
 
+/* Значок стоит в одной строке с заголовком, а не отдельной строкой сверху:
+   так блок короче на высоту значка, а связь «знак — название» читается
+   лучше, чем когда они стоят друг под другом. */
 .feature {
   min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--space-3);
   padding-top: var(--space-4);
   border-top: 1px solid var(--line);
 }
 
 .feature__icon {
+  width: 24px;
+  height: 24px;
+  margin: 0;
   color: var(--copper);
-  margin-bottom: var(--space-4);
 }
 
 .feature__title {
-  margin-bottom: var(--space-2);
+  margin: 0;
+  font-size: var(--text-h4);
+}
+
+.feature__text {
+  grid-column: 2;
+  margin-top: var(--space-2);
 }
 
 .feature__text {
@@ -836,22 +933,77 @@
 }
 
 
+/* --- Лента стран на телефоне ------------------------------------------------
+
+   Сетка два на шесть занимала почти два экрана. Лента режет её до одной
+   строки и добавляет то, чего на телефоне не хватало: листание пальцем.
+   Карточка чуть уже экрана, поэтому следующая выглядывает — видно,
+   что здесь можно листать.
+
+   Прокрутка примагничивается к началу карточки (scroll-snap), а лента
+   выходит за поля контейнера, чтобы карточки уезжали под самый край.
+   ---------------------------------------------------------------------------- */
+
+@media (max-width: 47.99em) {
+
+  .countries__grid {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: 78%;
+    gap: var(--space-3);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--container-pad);
+    margin-inline: calc(var(--container-pad) * -1);
+    padding: 2px var(--container-pad) var(--space-2);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .countries__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .country {
+    scroll-snap-align: start;
+  }
+
+  /* Кнопки фильтра — одной строкой, тоже с прокруткой: на узком экране
+     они переносились на две строки и съедали высоту. */
+  .countries__filter {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    margin-inline: calc(var(--container-pad) * -1);
+    padding-inline: var(--container-pad);
+    scrollbar-width: none;
+  }
+
+  .countries__filter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    flex: none;
+  }
+}
+
+
 /* --- «А если моей страны нет» ---------------------------------------------
    Не серая приписка, а приглашение спросить: пунктирная рамка из фирменной
    линии и ссылка на контакты. */
 
+/* Обычная строка, а не плашка: рамка с заливкой выбивалась из общей
+   системы и тянула на себя внимание сильнее, чем заслуживает. */
 .countries__more {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2) var(--space-3);
   max-width: none;
-  margin-top: var(--space-6);
-  padding: var(--space-4) var(--space-5);
-  border: 1px dashed var(--copper);
-  border-radius: var(--radius-md);
-  background-color: var(--copper-tint);
-  color: var(--ink);
+  margin-top: var(--space-5);
+  color: var(--muted);
   font-size: var(--text-sm);
 }
 
@@ -859,16 +1011,6 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
-}
-
-/* Медная точка перед приглашением */
-.countries__more span::before {
-  content: "";
-  flex: none;
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background-color: var(--copper);
 }
 
 .countries__more a {
@@ -1169,35 +1311,6 @@
    Не серая приписка, а заметная метка: медная точка, медная рамка,
    светлый текст. Это главное обещание блока. */
 
-.cta__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
-  padding: var(--space-2) var(--space-5);
-  background-color: rgba(204, 123, 80, 0.14);
-  border: 1px solid var(--copper-light);
-  border-radius: var(--radius-full);
-  color: var(--on-dark);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
-}
-
-.cta__badge::before {
-  content: "";
-  flex: none;
-  width: 9px;
-  height: 9px;
-  border-radius: var(--radius-full);
-  background-color: var(--copper-on-dark);
-  animation: cta-dot 2.8s var(--ease-hover) infinite;
-}
-
-@keyframes cta-dot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(217, 138, 95, 0.55); }
-  70%      { box-shadow: 0 0 0 7px rgba(217, 138, 95, 0); }
-}
-
 .cta__title {
   /* Ширина в em, а не в ch. Единица ch — это ширина нуля в текущем шрифте,
      то есть при подмене шрифта она меняется, и заголовок переносится иначе.
@@ -1270,26 +1383,54 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-5);
   background-color: var(--copper-tint);
+  border: 1px solid var(--copper);
   border-radius: var(--radius-full);
-  color: var(--copper-dark);
+  color: var(--ink);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
 }
 
-.badge .icon {
+/* Медная точка вместо значка: на первом экране и в блоке призыва
+   обещание должно выглядеть одинаково. */
+.badge::before {
+  content: "";
   flex: none;
-  color: var(--copper);
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-full);
+  background-color: var(--copper);
 }
 
-.hero__actions .badge {
-  align-self: center;
+/* На тёмном фоне — тот же вид, только светлее */
+.hero .badge,
+.cta .badge {
+  background-color: rgba(204, 123, 80, 0.14);
+  border-color: var(--copper-light);
+  color: var(--on-dark);
 }
 
-.cta__badge {
-  margin-bottom: var(--space-4);
+.hero .badge::before,
+.cta .badge::before {
+  background-color: var(--copper-on-dark);
+}
+
+.cta .badge {
+  margin-bottom: var(--space-5);
+}
+
+/* Точка в блоке призыва тихо пульсирует */
+@media (prefers-reduced-motion: no-preference) {
+  .cta .badge::before {
+    animation: cta-dot 2.8s var(--ease-hover) infinite;
+  }
+
+  @keyframes cta-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(217, 138, 95, 0.55); }
+    70%      { box-shadow: 0 0 0 7px rgba(217, 138, 95, 0); }
+  }
 }
 
 
@@ -1306,16 +1447,9 @@
   content: "";
   display: block;
   height: 1px;
-  margin-bottom: var(--space-7);
+  margin-bottom: clamp(var(--space-5), 4vw, var(--space-7));
   background-image: var(--dash-line);
   opacity: var(--dash-opacity);
-}
-
-@media (min-width: 48em) {
-  .section + .section > .container::before,
-  .section + .section > .container--narrow::before {
-    margin-bottom: var(--space-8);
-  }
 }
 
 /* Пунктир оживает, когда секция входит в кадр: штрихи медленно «пробегают»
