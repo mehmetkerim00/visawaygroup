@@ -74,7 +74,7 @@
   padding-top: var(--space-7);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
   .page {
     padding-top: var(--space-7);
   }
@@ -192,7 +192,7 @@
   border: 1px dashed var(--copper);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
   .pricing {
     padding: var(--space-6);
   }
@@ -240,7 +240,7 @@
 /* На узком экране значение переносится на свою строку —
    там прижимать его вправо неудобно для чтения. */
 /* На узком экране колонки не помещаются — ставим значение под названием */
-@media (max-width: 519px) {
+@media (max-width: 32.4375em) {
   .pricing__row {
     grid-template-columns: 1fr;
     gap: var(--space-1);
@@ -265,7 +265,7 @@
   margin-top: var(--space-5);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64em) {
   .steps--stack {
     grid-template-columns: 1fr;
     gap: var(--space-6);
@@ -323,7 +323,7 @@
    ========================================================================== */
 
 
-@media (min-width: 600px) {
+@media (min-width: 37.5em) {
 }
 
 
@@ -336,7 +336,7 @@ a
 
 /* Строка «адрес / часы / языки» */
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
 }
 
 
@@ -353,7 +353,7 @@ a
   gap: var(--space-5);
 }
 
-@media (min-width: 600px) {
+@media (min-width: 37.5em) {
   .form__grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -391,7 +391,9 @@ a
   border: 1px solid var(--muted);
   border-radius: var(--radius-md);
   color: var(--ink);
-  font-size: var(--text-base);
+  /* Не меньше 16px: на меньшем кегле Safari при фокусе увеличивает
+     страницу целиком, и человек оказывается на приближённой вёрстке. */
+  font-size: var(--text-input);
   transition: border-color var(--transition-fast);
 }
 
@@ -458,7 +460,7 @@ a
   margin-top: var(--space-6);
 }
 
-@media (max-width: 519px) {
+@media (max-width: 32.4375em) {
   .form__actions .btn {
     flex: 1 1 100%;
   }
@@ -587,7 +589,7 @@ a
   margin-top: var(--space-5);
 }
 
-@media (max-width: 519px) {
+@media (max-width: 32.4375em) {
   .pricing__cta {
     display: flex;
     width: 100%;
@@ -605,17 +607,11 @@ a
 
 .credits {
   display: grid;
-  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+  gap: clamp(var(--space-4), 2vw, var(--space-5));
   margin: var(--space-7) 0 0;
   padding: 0;
   list-style: none;
-}
-
-@media (min-width: 600px) {
-  .credits {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-5);
-  }
 }
 
 .credit {
@@ -655,7 +651,9 @@ a
 .credit__licence {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-3);
+  /* Не меньше 8 между строками: когда лицензия и ссылка на источник
+     переносятся на разные строки, они не должны слипаться. */
+  gap: var(--space-2) var(--space-3);
   margin: var(--space-2) 0 0;
   font-size: var(--text-sm);
 }
@@ -696,7 +694,7 @@ a
   margin-top: var(--space-7);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 56.25em) {
   .contacts {
     grid-template-columns: 0.9fr 1.1fr;
     gap: var(--space-6);
@@ -710,6 +708,14 @@ a
   min-width: 0;
   display: flex;
   flex-direction: column;
+}
+
+/* Панель — сама себе мера. Телефон на ней набран от ширины панели,
+   а не от ширины окна: иначе на 900–1050 он вылезал за край, потому что
+   колонка там уже, чем можно было бы судить по экрану. */
+.contacts__panel {
+  container-type: inline-size;
+  container-name: panel;
 }
 
 
@@ -726,7 +732,7 @@ a
   color: var(--on-dark);
 }
 
-@media (min-width: 600px) {
+@media (min-width: 37.5em) {
   .contact-panel {
     padding: var(--space-7) var(--space-6);
   }
@@ -777,11 +783,11 @@ a
 }
 
 .phones__link {
-  display: inline-block;
   color: var(--on-dark);
   font-family: var(--font-display);
-  /* Крупнее любого заголовка страницы, кроме h1: это главный канал связи */
-  font-size: clamp(1.5rem, 2.4vw + 0.9rem, 2.25rem);
+  /* Крупнее любого заголовка страницы, кроме h1: это главный канал связи.
+     Запасной размер — для браузеров, которые не умеют контейнерные запросы. */
+  font-size: clamp(1.25rem, 5vw, 2rem);
   font-weight: var(--weight-semibold);
   letter-spacing: -0.01em;
   line-height: 1.15;
@@ -790,7 +796,13 @@ a
   transition: color var(--transition-fast);
 }
 
-@media (hover: hover) {
+@container panel (min-width: 0px) {
+  .phones__link {
+    font-size: clamp(1.25rem, 8cqi, 2.25rem);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
   .phones__link:hover {
     color: var(--copper-on-dark);
   }
@@ -848,7 +860,7 @@ a
   overflow-wrap: anywhere;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   a.contact-line:hover .contact-line__value {
     color: var(--copper-on-dark);
   }
@@ -881,7 +893,7 @@ a
   border-radius: var(--radius-lg);
 }
 
-@media (min-width: 600px) {
+@media (min-width: 37.5em) {
   .contacts__form {
     padding: var(--space-7) var(--space-6);
   }
@@ -925,7 +937,7 @@ a
   top: 19px;
   margin: 0;
   color: var(--muted);
-  font-size: var(--text-base);
+  font-size: var(--text-input);
   font-weight: var(--weight-regular);
   line-height: 1;
   /* Клик по подписи должен попадать в поле, а не в саму подпись */
@@ -1059,11 +1071,11 @@ a
   border-radius: var(--radius-lg);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
   .office {
     grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
     gap: var(--space-7);
-    padding: var(--space-7) var(--space-7);
+    padding: var(--space-7);
   }
 }
 
@@ -1140,7 +1152,7 @@ a
   color: var(--on-dark);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
   .page-hero {
     margin-bottom: var(--space-3);
     padding-block: var(--space-7) var(--space-8);
@@ -1151,7 +1163,7 @@ a
   position: relative;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 56.25em) {
   .page-hero__inner {
     /* Мотив лежит правее колонки текста, поэтому место под него
        забирать не нужно: колонка и так узкая. */
@@ -1202,7 +1214,7 @@ a
   display: none;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 56.25em) {
   .page-hero__art {
     display: block;
     position: absolute;
@@ -1232,6 +1244,10 @@ a
 }
 
 .breadcrumbs ol {
+  flex-wrap: wrap;
+}
+
+.breadcrumbs ol {
   gap: var(--space-2);
 }
 
@@ -1240,17 +1256,11 @@ a
 
 .doclist {
   display: grid;
-  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+  gap: clamp(var(--space-3), 1.6vw, var(--space-4));
   margin: var(--space-5) 0 0;
   padding: 0;
   list-style: none;
-}
-
-@media (min-width: 600px) {
-  .doclist {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-4);
-  }
 }
 
 .doclist li {
@@ -1294,7 +1304,7 @@ a
   border-radius: var(--radius-lg);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
   .pricing {
     padding: var(--space-6) var(--space-7);
   }
@@ -1348,9 +1358,10 @@ a
   color: var(--on-dark);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
   .notfound {
-    min-height: min(72svh, 640px);
+    min-height: min(72vh, 640px);
+    min-height: min(72dvh, 640px);
     padding-block: var(--space-9);
   }
 }
@@ -1411,7 +1422,7 @@ a
   margin-top: var(--space-6);
 }
 
-@media (max-width: 519px) {
+@media (max-width: 32.4375em) {
   .notfound__actions {
     flex-direction: column;
     align-items: stretch;

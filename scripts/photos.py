@@ -59,6 +59,13 @@ SOURCES = os.path.join("data", "photos.json")
 
 WIDTH, HEIGHT = 480, 320
 LIMIT = 22 * 1024
+
+# Второй файл для экранов высокой чёткости. Карточка на мониторе бывает
+# до 300 пунктов шириной, при удвоенной плотности ей нужно 600 точек —
+# 480 уже мылит. Но на телефон этот файл не уходит: там карточка вдвое уже,
+# и лишние килобайты на медленном интернете ни к чему.
+WIDTH_2X, HEIGHT_2X = 960, 640
+LIMIT_2X = 80 * 1024
 SOURCE_EXT = (".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff")
 
 # --- Общая обработка. Одни и те же числа для всех двенадцати снимков. -------
@@ -98,22 +105,24 @@ def grade(image):
     return Image.merge("RGB", (red, green, blue))
 
 
-def crop_and_encode(image):
+def crop_and_encode(image, width=WIDTH, height=HEIGHT, limit=LIMIT):
     """Обрезка по центру, общая обработка, потом подбор сжатия."""
     from PIL import Image
 
     image = image.convert("RGB")
-    target = WIDTH / HEIGHT
-    width, height = image.size
-    if width / height > target:
-        new_width = int(height * target)
-        left = (width - new_width) // 2
-        image = image.crop((left, 0, left + new_width, height))
+    target = width / height
+    # Размеры исходника держим под своими именами: width и height —
+    # это то, во что режем, затирать их нельзя.
+    src_w, src_h = image.size
+    if src_w / src_h > target:
+        new_width = int(src_h * target)
+        left = (src_w - new_width) // 2
+        image = image.crop((left, 0, left + new_width, src_h))
     else:
-        new_height = int(width / target)
-        top = (height - new_height) // 2
-        image = image.crop((0, top, width, top + new_height))
-    image = grade(image.resize((WIDTH, HEIGHT), Image.LANCZOS))
+        new_height = int(src_w / target)
+        top = (src_h - new_height) // 2
+        image = image.crop((0, top, src_w, top + new_height))
+    image = grade(image.resize((width, height), Image.LANCZOS))
 
     # Качество подбираем сверху вниз: берём первое, которое влезает в лимит,
     # чтобы не пережимать снимок сильнее необходимого.
@@ -122,7 +131,7 @@ def crop_and_encode(image):
         buffer = io.BytesIO()
         image.save(buffer, "WEBP", quality=quality, method=6)
         data = buffer.getvalue()
-        if len(data) <= LIMIT:
+        if len(data) <= limit:
             return data, quality
     return data, quality
 
@@ -194,11 +203,18 @@ def cities():
             for c in data["countries"] if c.get("photo")]
 
 
-def save(slug, data, quality, note):
+def save(slug, data, quality, note, image=None):
     os.makedirs(PHOTOS, exist_ok=True)
     open(os.path.join(PHOTOS, slug + ".webp"), "wb").write(data)
     mark = "" if len(data) <= LIMIT else "  ПРЕВЫШЕН ЛИМИТ"
-    print(f"  {slug:14} {len(data)/1024:5.1f} КБ  качество {quality}  {note}{mark}")
+    line = f"  {slug:14} {len(data)/1024:5.1f} КБ  качество {quality}"
+
+    if image is not None:
+        big, big_q = crop_and_encode(image, WIDTH_2X, HEIGHT_2X, LIMIT_2X)
+        open(os.path.join(PHOTOS, slug + "@2x.webp"), "wb").write(big)
+        line += f"  +  ×2: {len(big)/1024:5.1f} КБ  качество {big_q}"
+
+    print(line + f"  {note}{mark}")
 
 
 def from_commons():
@@ -228,7 +244,7 @@ def from_commons():
             continue
         image = Image.open(io.BytesIO(fetch(url)))
         payload, quality = crop_and_encode(image)
-        save(p["photo"], payload, quality, f"© {p['author']}")
+        save(p["photo"], payload, quality, f"© {p['author']}", image)
         done += 1
     return done
 
@@ -254,7 +270,7 @@ def from_unsplash():
         photo = results[0]
         image = Image.open(io.BytesIO(fetch(photo["urls"]["raw"] + "&w=1400&fm=jpg&q=85")))
         payload, quality = crop_and_encode(image)
-        save(c["photo"], payload, quality, f"© {photo['user']['name']}")
+        save(c["photo"], payload, quality, f"© {photo['user']['name']}", image)
         done += 1
     print("\n⚠  Данные об авторах впишите в data/photos.json вручную.")
     return done
@@ -279,7 +295,7 @@ def from_folder(folder):
             print(f"  {c['photo']:14} файла нет в папке — пропущен")
             continue
         payload, quality = crop_and_encode(Image.open(source))
-        save(c["photo"], payload, quality, f"из {os.path.basename(source)}")
+        save(c["photo"], payload, quality, f"из {os.path.basename(source)}", image)
         done += 1
     return done
 

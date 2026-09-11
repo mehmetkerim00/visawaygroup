@@ -381,9 +381,14 @@ function checkPhotoCredits() {
   const creditsFile = path.join(ROOT, "assets", "photos", "CREDITS.md");
   const dir = path.join(ROOT, "assets", "photos");
 
+  /* Файлы вида istanbul@2x.webp — это тот же снимок для экранов высокой
+     чёткости, а не новый. Источник у них общий, спрашивать его отдельно
+     не за чем. */
+  const variant = f => f.replace(/@\dx(?=\.webp$)/, "");
   const onDisk = fs.existsSync(dir)
     ? fs.readdirSync(dir).filter(f => f.endsWith(".webp"))
     : [];
+  const bases = [...new Set(onDisk.map(variant))];
   if (!onDisk.length) {
     ok("Фотографий городов пока нет — проверять источники не у чего");
     return;
@@ -412,7 +417,7 @@ function checkPhotoCredits() {
   let bad = 0;
 
   for (const p of data.photos || []) {
-    if (!onDisk.includes(p.photo + ".webp")) continue;   /* снимка нет — и спрашивать не с чего */
+    if (!bases.includes(p.photo + ".webp")) continue;   /* снимка нет — и спрашивать не с чего */
     const where = `data/photos.json → ${p.photo}`;
     const free = /public domain|cc0/i.test(p.licence || "");
 
@@ -436,7 +441,7 @@ function checkPhotoCredits() {
   }
 
   /* Файл лежит, а в списке его нет — значит, источник вообще неизвестен */
-  for (const file of onDisk) {
+  for (const file of bases) {
     const slug = file.replace(/\.webp$/, "");
     if (!listed.has(slug)) {
       bad++;
@@ -445,7 +450,11 @@ function checkPhotoCredits() {
     }
   }
 
-  if (!bad) ok(`У всех фотографий указаны автор, лицензия и ссылка (${onDisk.length} шт.)`);
+  if (!bad) {
+    const extra = onDisk.length - bases.length;
+    ok(`У всех фотографий указаны автор, лицензия и ссылка (${bases.length} шт.` +
+       (extra ? `, плюс ${extra} для экранов высокой чёткости` : "") + ")");
+  }
 }
 
 

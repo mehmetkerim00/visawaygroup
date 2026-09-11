@@ -547,11 +547,25 @@ function countriesBlock(lang, prefix, indent, relPosix) {
     out.push(`${i}    <li class="country" data-region="${c.region}">`);
     out.push(`${i}      <div class="country__photo">`);
     if (hasPhoto) {
+      const big = path.join(ROOT, "assets", "photos", c.photo + "@2x.webp");
+      /* Второй файл — только для широких экранов. На телефоне карточка вдвое
+         уже, и 480 точек ей хватает даже при удвоенной плотности; тащить
+         туда файл вчетверо тяжелее на медленном интернете нельзя.
+         Поэтому крупный вариант отдаётся через source с условием по ширине,
+         а телефон всегда получает лёгкий img. */
+      out.push(`${i}        <picture>`);
+      if (fs.existsSync(big)) {
+        out.push(`${i}          <source media="(min-width: 64em)"` +
+                 ` srcset="${prefix}assets/photos/${c.photo}.webp 480w,` +
+                 ` ${prefix}assets/photos/${c.photo}@2x.webp 960w"` +
+                 ` sizes="300px">`);
+      }
       /* width и height обязательны: браузер резервирует место под картинку
          заранее, и страница не дёргается, когда фотография догрузится. */
-      out.push(`${i}        <img src="${prefix}assets/photos/${c.photo}.webp"` +
+      out.push(`${i}          <img src="${prefix}assets/photos/${c.photo}.webp"` +
                ` alt="${escapeAttr(alt)}" width="480" height="320"` +
                ` loading="lazy" decoding="async">`);
+      out.push(`${i}        </picture>`);
     }
     out.push(`${i}      </div>`);
     out.push(`${i}      <div class="country__label">`);

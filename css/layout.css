@@ -9,7 +9,10 @@
 body {
   display: flex;
   flex-direction: column;
+  /* dvh вместо vh: на телефоне адресная строка уезжает, и vh показывает
+     высоту, которой на экране нет. Первая строка — для старых браузеров. */
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .site-main {
@@ -24,6 +27,8 @@ body {
 .site-header {
   position: sticky;
   top: 0;
+  /* Вырез сверху: на телефоне в повороте шапка не должна лезть под него */
+  padding-top: var(--safe-top);
   z-index: var(--z-header);
   background-color: var(--surface);
   border-bottom: 1px solid var(--line);
@@ -129,7 +134,7 @@ body {
   width: auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
   .site-header__logo-img {
     height: 44px;
   }
@@ -220,7 +225,7 @@ body {
 
 .site-nav {
   position: fixed;
-  top: var(--header-h);
+  top: calc(var(--header-h) + var(--safe-top));
   right: 0;
   bottom: 0;
   z-index: var(--z-header);
@@ -228,11 +233,20 @@ body {
   flex-direction: column;
   gap: var(--space-5);
   width: min(86vw, 340px);
-  padding: var(--space-5) var(--space-5) var(--space-7);
+  /* Снизу — либо обычный отступ, либо полоса жестов у iPhone,
+     смотря что больше. Справа — скруглённый угол экрана в повороте. */
+  padding: var(--space-5)
+           max(var(--space-5), var(--safe-right))
+           max(var(--space-7), var(--safe-bottom))
+           var(--space-5);
   background-color: var(--surface);
   border-left: 1px solid var(--line);
+  /* Экран высотой 500 пунктов и меньше: список пунктов прокручивается
+     внутри панели, а не обрезается. Поэтому высота панели ограничена
+     окном, а содержимое скроллится. */
   overflow-y: auto;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   transform: translateX(100%);
   visibility: hidden;
   transition: transform var(--transition-base),
@@ -297,7 +311,7 @@ body {
 .lang-switch {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-2);
   padding: 3px;
   border: 1px solid var(--line);
   border-radius: var(--radius-full);
@@ -309,8 +323,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
-  min-height: 32px;
+  min-width: var(--tap);
+  min-height: var(--tap);
   padding-inline: var(--space-2);
   border-radius: var(--radius-full);
   color: var(--muted);
@@ -375,7 +389,9 @@ body {
   .site-nav__list {
     flex-direction: row;
     align-items: center;
-    gap: var(--space-1);
+    /* Не меньше 8: между двумя соседними целями нажатия должен
+       помещаться промах пальца. */
+    gap: var(--space-2);
   }
 
   .site-nav__item + .site-nav__item {
@@ -455,6 +471,7 @@ body {
 
 .site-footer {
   flex-shrink: 0;
+  padding-bottom: var(--safe-bottom);
   background-color: var(--dark);
   color: var(--on-dark-muted);
   font-size: var(--text-sm);
@@ -467,17 +484,15 @@ body {
   padding-block: var(--space-7);
 }
 
-@media (min-width: 600px) {
-  .site-footer__top {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-6) var(--space-5);
-  }
+/* Колонки подвала тоже считаются, а не перечисляются: на телефоне одна,
+   на планшете две, на мониторе четыре — и ни одного порога. */
+.site-footer__top {
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  gap: var(--space-6) clamp(var(--space-5), 2vw, var(--space-6));
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64em) {
   .site-footer__top {
-    grid-template-columns: 1.6fr 1fr 1fr 1.3fr;
-    gap: var(--space-6);
     padding-block: var(--space-8);
   }
 }
@@ -597,7 +612,7 @@ body {
 }
 
 .site-footer__phone + .site-footer__phone {
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
 }
 
 .site-footer a.site-footer__phone {
