@@ -106,8 +106,36 @@ function todos(entry) {
   return found.filter(f => (seen.has(f.text) ? false : seen.add(f.text)));
 }
 
-/* Поля, которые специалист обязан заполнить перед тем, как ставить verified */
-const MUST_FILL = ["where", "prepDays", "reviewDays", "fee"];
+/* Поля, которые специалист обязан заполнить перед тем, как ставить verified.
+
+   Сбора здесь нет нарочно. Сборы меняются чаще всего и зависят от курса:
+   устаревшая сумма на сайте хуже, чем её отсутствие. Поэтому пустой сбор —
+   это нормально, на странице встанет честная строка. А вот если сумму
+   всё-таки вписали, к ней обязательна дата: см. feeNeedsDate. */
+const MUST_FILL = ["where", "prepDays", "reviewDays"];
+
+/* Сумма вписана, а когда её проверяли — не сказано */
+function feeNeedsDate(entry) {
+  const hasFee = LANGS.some(l => String(pick(entry.fee, l)).trim());
+  return hasFee && !String(entry.feeCheckedOn || "").trim();
+}
+
+/* Сколько месяцев прошло с даты вида 2026-09-12. null, если даты нет. */
+function monthsSince(date) {
+  const d = String(date || "").trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return null;
+  const then = new Date(d + "T00:00:00Z");
+  if (isNaN(then)) return null;
+  return (Date.now() - then.getTime()) / (1000 * 60 * 60 * 24 * 30.44);
+}
+
+/* Данные старше полугода считаем требующими перепроверки */
+const STALE_MONTHS = 6;
+
+function isStale(date) {
+  const m = monthsSince(date);
+  return m !== null && m > STALE_MONTHS;
+}
 
 function emptyFields(entry) {
   return MUST_FILL.filter(k => LANGS.every(l => !String(pick(entry[k], l)).trim()));
@@ -158,6 +186,17 @@ function draftBar(lang) {
   };
   return `      <div class="draftbar" role="alert"><style>${css}</style>` +
          `${esc(text[lang] || text.ru)}<small>${esc(sub[lang] || sub.ru)}</small></div>`;
+}
+
+/* Дату показываем словами: «в январе 2026», а не «2026-09-12». Цифровая
+   дата на странице читается как код, а не как срок годности сведений. */
+function formatDate(date, lang, data, template) {
+  const d = String(date || "").trim();
+  const m = d.match(/^(\d{4})-(\d{2})-\d{2}$/);
+  if (!m) return "";
+  const months = (data.labels.months && data.labels.months[lang]) || [];
+  const name = months[Number(m[2]) - 1] || m[2];
+  return String(template).replace("{month}", name).replace("{year}", m[1]);
 }
 
 function factRow(label, value, isDraft, emptyText) {
@@ -254,7 +293,29 @@ function mainContent(entry, lang, data, relPosix) {
   out.push(factRow(L("where"), pick(entry.where, lang), isDraft, L("empty")));
   out.push(factRow(L("prepDays"), pick(entry.prepDays, lang), isDraft, L("empty")));
   out.push(factRow(L("reviewDays"), pick(entry.reviewDays, lang), isDraft, L("empty")));
-  out.push(factRow(L("fee"), pick(entry.fee, lang), isDraft, L("empty")));
+  /* Сбор — особый случай. Пустой это не недоделка, а осознанный выбор:
+     ставим честную строку. Вписанная сумма живёт вместе с датой, когда
+     её проверяли, иначе через полгода она врёт с уверенным видом. */
+  const feeText = String(pick(entry.fee, lang)).trim();
+  if (feeText) {
+    const asOf = formatDate(entry.feeCheckedOn, lang, data, L("feeAsOf"));
+    const tail = asOf
+      ? ` <span class="fact-note">&middot; ${esc(asOf)}</span>`
+      : (isDraft ? ` <span style="color:#B3261E;font-weight:700">· БЕЗ ДАТЫ ПРОВЕРКИ</span>` : "");
+    out.push([
+      `            <li class="pricing__row">`,
+      `              <span class="pricing__label">${esc(L("fee"))}</span>`,
+      `              <span class="pricing__value">${esc(feeText)}${tail}</span>`,
+      `            </li>`
+    ].join("\n"));
+  } else {
+    out.push([
+      `            <li class="pricing__row">`,
+      `              <span class="pricing__label">${esc(L("fee"))}</span>`,
+      `              <span class="pricing__value">${esc(L("feeDefault"))}</span>`,
+      `            </li>`
+    ].join("\n"));
+  }
   out.push(`            </ul>
             <a class="btn btn--primary pricing__cta" href="${contacts}">${esc(L("askUs"))}</a>
           </div>
@@ -271,11 +332,23 @@ function mainContent(entry, lang, data, relPosix) {
         </section>`);
   }
 
+  /* Дата актуальности и оговорка — последнее, что человек читает перед
+     призывом. Оговорка набрана так же, как предупреждение о документах
+     на странице контактов: это не мелкий шрифт внизу, а часть сведений. */
   const checkedOn = String(entry.checkedOn || "").trim();
   const checkedBy = String(entry.checkedBy || "").trim() || L("notChecked");
+  const dateLine = formatDate(checkedOn, lang, data, L("verifiedOn"))
+    || (isDraft ? "НЕ ЗАПОЛНЕНО" : L("notVerifiedYet"));
   out.push(`
         <section class="page-section" data-reveal>
-          <p class="note-line">${esc(L("checked"))}: ${esc(checkedBy)}${checkedOn ? " &middot; " + esc(checkedOn) : ""}</p>
+          <div class="warn">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+            <div>
+              <p><strong>${esc(dateLine)}</strong></p>
+              <p>${esc(L("disclaimer"))}</p>
+            </div>
+          </div>
+          <p class="note-line">${esc(L("checked"))}: ${esc(checkedBy)}</p>
           <a class="backlink" href="${visaPage}">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-left"/></svg>
             ${esc(L("backToVisa"))}
@@ -458,5 +531,6 @@ function build({ drafts = false } = {}) {
 
 module.exports = {
   load, pick, pagePath, allPaths, entriesFor, todos, emptyFields,
-  visaTitle, pickerBlock, build, TODO_MARK, MUST_FILL
+  visaTitle, pickerBlock, build, feeNeedsDate, monthsSince, isStale,
+  formatDate, TODO_MARK, MUST_FILL, STALE_MONTHS
 };

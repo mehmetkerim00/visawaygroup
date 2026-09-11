@@ -291,6 +291,21 @@
 }
 
 /* Ссылка «назад к списку услуг» */
+/* Дата, когда проверяли сумму сбора. Тише самой суммы: это пометка
+   о свежести сведений, а не часть цены. */
+.fact-note {
+  color: var(--muted);
+  font-weight: var(--weight-regular, 400);
+  white-space: nowrap;
+}
+
+/* Строка «Проверено: …» под оговоркой */
+.note-line {
+  margin: var(--space-4) 0 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
 .backlink {
   display: inline-flex;
   align-items: center;

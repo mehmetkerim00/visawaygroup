@@ -63,6 +63,39 @@ function main() {
     console.log("");
   }
 
+  /* Что пора перепроверить. Сведения о визах стареют молча: страница
+     выглядит так же, а требования уже другие. Полгода — граница, после
+     которой запись просят посмотреть заново. */
+  const stale = [];
+  const staleFee = [];
+  for (const e of entries) {
+    if (e.status !== "verified") continue;
+    const c = data.byCode.get(e.country);
+    if (requirements.isStale(e.checkedOn)) {
+      const m = Math.round(requirements.monthsSince(e.checkedOn));
+      stale.push(`  ${c.country.ru} · ${e.visa} — проверено ${e.checkedOn}, это ${m} мес. назад`);
+    }
+    if (requirements.isStale(e.feeCheckedOn)) {
+      const m = Math.round(requirements.monthsSince(e.feeCheckedOn));
+      staleFee.push(`  ${c.country.ru} · ${e.visa} — сумма сбора проверена ${e.feeCheckedOn}, это ${m} мес. назад`);
+    }
+  }
+
+  if (stale.length || staleFee.length) {
+    console.log("ПОРА ПЕРЕПРОВЕРИТЬ");
+    console.log("─".repeat(78));
+    if (stale.length) {
+      console.log(`\n  Сведения старше ${requirements.STALE_MONTHS} месяцев:`);
+      stale.forEach(x => console.log(x));
+    }
+    if (staleFee.length) {
+      console.log(`\n  Суммы сбора старше ${requirements.STALE_MONTHS} месяцев:`);
+      staleFee.forEach(x => console.log(x));
+      console.log("  Сборы меняются чаще всего и зависят от курса.");
+    }
+    console.log("");
+  }
+
   /* Вопросы специалисту и пустые поля */
   console.log("ЧТО ЖДЁТ СПЕЦИАЛИСТА");
   console.log("─".repeat(78));
@@ -71,11 +104,12 @@ function main() {
     const country = data.byCode.get(e.country);
     const todos = requirements.todos(e);
     const empty = requirements.emptyFields(e);
-    if (!todos.length && !empty.length && e.status === "verified") continue;
+    if (!todos.length && !empty.length && !requirements.feeNeedsDate(e) && e.status === "verified") continue;
     any = true;
     console.log("");
     console.log(`  ${country.country.ru} · ${e.visa}   [${e.status === "verified" ? "проверено" : "черновик"}]`);
     if (empty.length) console.log(`    пустые поля: ${empty.join(", ")}`);
+    if (requirements.feeNeedsDate(e)) console.log("    вписан сбор, но нет даты его проверки (feeCheckedOn)");
     for (const t of todos) {
       console.log(`    ${t.text.replace(/\s+/g, " ").slice(0, 120)}`);
     }

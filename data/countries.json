@@ -6,6 +6,10 @@
     "",
     "flag   — имя файла в assets/flags/ без расширения (код страны);",
     "slug   — кусок адреса страницы требований: wizalar/okuw-wizasy/turkiye.html.",
+    "in     — название страны в нужном падеже: «в Турции», Türkiýede. Нужно,",
+    "         чтобы тексты требований были грамотными на всех трёх языках;",
+    "genRu  — родительный падеж по-русски: «консульство Турции». Только для",
+    "         вопросов специалисту внутри data/requirements.json;",
     "photo  — имя файла в assets/photos/ без расширения. Если файла нет,",
     "         карточка соберётся без фотографии и вёрстка не сломается;",
     "query  — что искать на Unsplash: этим пользуется scripts/photos.py;",
@@ -50,6 +54,12 @@
     {
       "flag": "tr",
       "slug": "turkiye",
+      "in": {
+        "tk": "Türkiýede",
+        "ru": "в Турции",
+        "en": "in Türkiye"
+      },
+      "genRu": "Турции",
       "photo": "istanbul",
       "query": "Istanbul Hagia Sophia Bosphorus",
       "region": "middle-east",
@@ -67,6 +77,12 @@
     {
       "flag": "ru",
       "slug": "russiya",
+      "in": {
+        "tk": "Russiýada",
+        "ru": "в России",
+        "en": "in Russia"
+      },
+      "genRu": "России",
       "photo": "moscow",
       "query": "Moscow Red Square",
       "region": "cis",
@@ -84,6 +100,12 @@
     {
       "flag": "ae",
       "slug": "bae",
+      "in": {
+        "tk": "BAE-de",
+        "ru": "в ОАЭ",
+        "en": "in the UAE"
+      },
+      "genRu": "ОАЭ",
       "photo": "dubai",
       "query": "Dubai skyline Burj Khalifa",
       "region": "middle-east",
@@ -101,6 +123,12 @@
     {
       "flag": "cn",
       "slug": "hytay",
+      "in": {
+        "tk": "Hytaýda",
+        "ru": "в Китае",
+        "en": "in China"
+      },
+      "genRu": "Китая",
       "photo": "beijing",
       "query": "Beijing Forbidden City",
       "region": "asia",
@@ -118,6 +146,12 @@
     {
       "flag": "de",
       "slug": "germaniya",
+      "in": {
+        "tk": "Germaniýada",
+        "ru": "в Германии",
+        "en": "in Germany"
+      },
+      "genRu": "Германии",
       "photo": "berlin",
       "query": "Berlin Brandenburg Gate",
       "region": "europe",
@@ -135,6 +169,12 @@
     {
       "flag": "it",
       "slug": "italiya",
+      "in": {
+        "tk": "Italiýada",
+        "ru": "в Италии",
+        "en": "in Italy"
+      },
+      "genRu": "Италии",
       "photo": "rome",
       "query": "Rome Colosseum",
       "region": "europe",
@@ -152,6 +192,12 @@
     {
       "flag": "pl",
       "slug": "polsa",
+      "in": {
+        "tk": "Polşada",
+        "ru": "в Польше",
+        "en": "in Poland"
+      },
+      "genRu": "Польши",
       "photo": "warsaw",
       "query": "Warsaw old town",
       "region": "europe",
@@ -169,6 +215,12 @@
     {
       "flag": "cz",
       "slug": "cehiya",
+      "in": {
+        "tk": "Çehiýada",
+        "ru": "в Чехии",
+        "en": "in Czechia"
+      },
+      "genRu": "Чехии",
       "photo": "prague",
       "query": "Prague Charles Bridge",
       "region": "europe",
@@ -186,6 +238,12 @@
     {
       "flag": "my",
       "slug": "malayziya",
+      "in": {
+        "tk": "Malaýziýada",
+        "ru": "в Малайзии",
+        "en": "in Malaysia"
+      },
+      "genRu": "Малайзии",
       "photo": "kuala-lumpur",
       "query": "Kuala Lumpur Petronas Towers",
       "region": "asia",
@@ -203,6 +261,12 @@
     {
       "flag": "kr",
       "slug": "koreya",
+      "in": {
+        "tk": "Koreýada",
+        "ru": "в Корее",
+        "en": "in South Korea"
+      },
+      "genRu": "Кореи",
       "photo": "seoul",
       "query": "Seoul Gyeongbokgung palace",
       "region": "asia",
@@ -220,6 +284,12 @@
     {
       "flag": "kz",
       "slug": "gazagystan",
+      "in": {
+        "tk": "Gazagystanda",
+        "ru": "в Казахстане",
+        "en": "in Kazakhstan"
+      },
+      "genRu": "Казахстана",
       "photo": "almaty",
       "query": "Almaty city mountains",
       "region": "cis",
@@ -237,6 +307,12 @@
     {
       "flag": "by",
       "slug": "belarus",
+      "in": {
+        "tk": "Belarusda",
+        "ru": "в Беларуси",
+        "en": "in Belarus"
+      },
+      "genRu": "Беларуси",
       "photo": "minsk",
       "query": "Minsk city",
       "region": "cis",

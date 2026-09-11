@@ -215,6 +215,12 @@ function checkDrafts() {
     if (!String(e.checkedOn || "").trim()) {
       block("Черновики", "в проверенной записи нет даты проверки", "data/requirements.json: " + id);
     }
+    /* Сумма сбора без даты — хуже, чем отсутствие суммы: через полгода
+       она будет врать, и никто не поймёт, когда её последний раз видели. */
+    if (requirements.feeNeedsDate(e)) {
+      block("Черновики", "вписан консульский сбор, но не сказано, когда проверяли сумму (feeCheckedOn)",
+            "data/requirements.json: " + id);
+    }
   }
 
   if (!leaked) {

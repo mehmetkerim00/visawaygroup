@@ -174,9 +174,29 @@ function faqNode(page) {
   };
 }
 
+/* Когда сведения на странице последний раз проверяли. Есть только у
+   страниц требований по странам — для них дата обязательна. */
+let reqDates = null;
+function requirementDate(rel) {
+  if (reqDates === null) {
+    reqDates = new Map();
+    try {
+      const requirements = require("./requirements");
+      const data = requirements.load();
+      for (const e of data.req.entries || []) {
+        if (!String(e.checkedOn || "").trim()) continue;
+        for (const lang of L.LANGS) reqDates.set(requirements.pagePath(e, lang, data), e.checkedOn);
+      }
+    } catch (err) { /* нет данных — значит, и дат нет */ }
+  }
+  return reqDates.get(rel) || null;
+}
+
 function serviceNode(site, page, values) {
+  const modified = requirementDate(page.rel);
   return {
     "@type": "Service",
+    ...(modified ? { dateModified: modified } : {}),
     name: page.h1,
     description: page.description,
     serviceType: page.h1,
