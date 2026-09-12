@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>Панель — VisaWay Group</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+
+<!-- ВХОД -->
+<section class="screen" id="screen-login" hidden>
+  <form class="card login" id="form-login" autocomplete="on">
+    <h1>Панель требований</h1>
+    <p class="muted">Вход только для сотрудников VisaWay&nbsp;Group.</p>
+
+    <label class="field">
+      <span>Почта</span>
+      <input type="email" name="email" id="in-email" autocomplete="username"
+             required autocapitalize="none" spellcheck="false">
+    </label>
+
+    <label class="field">
+      <span>Пароль</span>
+      <input type="password" name="password" id="in-password"
+             autocomplete="current-password" required>
+    </label>
+
+    <label class="field">
+      <span>Код из приложения</span>
+      <input type="text" name="code" id="in-code" inputmode="numeric"
+             autocomplete="one-time-code" pattern="[0-9]*" maxlength="6"
+             required placeholder="6 цифр">
+      <small class="muted">Шестизначный код меняется каждые 30 секунд.</small>
+    </label>
+
+    <p class="alert" id="login-error" hidden></p>
+    <button class="btn btn--main" type="submit" id="btn-login">Войти</button>
+  </form>
+</section>
+
+<!-- СПИСОК -->
+<section class="screen" id="screen-list" hidden>
+  <header class="topbar">
+    <div class="topbar__title">
+      <strong>Требования по странам</strong>
+      <span class="muted" id="who"></span>
+    </div>
+    <button class="btn btn--quiet" type="button" id="btn-logout">Выйти</button>
+  </header>
+
+  <div class="wrap">
+    <div class="counts" id="counts"></div>
+
+    <div class="tools">
+      <div class="chips" id="filters" role="group" aria-label="Отбор записей">
+        <button class="chip is-on" type="button" data-filter="all">Все</button>
+        <button class="chip" type="button" data-filter="draft">Черновики</button>
+        <button class="chip" type="button" data-filter="verified">Проверено</button>
+        <button class="chip" type="button" data-filter="stale">Пора перепроверить</button>
+      </div>
+      <label class="search">
+        <span class="visually-hidden">Поиск по стране или типу визы</span>
+        <input type="search" id="search" placeholder="Страна или тип визы" autocomplete="off">
+      </label>
+    </div>
+
+    <p class="alert" id="list-error" hidden></p>
+    <div id="list" class="list"></div>
+    <p class="muted" id="list-empty" hidden>Ничего не нашлось. Попробуйте другое слово.</p>
+  </div>
+</section>
+
+<!-- РЕДАКТОР -->
+<section class="screen" id="screen-edit" hidden>
+  <header class="topbar">
+    <button class="btn btn--quiet" type="button" id="btn-back">← К списку</button>
+    <div class="topbar__title">
+      <strong id="edit-title"></strong>
+      <span class="muted" id="edit-sub"></span>
+    </div>
+    <button class="btn btn--quiet" type="button" id="btn-logout-2">Выйти</button>
+  </header>
+
+  <div class="wrap edit">
+    <div class="edit__form">
+      <p class="alert" id="edit-error" hidden></p>
+      <p class="ok" id="edit-ok" hidden></p>
+
+      <div class="blockers" id="blockers" hidden>
+        <strong>Пока нельзя пометить проверенным:</strong>
+        <ul id="blockers-list"></ul>
+      </div>
+
+      <div id="fields"></div>
+
+      <div class="actions">
+        <button class="btn btn--main" type="button" id="btn-save">Сохранить</button>
+        <button class="btn" type="button" id="btn-verify">Пометить проверенным</button>
+        <button class="btn btn--quiet" type="button" id="btn-draft" hidden>Вернуть в черновики</button>
+      </div>
+    </div>
+
+    <aside class="edit__preview">
+      <div class="preview-tools">
+        <div class="chips" id="preview-langs" role="group" aria-label="Язык предпросмотра">
+          <button class="chip is-on" type="button" data-lang="tk">Türkmen</button>
+          <button class="chip" type="button" data-lang="ru">Русский</button>
+          <button class="chip" type="button" data-lang="en">English</button>
+        </div>
+        <div class="chips" id="preview-size" role="group" aria-label="Размер экрана">
+          <button class="chip is-on" type="button" data-size="phone">Телефон</button>
+          <button class="chip" type="button" data-size="wide">Монитор</button>
+        </div>
+      </div>
+      <div class="preview-frame" id="preview-frame">
+        <iframe id="preview" title="Предпросмотр страницы"></iframe>
+      </div>
+      <p class="muted preview-note">
+        Так страница будет выглядеть на сайте. Шапка и подвал не показаны —
+        они одинаковы на всех страницах и от этих правок не зависят.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<script src="/admin/admin.js"></script>
+</body>
+</html>

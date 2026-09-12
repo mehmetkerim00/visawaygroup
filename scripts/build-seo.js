@@ -287,9 +287,13 @@ function buildManifest(site) {
 function buildRobots(site) {
   const base = L.siteUrl(site);
   return [
-    "# Обход разрешён полностью: закрывать на этом сайте нечего.",
+    "# Сайт открыт для обхода целиком. Закрыта только панель для сотрудников.",
     "User-agent: *",
     "Allow: /",
+    "",
+    "# Панель для сотрудников. Содержимого для поиска там нет.",
+    "Disallow: /admin/",
+    "Disallow: /api/",
     "",
     base ? `Sitemap: ${base}sitemap.xml`
          : "# Sitemap: впишите домен в data/site.json и запустите node scripts/build-seo.js",

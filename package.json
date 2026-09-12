@@ -1,0 +1,9 @@
+{
+  "name": "visawaygroup",
+  "private": true,
+  "description": "Сайт визового центра VisaWay Group. Публичная часть — готовые html-файлы без сборки; этот файл нужен только серверным функциям панели в api/.",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "bcryptjs": "2.4.3"
+  }
+}
