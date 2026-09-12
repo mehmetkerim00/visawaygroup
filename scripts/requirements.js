@@ -106,19 +106,54 @@ function todos(entry) {
   return found.filter(f => (seen.has(f.text) ? false : seen.add(f.text)));
 }
 
+/* У записи бывает два устройства. Обычная виза и образовательная
+   консультация — это разные вещи, и поля у них разные.
+
+   У консультации нет ни консульского сбора, ни подачи в консульство:
+   документы идут в учебное заведение, а не в консульство. Зато есть то,
+   чего нет у визы: сроки приёма в вузы, языковые требования, признание
+   диплома в Туркменистане и стипендии. */
+const KIND_FIELDS = {
+  visa:      ["where", "prepDays", "reviewDays"],
+  education: ["admissionDates", "language", "recognition", "scholarships"]
+};
+
+function kindOf(entry) {
+  return entry.kind === "education" ? "education" : "visa";
+}
+
 /* Поля, которые специалист обязан заполнить перед тем, как ставить verified.
 
-   Сбора здесь нет нарочно. Сборы меняются чаще всего и зависят от курса:
-   устаревшая сумма на сайте хуже, чем её отсутствие. Поэтому пустой сбор —
-   это нормально, на странице встанет честная строка. А вот если сумму
-   всё-таки вписали, к ней обязательна дата: см. feeNeedsDate. */
-const MUST_FILL = ["where", "prepDays", "reviewDays"];
-
-/* Сумма вписана, а когда её проверяли — не сказано */
-function feeNeedsDate(entry) {
-  const hasFee = LANGS.some(l => String(pick(entry.fee, l)).trim());
-  return hasFee && !String(entry.feeCheckedOn || "").trim();
+   Денежных полей здесь нет нарочно. Сборы и стоимость обучения меняются
+   чаще всего и зависят от курса: устаревшая сумма на сайте хуже, чем её
+   отсутствие. Поэтому пустая сумма — это нормально, на странице встанет
+   честная строка. А вот если сумму вписали, к ней обязательна дата:
+   см. amountNeedsDate. */
+function mustFill(entry) {
+  return KIND_FIELDS[kindOf(entry)];
 }
+
+/* Денежное поле у каждого устройства своё */
+const MONEY = {
+  visa:      { field: "fee",     date: "feeCheckedOn",     ru: "консульский сбор" },
+  education: { field: "tuition", date: "tuitionCheckedOn", ru: "стоимость обучения" }
+};
+
+/* Сумма вписана, а когда её проверяли — не сказано.
+   Текст с меткой УТОЧНИТЬ суммой не считается: это ещё вопрос
+   специалисту, а не цифра, которую кто-то подтвердил. */
+function amountNeedsDate(entry) {
+  const m = MONEY[kindOf(entry)];
+  const has = LANGS.some(l => {
+    const v = String(pick(entry[m.field], l)).trim();
+    return v && !v.includes(TODO_MARK);
+  });
+  return has && !String(entry[m.date] || "").trim() ? m : null;
+}
+
+/* Сохранено ради старых вызовов: где спрашивали про сбор, теперь
+   спрашивают про любую сумму. */
+function feeNeedsDate(entry) { return amountNeedsDate(entry) !== null; }
 
 /* Сколько месяцев прошло с даты вида 2026-09-12. null, если даты нет. */
 function monthsSince(date) {
@@ -138,7 +173,7 @@ function isStale(date) {
 }
 
 function emptyFields(entry) {
-  return MUST_FILL.filter(k => LANGS.every(l => !String(pick(entry[k], l)).trim()));
+  return mustFill(entry).filter(k => LANGS.every(l => !String(pick(entry[k], l)).trim()));
 }
 
 
@@ -285,36 +320,67 @@ function mainContent(entry, lang, data, relPosix) {
         </section>`);
   }
 
+  /* Признание диплома в Туркменистане вынесено отдельным блоком и стоит
+     до всего остального про сроки и деньги. Для родителей это главный
+     вопрос — «а что этот диплом будет значить дома», — и ответа на него
+     почти нигде нет. Прятать его строкой в таблице было бы нечестно. */
+  const kind = kindOf(entry);
+  if (kind === "education") {
+    out.push(`
+        <section class="page-section" data-reveal>
+          <h2>${esc(L("recognition"))}</h2>
+          <div class="callout">
+            <p>${esc(pick(entry.recognition, lang) || (isDraft ? "НЕ ЗАПОЛНЕНО" : L("empty")))}</p>
+          </div>
+        </section>`);
+  }
+
+  const factTitle = kind === "education" ? L("studyTerms") : L("termsAndFee");
   out.push(`
         <section class="page-section" data-reveal>
-          <h2>${esc(L("termsAndFee"))}</h2>
+          <h2>${esc(factTitle)}</h2>
           <div class="pricing">
             <ul class="pricing__list">`);
-  out.push(factRow(L("where"), pick(entry.where, lang), isDraft, L("empty")));
-  out.push(factRow(L("prepDays"), pick(entry.prepDays, lang), isDraft, L("empty")));
-  out.push(factRow(L("reviewDays"), pick(entry.reviewDays, lang), isDraft, L("empty")));
-  /* Сбор — особый случай. Пустой это не недоделка, а осознанный выбор:
-     ставим честную строку. Вписанная сумма живёт вместе с датой, когда
-     её проверяли, иначе через полгода она врёт с уверенным видом. */
-  const feeText = String(pick(entry.fee, lang)).trim();
+  if (kind === "education") {
+    out.push(factRow(L("admissionDates"), pick(entry.admissionDates, lang), isDraft, L("empty")));
+    out.push(factRow(L("language"), pick(entry.language, lang), isDraft, L("empty")));
+  } else {
+    out.push(factRow(L("where"), pick(entry.where, lang), isDraft, L("empty")));
+    out.push(factRow(L("prepDays"), pick(entry.prepDays, lang), isDraft, L("empty")));
+    out.push(factRow(L("reviewDays"), pick(entry.reviewDays, lang), isDraft, L("empty")));
+  }
+  /* Деньги — особый случай. Пустое поле это не недоделка, а осознанный
+     выбор: ставим честную строку. Вписанная сумма живёт вместе с датой,
+     когда её проверяли, иначе через полгода она врёт с уверенным видом.
+     У визы это консульский сбор, у консультации — стоимость обучения. */
+  const money = MONEY[kind];
+  const moneyLabel = kind === "education" ? L("tuition") : L("fee");
+  const moneyDefault = kind === "education" ? L("tuitionDefault") : L("feeDefault");
+  const feeText = String(pick(entry[money.field], lang)).trim();
+  /* Текст с меткой УТОЧНИТЬ — это ещё вопрос специалисту, а не сумма:
+     даты проверки он не требует и ярлыка «без даты» не получает. */
+  const isAmount = feeText && !feeText.includes(TODO_MARK);
   if (feeText) {
-    const asOf = formatDate(entry.feeCheckedOn, lang, data, L("feeAsOf"));
+    const asOf = formatDate(entry[money.date], lang, data, L("feeAsOf"));
     const tail = asOf
       ? ` <span class="fact-note">&middot; ${esc(asOf)}</span>`
-      : (isDraft ? ` <span style="color:#B3261E;font-weight:700">· БЕЗ ДАТЫ ПРОВЕРКИ</span>` : "");
+      : (isDraft && isAmount ? ` <span style="color:#B3261E;font-weight:700">· БЕЗ ДАТЫ ПРОВЕРКИ</span>` : "");
     out.push([
       `            <li class="pricing__row">`,
-      `              <span class="pricing__label">${esc(L("fee"))}</span>`,
+      `              <span class="pricing__label">${esc(moneyLabel)}</span>`,
       `              <span class="pricing__value">${esc(feeText)}${tail}</span>`,
       `            </li>`
     ].join("\n"));
   } else {
     out.push([
       `            <li class="pricing__row">`,
-      `              <span class="pricing__label">${esc(L("fee"))}</span>`,
-      `              <span class="pricing__value">${esc(L("feeDefault"))}</span>`,
+      `              <span class="pricing__label">${esc(moneyLabel)}</span>`,
+      `              <span class="pricing__value">${esc(moneyDefault)}</span>`,
       `            </li>`
     ].join("\n"));
+  }
+  if (kind === "education") {
+    out.push(factRow(L("scholarships"), pick(entry.scholarships, lang), isDraft, L("empty")));
   }
   out.push(`            </ul>
             <a class="btn btn--primary pricing__cta" href="${contacts}">${esc(L("askUs"))}</a>
@@ -531,6 +597,6 @@ function build({ drafts = false } = {}) {
 
 module.exports = {
   load, pick, pagePath, allPaths, entriesFor, todos, emptyFields,
-  visaTitle, pickerBlock, build, feeNeedsDate, monthsSince, isStale,
-  formatDate, TODO_MARK, MUST_FILL, STALE_MONTHS
+  visaTitle, pickerBlock, build, feeNeedsDate, amountNeedsDate, monthsSince,
+  isStale, formatDate, kindOf, mustFill, TODO_MARK, MONEY, STALE_MONTHS
 };
