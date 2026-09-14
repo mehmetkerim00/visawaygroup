@@ -412,6 +412,7 @@
               <mask id="route-dash-wide" maskUnits="userSpaceOnUse" x="0" y="0" width="420" height="720">
                 <path d="M196 648 C 110 596, 46 470, 74 360" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
                 <path d="M196 648 C 150 500, 60 300, 86 120" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
+                <path d="M196 648 C 200 430, 225 200, 216 84" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
                 <path d="M196 648 C 250 520, 330 320, 344 152" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
                 <path d="M196 648 C 286 604, 352 540, 350 430" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-dasharray="5 13"/>
               </mask>
@@ -432,8 +433,9 @@
             <g class="route__lines" mask="url(#route-dash-wide)">
               <path class="route__line" style="--len: 333; --draw: 200ms" d="M196 648 C 110 596, 46 470, 74 360" fill="none" stroke-width="2"/>
               <path class="route__line" style="--len: 544; --draw: 500ms" d="M196 648 C 150 500, 60 300, 86 120" fill="none" stroke-width="2"/>
-              <path class="route__line" style="--len: 520; --draw: 800ms" d="M196 648 C 250 520, 330 320, 344 152" fill="none" stroke-width="2"/>
-              <path class="route__line" style="--len: 284; --draw: 1100ms" d="M196 648 C 286 604, 352 540, 350 430" fill="none" stroke-width="2"/>
+              <path class="route__line" style="--len: 565; --draw: 800ms" d="M196 648 C 200 430, 225 200, 216 84" fill="none" stroke-width="2"/>
+              <path class="route__line" style="--len: 520; --draw: 1100ms" d="M196 648 C 250 520, 330 320, 344 152" fill="none" stroke-width="2"/>
+              <path class="route__line" style="--len: 284; --draw: 1400ms" d="M196 648 C 286 604, 352 540, 350 430" fill="none" stroke-width="2"/>
             </g>
             <!-- Откуда: единственная точка отправления -->
             <circle class="route__ring" cx="196" cy="648" r="18" fill="none" stroke-width="1.5"/>
@@ -453,12 +455,18 @@
               <text class="route__label route__label--end" x="86" y="82" text-anchor="middle">Berlin</text>
             </g>
             <g class="route__stop" style="--i: 2">
+              <circle class="route__pulse" cx="216" cy="84" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__ring" cx="216" cy="84" r="20" fill="none" stroke-width="1.5"/>
+              <circle class="route__dot route__dot--end" cx="216" cy="84" r="6.5"/>
+              <text class="route__label route__label--end" x="216" y="44" text-anchor="middle">Moscow</text>
+            </g>
+            <g class="route__stop" style="--i: 3">
               <circle class="route__pulse" cx="344" cy="152" r="20" fill="none" stroke-width="1.5"/>
               <circle class="route__ring" cx="344" cy="152" r="20" fill="none" stroke-width="1.5"/>
               <circle class="route__dot route__dot--end" cx="344" cy="152" r="6.5"/>
               <text class="route__label route__label--end" x="344" y="114" text-anchor="middle">Beijing</text>
             </g>
-            <g class="route__stop" style="--i: 3">
+            <g class="route__stop" style="--i: 4">
               <circle class="route__pulse" cx="350" cy="430" r="20" fill="none" stroke-width="1.5"/>
               <circle class="route__ring" cx="350" cy="430" r="20" fill="none" stroke-width="1.5"/>
               <circle class="route__dot route__dot--end" cx="350" cy="430" r="6.5"/>
@@ -472,10 +480,13 @@
             <g class="route__plane" style="--path: path('M196 648 C 150 500, 60 300, 86 120'); --dur: 11s; --delay: 2400ms">
               <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
             </g>
-            <g class="route__plane" style="--path: path('M196 648 C 250 520, 330 320, 344 152'); --dur: 12.5s; --delay: 3500ms">
+            <g class="route__plane" style="--path: path('M196 648 C 200 430, 225 200, 216 84'); --dur: 10.5s; --delay: 3500ms">
               <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
             </g>
-            <g class="route__plane" style="--path: path('M196 648 C 286 604, 352 540, 350 430'); --dur: 10s; --delay: 4600ms">
+            <g class="route__plane" style="--path: path('M196 648 C 250 520, 330 320, 344 152'); --dur: 12.5s; --delay: 4600ms">
+              <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
+            </g>
+            <g class="route__plane" style="--path: path('M196 648 C 286 604, 352 540, 350 430'); --dur: 10s; --delay: 5700ms">
               <g transform="rotate(90) scale(0.26)"><path d="M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z"/></g>
             </g>
           </svg>
