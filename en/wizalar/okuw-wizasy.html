@@ -1044,6 +1044,11 @@
         </section>
         <!-- reqcountries:end -->
 
+        <!-- Два общих раздела — «кому подходит» и базовый список документов —
+             убраны с вывода: то же самое теперь показывает выбранная страна
+             выше, а два разных списка документов на одной странице путали бы.
+             Текст не потерян: чтобы вернуть, снимите обёртку template. -->
+        <template>
         <section class="page-section" data-reveal>
           <h2>Who it is for</h2>
           <ul class="checklist">
@@ -1077,6 +1082,7 @@
             </div>
           </div>
         </section>
+        </template>
 
         <section class="page-section" data-reveal>
           <h2>How it works</h2>
