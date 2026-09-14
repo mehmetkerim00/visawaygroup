@@ -960,12 +960,6 @@ function stampAssets(html, relPosix) {
 }
 
 
-/* Собирают ли сейчас вместе с черновиками. Ставит scripts/build.js
-   при запуске с --drafts; обычная сборка эту переменную не задаёт,
-   и черновиков не видит ни один блок. */
-const WITH_DRAFTS = process.env.VW_DRAFTS === "1";
-
-
 function syncFile(file, partials, site, valuesByLang, existing) {
   const original = fs.readFileSync(file, "utf8");
   const relative = path.relative(ROOT, file);
@@ -997,12 +991,11 @@ function syncFile(file, partials, site, valuesByLang, existing) {
     }
 
     /* Выбор страны на странице визы — из data/requirements.json.
-       Черновики сюда попадают только в предпросмотре: сборщик
-       ставит VW_DRAFTS=1, обычная сборка этого не делает. */
+       В списке все страны: статус на видимость не влияет. */
     if (name === "reqcountries") {
       blocks++;
       const visa = (rawAttrs.match(/visa="([^"]+)"/) || [])[1] || "";
-      const body = requirements.pickerBlock(lang, visa, indent, relPosix, prefix, WITH_DRAFTS);
+      const body = requirements.pickerBlock(lang, visa, indent, relPosix, prefix);
       return `${indent}<!-- reqcountries:start visa="${visa}" -->\n${body}\n${indent}<!-- reqcountries:end -->`;
     }
 

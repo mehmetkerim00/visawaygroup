@@ -73,8 +73,7 @@
     <div class="tools">
       <div class="chips" id="filters" role="group" aria-label="Отбор записей">
         <button class="chip is-on" type="button" data-filter="all" data-t="fAll"></button>
-        <button class="chip" type="button" data-filter="draft" data-t="fDraft"></button>
-        <button class="chip" type="button" data-filter="verified" data-t="fVerified"></button>
+        <button class="chip" type="button" data-filter="changed" data-t="fChanged"></button>
         <button class="chip" type="button" data-filter="published" data-t="fPublished"></button>
         <button class="chip" type="button" data-filter="stale" data-t="fStale"></button>
       </div>
@@ -154,8 +153,6 @@
       </button>
       <div class="issuebar__actions">
         <button class="btn btn--main" type="button" id="btn-save" data-t="save"></button>
-        <button class="btn" type="button" id="btn-verify" data-t="markVerified"></button>
-        <button class="btn btn--quiet" type="button" id="btn-draft" hidden data-t="backToWork"></button>
       </div>
     </div>
     <ul class="issuebar__list" id="issues-list" hidden></ul>

@@ -117,22 +117,9 @@ module.exports = http.handler(async (req, res) => {
   if (body.checkedOn !== undefined) next.checkedOn = cleanDate(body.checkedOn);
   if (body.checkedBy !== undefined) next.checkedBy = String(body.checkedBy || "").trim().slice(0, 80);
 
-  if (body.status !== undefined) {
-    if (body.status !== "draft" && body.status !== "verified") {
-      http.fail(400, "Состояние бывает только «черновик» или «проверено».");
-    }
-    /* Поставить «проверено» можно только тому, что пройдёт публикацию.
-       Та же проверка стоит и в preflight при сборке: если её обойти
-       здесь, сборка всё равно не даст выложить — но человек узнает об
-       этом позже и не поймёт почему. */
-    if (body.status === "verified") {
-      const problems = records.blockersFor(next);
-      if (problems.length) {
-        http.fail(422, "Пока нельзя пометить проверенным.", { blockers: problems });
-      }
-    }
-    next.status = body.status;
-  }
+  /* Поле статуса в записи осталось и по-прежнему хранится, но панель его
+     больше не меняет и на видимость страниц оно не влияет: страницы
+     собираются для всех пар. Пригодится, когда специалист пройдётся. */
 
   const saved = await records.putRecord(next, session.email);
   http.send(res, 200, { ok: true, entry: saved, blockers: records.blockersFor(saved) });

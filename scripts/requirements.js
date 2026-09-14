@@ -6,16 +6,20 @@
  * wizalar/{виза}/{страна}.html на трёх языках и блок выбора страны
  * на самой странице визы.
  *
- * ГЛАВНОЕ ПРАВИЛО. Запись со статусом draft на опубликованный сайт не
- * попадает вообще: ни файлом, ни ссылкой, ни строкой в карте сайта.
- * Это сделано не стилями, а тем, что файла попросту нет на диске.
- * Спрятанное стилями всё равно уезжает на хостинг и всё равно
- * находится поиском — а недопроверенные требования по визам это
- * не просто некрасиво, это вводит человека в заблуждение.
+ * СТАТУС НА ВИДИМОСТЬ НЕ ВЛИЯЕТ. Раньше страница собиралась только из
+ * записи со статусом verified, а черновики физически отсутствовали.
+ * Теперь собираются все: владелец решил выкладывать как есть.
  *
- * Черновики можно посмотреть локально:
- *     node scripts/build.js --drafts
- * Каждая такая страница помечена красной полосой и пометкой noindex.
+ * Взамен страницы защищены иначе, и это важнее прежнего разделения:
+ *   — незаполненные поля и пункты с меткой УТОЧНИТЬ наружу не выходят
+ *     (правила в api/_lib/core.js), так что недоделка не показывается;
+ *   — вверху каждой страницы стоит предупреждение, что сведения общие;
+ *   — страницы закрыты от поиска пометкой noindex и не стоят в карте
+ *     сайта: они доступны по ссылке, но не приводят человека из поиска
+ *     на непроверенный текст.
+ *
+ * Поле статуса и дата проверки в данных остаются — они понадобятся,
+ * когда специалист пройдётся по записям.
  *
  * Сам по себе этот файл ничего не делает — его вызывает scripts/build.js.
  */
@@ -73,7 +77,7 @@ function pick(obj, lang) {
 const {
   TODO_MARK, todos, KIND_FIELDS, kindOf, mustFill, MONEY, amountNeedsDate,
   feeNeedsDate, monthsSince, STALE_MONTHS, isStale, emptyFields,
-  esc, escAttr, draftBar, formatDate, factRow
+  esc, escAttr, formatDate, factRow
 } = core;
 
 /* Путь страницы требований от корня сайта */
@@ -92,10 +96,8 @@ function allPaths(data) {
   return out;
 }
 
-function entriesFor(visa, data, withDrafts) {
-  return (data.req.entries || [])
-    .filter(e => e.visa === visa)
-    .filter(e => withDrafts || e.status === "verified");
+function entriesFor(visa, data) {
+  return (data.req.entries || []).filter(e => e.visa === visa);
 }
 
 /* Есть ли в записи незакрытые вопросы специалисту */
@@ -138,16 +140,29 @@ function pageBody(entry, lang, data, relPosix) {
 /* Готовая страница. За основу берётся страница самой визы: так шапка,
    подвал, набор иконок и все метки блоков остаются ровно такими же, как
    на остальном сайте, и их потом обновит sync-layout. */
+/* Хвост описания, когда своего текста у записи ещё нет. Ничего не
+   обещает и ничего не выдумывает — просто говорит, о чём страница. */
+const DESCR_TAIL = {
+  tk: "resminamalar we tabşyryş tertibi. VisaWay Group, Aşgabat.",
+  ru: "документы и порядок подачи. VisaWay Group, Ашхабад.",
+  en: "documents and how to apply. VisaWay Group, Ashgabat."
+};
+
 function renderPage(entry, lang, data) {
   const relPosix = pagePath(entry, lang, data);
   const template = fs.readFileSync(path.join(ROOT, joinLang(`wizalar/${entry.visa}.html`, lang)), "utf8");
   const country = data.byCode.get(entry.country);
   const countryName = pick(country.country, lang);
   const visaName = visaTitle(entry.visa, lang);
-  const isDraft = entry.status !== "verified";
 
   const title = `${countryName} — ${visaName} — VisaWay Group`;
-  const descr = String(pick(entry.summary, lang)).replace(/\s+/g, " ").trim().slice(0, 155);
+  /* Описание берём из краткого текста записи. Если он пуст или в нём
+     осталась метка специалиста — на страницу такое не выносим, поэтому
+     и в описание тоже: вместо него ровная строка из названий. */
+  const summary = core.shown(entry.summary, lang);
+  const descr = (summary || `${countryName} — ${visaName.toLocaleLowerCase(lang === "ru" ? "ru" : "en")}: ` +
+                            DESCR_TAIL[lang])
+    .replace(/\s+/g, " ").trim().slice(0, 155);
 
   let html = template;
 
@@ -174,12 +189,11 @@ function renderPage(entry, lang, data) {
     /(\s(?:href|src)=")(?:\.\.\/)+(assets\/|css\/|js\/|manifest\.webmanifest)/g,
     (m, head, file) => head + prefix + file);
 
-  /* Черновик не должен попадать в поиск даже случайно — например, если
-     кто-то откроет предпросмотр наружу. */
-  if (isDraft) {
-    html = html.replace(/<meta name="theme-color"/,
-      `<meta name="robots" content="noindex, nofollow">\n  <meta name="theme-color"`);
-  }
+  /* Пока специалист не прошёлся по записям, страницы не должны приводить
+     человека из поиска. Открыть по ссылке можно, найти поиском — нет.
+     Снимается это одной строкой отсюда и одной в build-seo.js. */
+  html = html.replace(/<meta name="theme-color"/,
+    `<meta name="robots" content="noindex, follow">\n  <meta name="theme-color"`);
 
   return html;
 }
@@ -191,12 +205,19 @@ function renderPage(entry, lang, data) {
 /* Те же карточки, что на главной, только проверенные страны и каждая —
    ссылка. Когда проверенных ещё нет, вместо сетки честная строка и
    кнопка на контакты: обещать несуществующие страницы нельзя. */
-function pickerBlock(lang, visa, indent, relPosix, prefix, withDrafts) {
+/* Сколько стран в списке. Раньше подпись говорила «проверено стран» —
+   теперь проверка на видимость не влияет, и обещать проверку нельзя. */
+const COUNTRY_COUNT = {
+  tk: "Ýurt: {{n}}",
+  ru: "Стран: {{n}}",
+  en: "Countries: {{n}}"
+};
+
+function pickerBlock(lang, visa, indent, relPosix, prefix) {
   const data = load();
   const L = k => pick(data.labels[k], lang);
   const i = indent;
-  const list = entriesFor(visa, data, withDrafts);
-  const verified = entriesFor(visa, data, false).length;
+  const list = entriesFor(visa, data);
   const out = [];
   const contacts = relLink(relPosix, joinLang("habarlasmak.html", lang));
 
@@ -210,7 +231,7 @@ function pickerBlock(lang, visa, indent, relPosix, prefix, withDrafts) {
     return out.join("\n");
   }
 
-  out.push(`${i}  <p class="countries__count">${esc(L("checkedCount").replace("{{n}}", String(verified)))}</p>`);
+  out.push(`${i}  <p class="countries__count">${esc(COUNTRY_COUNT[lang].replace("{{n}}", String(list.length)))}</p>`);
   out.push(`${i}  <div class="countries countries--plain">`);
   /* На телефоне сетка превращается в ленту с прокруткой пальцем, поэтому
      ей нужен и способ прокрутки с клавиатуры: tabindex делает её точкой
@@ -223,7 +244,6 @@ function pickerBlock(lang, visa, indent, relPosix, prefix, withDrafts) {
     const city = pick(c.city, lang);
     const alt = pick((data.req.labels.photoOf || {}), lang) || "";
     const href = relLink(relPosix, pagePath(e, lang, data));
-    const draft = e.status !== "verified";
     const photo = c.photo ? path.join(ROOT, "assets", "photos", c.photo + ".webp") : null;
     const big = c.photo ? path.join(ROOT, "assets", "photos", c.photo + "@2x.webp") : null;
 
@@ -246,7 +266,7 @@ function pickerBlock(lang, visa, indent, relPosix, prefix, withDrafts) {
     out.push(`${i}            <img class="country__flag" src="${prefix}assets/flags/${c.flag}.svg"` +
              ` alt="" width="24" height="18" loading="lazy" decoding="async">`);
     out.push(`${i}            <span class="country__name">${esc(name)}</span>`);
-    out.push(`${i}            <span class="country__city">${esc(city)}${draft ? " · ЧЕРНОВИК" : ""}</span>`);
+    out.push(`${i}            <span class="country__city">${esc(city)}</span>`);
     out.push(`${i}          </div>`);
     out.push(`${i}        </a>`);
     out.push(`${i}      </li>`);
@@ -263,14 +283,13 @@ function pickerBlock(lang, visa, indent, relPosix, prefix, withDrafts) {
 /* Запись и уборка                                                      */
 /* ==================================================================== */
 
-function build({ drafts = false } = {}) {
+function build() {
   const data = load();
   const written = [];
   const removed = [];
   const wanted = new Set();
 
   for (const e of data.req.entries || []) {
-    if (!drafts && e.status !== "verified") continue;
     for (const lang of LANGS) {
       const rel = pagePath(e, lang, data);
       wanted.add(rel);
@@ -282,9 +301,8 @@ function build({ drafts = false } = {}) {
     }
   }
 
-  /* Всё, чего в этой сборке быть не должно, с диска убирается. Иначе
-     черновик, однажды собранный для предпросмотра, так и остался бы
-     лежать и уехал бы на хостинг вместе со всем остальным. */
+  /* Всё, чего в этой сборке быть не должно, с диска убирается: страница
+     удалённой или переименованной пары не должна остаться лежать. */
   for (const rel of allPaths(data)) {
     if (wanted.has(rel)) continue;
     const file = path.join(ROOT, rel);
@@ -293,7 +311,7 @@ function build({ drafts = false } = {}) {
     if (fs.existsSync(dir) && !fs.readdirSync(dir).length) fs.rmdirSync(dir);
   }
 
-  return { written, removed, drafts };
+  return { written, removed };
 }
 
 module.exports = {

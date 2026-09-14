@@ -58,6 +58,7 @@ const TYPES = [
   ["главная", "index.html"],
   ["хаб виз", "wizalar.html"],
   ["услуга", "wizalar/is-wizasy.html"],
+  ["требования", "wizalar/is-wizasy/turkiye.html"],
   ["контакты", "habarlasmak.html"],
   ["о нас", "biz-barada.html"],
   ["источники", "suratlar.html"],

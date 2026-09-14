@@ -113,32 +113,45 @@ function esc(s) {
 }
 function escAttr(s) { return esc(s).replace(/"/g, "&quot;"); }
 
-/* Красная полоса черновика. Стили прямо в ней: в общие файлы стилей
-   им нельзя — те уезжают на хостинг, а всё про черновики должно
-   оставаться только на рабочем компьютере. */
-function draftBar(lang, withStyles) {
-  const text = {
-    tk: "ÇYNLAMA — HÜNÄRMEN TARAPYNDAN BARLANMADY",
-    ru: "ЧЕРНОВИК — НЕ ПРОВЕРЕНО СПЕЦИАЛИСТОМ",
-    en: "DRAFT — NOT CHECKED BY A SPECIALIST"
-  };
-  const css = ".draftbar{position:sticky;top:0;z-index:300;display:block;padding:14px 16px;" +
-    "background:#B3261E;color:#fff;font:700 clamp(.9rem,3.4vw,1.15rem)/1.25 system-ui,sans-serif;" +
-    "letter-spacing:.04em;text-align:center;text-transform:uppercase}" +
-    ".is-missing{color:#B3261E;font-weight:700}" +
-    ".draftbar small{display:block;margin-top:5px;color:#FFE9E6;font-weight:600;font-size:.82em;text-transform:none;letter-spacing:.01em}";
-  const sub = {
-    tk: "Bu sahypa diňe içerki gözden geçirmek üçin. Saýtda ýok.",
-    ru: "Эта страница только для внутренней проверки. На сайте её нет.",
-    en: "This page is for internal review only. It is not on the site."
-  };
-  /* В предпросмотре панели стили приходят из /admin/preview.css: там
-     действует строгая политика содержимого, и встроенную вставку она
-     не пропускает. На собранной странице наоборот — вставка нужна,
-     иначе полоса черновика зависела бы от внешнего файла. */
-  const style = withStyles === false ? "" : `<style>${css}</style>`;
-  return `      <div class="draftbar" role="alert">${style}` +
-         `${esc(text[lang] || text.ru)}<small>${esc(sub[lang] || sub.ru)}</small></div>`;
+/* Предупреждение вверху каждой страницы требований.
+ *
+ * Текст живёт в коде, а не в подписях, которые правит специалист: это
+ * условие, на котором страницы вообще выложены. Случайно стереть его
+ * из панели быть не должно возможности.
+ */
+const TOP_NOTICE = {
+  tk: "Bu sahypadaky maglumat umumy häsiýetlidir we üýtgäp biler. " +
+      "Size degişli takyk talaplary maslahatda tassyklaýarys.",
+  ru: "Информация на этой странице носит общий характер и может меняться. " +
+      "Точные требования подтверждаем на консультации.",
+  en: "The information on this page is general and may change. " +
+      "We confirm the exact requirements during the consultation."
+};
+
+function noticeBlock(lang) {
+  return [
+    `        <aside class="notice" role="note">`,
+    `          <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>`,
+    `          <p>${esc(TOP_NOTICE[lang] || TOP_NOTICE.ru)}</p>`,
+    `        </aside>`
+  ].join("\n");
+}
+
+/* Текст, который можно показать посетителю.
+ *
+ * Пустое поле и метка УТОЧНИТЬ — это заметки для специалиста, а не
+ * сведения. На странице они выглядели бы недоделкой, поэтому наружу не
+ * выходят: пустой ответ означает «этого раздела на странице не будет».
+ * В панели те же места по-прежнему подсвечиваются — см. mainContent. */
+function shown(value, lang) {
+  const t = String(pick(value, lang) || "").trim();
+  if (!t || t.includes(TODO_MARK)) return "";
+  return t;
+}
+
+/* То же для списка: пункты с метками просто выпадают. */
+function shownList(list, lang) {
+  return (list || []).map(x => shown(x, lang)).filter(Boolean);
 }
 
 /* Дату показываем словами: «в январе 2026», а не «2026-09-12». Цифровая
@@ -152,17 +165,23 @@ function formatDate(date, lang, data, template) {
   return String(template).replace("{month}", name).replace("{year}", m[1]);
 }
 
-function factRow(label, value, isDraft, emptyText) {
-  const filled = String(value || "").trim();
-  const shown = filled
+/* Строка в табличке «сроки и сборы».
+ *
+ * На сайте незаполненной строки не бывает вовсе: вместо «НЕ ЗАПОЛНЕНО»
+ * строка просто не выводится. В панели наоборот — специалист должен
+ * видеть, что осталось дозаполнить, поэтому там пропуск подсвечивается. */
+function factRow(label, value, forPanel, lang) {
+  const filled = String(pick(value, lang) || "").trim();
+  const годно = filled && !filled.includes(TODO_MARK);
+  if (!годно && !forPanel) return "";
+
+  const shownValue = годно
     ? esc(filled)
-    : (isDraft
-        ? `<span class="is-missing">НЕ ЗАПОЛНЕНО</span>`
-        : esc(emptyText));
+    : `<span class="is-missing">${esc(filled || "НЕ ЗАПОЛНЕНО")}</span>`;
   return [
     `            <li class="pricing__row">`,
     `              <span class="pricing__label">${esc(label)}</span>`,
-    `              <span class="pricing__value">${shown}</span>`,
+    `              <span class="pricing__value">${shownValue}</span>`,
     `            </li>`
   ].join("\n");
 }
@@ -181,12 +200,14 @@ function mainContent(entry, lang, ctx) {
   const country = ctx.country;
   const countryName = pick(country.country, lang);
   const visaName = ctx.visaName;
-  const isDraft = entry.status !== "verified";
+  /* Две отрисовки одного и того же. На сайте незаполненное просто не
+     выводится: посетителю нечего делать с заметками специалиста. В панели
+     пропуски подсвечиваются — иначе специалист не увидит, что дозаполнить. */
+  const forPanel = ctx.forPanel === true;
   const out = [];
   const { home, hub, visaPage, contacts } = ctx.links;
 
   out.push(`    <article class="page page--service">`);
-  if (isDraft) out.push(draftBar(lang, ctx.inlineStyles));
 
   out.push(`
       <section class="page-hero">
@@ -211,34 +232,45 @@ function mainContent(entry, lang, ctx) {
           <div class="page-hero__head" data-reveal>
             <p class="eyebrow">${esc(L("eyebrow"))}</p>
             <h1>${esc(countryName)} &mdash; ${esc(visaName.toLocaleLowerCase(lang === "ru" ? "ru" : "en"))}</h1>
-            <p class="lead">${esc(pick(entry.summary, lang))}</p>
+            ${(() => { const t = shown(entry.summary, lang);
+                       return t ? `<p class="lead">${esc(t)}</p>`
+                                : (forPanel ? `<p class="lead is-missing">НЕ ЗАПОЛНЕНО</p>` : ""); })()}
           </div>
         </div>
       </section>
 
       <div class="container container--narrow">`);
 
-  if ((entry.audience || []).length) {
+  /* Первое, что человек читает под заголовком. Не сноска внизу: сведения
+     здесь общие, и знать об этом надо до того, как их применят к себе. */
+  out.push(noticeBlock(lang));
+
+  const audience = forPanel ? (entry.audience || []).map(a => pick(a, lang))
+                            : shownList(entry.audience, lang);
+  if (audience.length) {
     out.push(`
         <section class="page-section" data-reveal>
           <h2>${esc(L("audience"))}</h2>
           <ul class="checklist">`);
-    for (const a of entry.audience) out.push(`            <li>${esc(pick(a, lang))}</li>`);
+    for (const a of audience) out.push(`            <li>${esc(a)}</li>`);
     out.push(`          </ul>
         </section>`);
   }
 
-  if ((entry.documents || []).length) {
+  const documents = (entry.documents || [])
+    .filter(d => forPanel || shown(d.text, lang));
+  if (documents.length) {
     out.push(`
         <section class="page-section" data-reveal>
           <h2>${esc(L("documents"))}</h2>
           <ul class="doclist" data-reveal-group>`);
-    for (const d of entry.documents) {
-      const note = d.note ? pick(d.note, lang) : "";
+    for (const d of documents) {
+      const note = d.note ? (forPanel ? pick(d.note, lang) : shown(d.note, lang)) : "";
       const extra = d.required === false ? L("optional") : "";
       const sub = [note, extra].filter(Boolean).join(" &middot; ");
+      const текст = forPanel ? String(pick(d.text, lang) || "") : shown(d.text, lang);
       out.push(`            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg>` +
-               `<span>${esc(pick(d.text, lang))}` + (sub ? `<span>${sub}</span>` : "") + `</span></li>`);
+               `<span>${esc(текст)}` + (sub ? `<span>${sub}</span>` : "") + `</span></li>`);
     }
     out.push(`          </ul>
         </section>`);
@@ -249,12 +281,14 @@ function mainContent(entry, lang, ctx) {
      вопрос — «а что этот диплом будет значить дома», — и ответа на него
      почти нигде нет. Прятать его строкой в таблице было бы нечестно. */
   const kind = kindOf(entry);
-  if (kind === "education") {
+  const recognition = shown(entry.recognition, lang);
+  if (kind === "education" && (recognition || forPanel)) {
+    const текст = recognition || (forPanel ? "НЕ ЗАПОЛНЕНО" : "");
     out.push(`
         <section class="page-section" data-reveal>
           <h2>${esc(L("recognition"))}</h2>
           <div class="callout">
-            <p>${esc(pick(entry.recognition, lang) || (isDraft ? "НЕ ЗАПОЛНЕНО" : L("empty")))}</p>
+            <p${recognition ? "" : ' class="is-missing"'}>${esc(текст)}</p>
           </div>
         </section>`);
   }
@@ -266,12 +300,12 @@ function mainContent(entry, lang, ctx) {
           <div class="pricing">
             <ul class="pricing__list">`);
   if (kind === "education") {
-    out.push(factRow(L("admissionDates"), pick(entry.admissionDates, lang), isDraft, L("empty")));
-    out.push(factRow(L("language"), pick(entry.language, lang), isDraft, L("empty")));
+    out.push(factRow(L("admissionDates"), entry.admissionDates, forPanel, lang));
+    out.push(factRow(L("language"), entry.language, forPanel, lang));
   } else {
-    out.push(factRow(L("where"), pick(entry.where, lang), isDraft, L("empty")));
-    out.push(factRow(L("prepDays"), pick(entry.prepDays, lang), isDraft, L("empty")));
-    out.push(factRow(L("reviewDays"), pick(entry.reviewDays, lang), isDraft, L("empty")));
+    out.push(factRow(L("where"), entry.where, forPanel, lang));
+    out.push(factRow(L("prepDays"), entry.prepDays, forPanel, lang));
+    out.push(factRow(L("reviewDays"), entry.reviewDays, forPanel, lang));
   }
   /* Деньги — особый случай. Пустое поле это не недоделка, а осознанный
      выбор: ставим честную строку. Вписанная сумма живёт вместе с датой,
@@ -280,15 +314,17 @@ function mainContent(entry, lang, ctx) {
   const money = MONEY[kind];
   const moneyLabel = kind === "education" ? L("tuition") : L("fee");
   const moneyDefault = kind === "education" ? L("tuitionDefault") : L("feeDefault");
-  const feeText = String(pick(entry[money.field], lang)).trim();
-  /* Текст с меткой УТОЧНИТЬ — это ещё вопрос специалисту, а не сумма:
-     даты проверки он не требует и ярлыка «без даты» не получает. */
+  /* Метка УТОЧНИТЬ — это вопрос специалисту, а не сумма. На сайте вместо
+     неё встаёт честная строка «уточняем на консультации»: она верна в
+     любом случае и не выглядит недоделкой. */
+  const сырое = String(pick(entry[money.field], lang) || "").trim();
+  const feeText = forPanel ? сырое : shown(entry[money.field], lang);
   const isAmount = feeText && !feeText.includes(TODO_MARK);
   if (feeText) {
     const asOf = formatDate(entry[money.date], lang, data, L("feeAsOf"));
     const tail = asOf
       ? ` <span class="fact-note">&middot; ${esc(asOf)}</span>`
-      : (isDraft && isAmount ? ` <span class="is-missing">· БЕЗ ДАТЫ ПРОВЕРКИ</span>` : "");
+      : (forPanel && isAmount ? ` <span class="is-missing">· БЕЗ ДАТЫ ПРОВЕРКИ</span>` : "");
     out.push([
       `            <li class="pricing__row">`,
       `              <span class="pricing__label">${esc(moneyLabel)}</span>`,
@@ -304,20 +340,21 @@ function mainContent(entry, lang, ctx) {
     ].join("\n"));
   }
   if (kind === "education") {
-    out.push(factRow(L("scholarships"), pick(entry.scholarships, lang), isDraft, L("empty")));
+    out.push(factRow(L("scholarships"), entry.scholarships, forPanel, lang));
   }
   out.push(`            </ul>
             <a class="btn btn--primary pricing__cta" href="${contacts}">${esc(L("askUs"))}</a>
           </div>
         </section>`);
 
-  for (const [key, list] of [["notes", entry.notes], ["refusals", entry.refusals]]) {
-    if (!(list || []).length) continue;
+  for (const [key, raw] of [["notes", entry.notes], ["refusals", entry.refusals]]) {
+    const list = forPanel ? (raw || []).map(x => pick(x, lang)) : shownList(raw, lang);
+    if (!list.length) continue;
     out.push(`
         <section class="page-section" data-reveal>
           <h2>${esc(L(key))}</h2>
           <ul class="checklist">`);
-    for (const n of list) out.push(`            <li>${esc(pick(n, lang))}</li>`);
+    for (const n of list) out.push(`            <li>${esc(n)}</li>`);
     out.push(`          </ul>
         </section>`);
   }
@@ -328,7 +365,7 @@ function mainContent(entry, lang, ctx) {
   const checkedOn = String(entry.checkedOn || "").trim();
   const checkedBy = String(entry.checkedBy || "").trim() || L("notChecked");
   const dateLine = formatDate(checkedOn, lang, data, L("verifiedOn"))
-    || (isDraft ? "НЕ ЗАПОЛНЕНО" : L("notVerifiedYet"));
+    || (forPanel ? "НЕ ЗАПОЛНЕНО" : L("notVerifiedYet"));
   out.push(`
         <section class="page-section" data-reveal>
           <div class="warn">
@@ -353,7 +390,9 @@ function mainContent(entry, lang, ctx) {
       <!-- cta:start title="${escAttr(L("ctaTitle"))}" text="${escAttr(L("ctaText"))}" -->
       <!-- cta:end -->`);
   out.push(`    </article>`);
-  return out.join("\n");
+  /* Пропущенные строки таблички возвращают пустую строку — выбрасываем,
+     чтобы в разметке не оставалось дыр на месте того, чего не выводим. */
+  return out.filter(x => x !== "").join("\n");
 }
 
 
@@ -366,5 +405,5 @@ module.exports = {
   LANGS, DEFAULT_LANG, TODO_MARK, pick,
   todos, KIND_FIELDS, kindOf, mustFill, MONEY, amountNeedsDate, feeNeedsDate,
   monthsSince, STALE_MONTHS, isStale, emptyFields,
-  esc, escAttr, draftBar, formatDate, factRow, mainContent
+  esc, escAttr, formatDate, factRow, mainContent, noticeBlock, shown, shownList, TOP_NOTICE
 };

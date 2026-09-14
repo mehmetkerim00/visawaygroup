@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 /*
- * requirements-status.js — что заполнено, что проверено, где остались вопросы.
+ * requirements-status.js — что заполнено и где остались вопросы.
+ *
+ * Пометка «проверено» в записи сохраняется, но на то, есть ли страница
+ * на сайте, больше не влияет: страницы собираются для всех пар.
  *
  *     node scripts/requirements-status.js            таблица
  *     node scripts/requirements-status.js --todo     только вопросы специалисту
@@ -41,7 +44,8 @@ function main() {
     console.log("");
     console.log("ТРЕБОВАНИЯ ПО СТРАНАМ");
     console.log("─".repeat(78));
-    console.log("  ·  записи нет      ○  черновик      ✓  проверено");
+    console.log("  ·  записи нет      ○  не отмечена      ✓  отмечена проверенной");
+    console.log("  Пометка на видимость не влияет: страницы есть у всех пар.");
     console.log("");
 
     const head = pad("страна", 14) + VISAS.map(v => pad(v.slice(0, 9), 10)).join("");
@@ -109,7 +113,7 @@ function main() {
     if (!todos.length && !empty.length && !requirements.amountNeedsDate(e) && e.status === "verified") continue;
     any = true;
     console.log("");
-    console.log(`  ${country.country.ru} · ${e.visa}   [${e.status === "verified" ? "проверено" : "черновик"}]`);
+    console.log(`  ${country.country.ru} · ${e.visa}   [${e.status === "verified" ? "отмечена" : "не отмечена"}]`);
     if (empty.length) console.log(`    пустые поля: ${empty.join(", ")}`);
     const nd = requirements.amountNeedsDate(e);
     if (nd) console.log(`    вписана ${nd.ru}, но нет даты её проверки (${nd.date})`);

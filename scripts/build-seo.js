@@ -233,6 +233,10 @@ function buildJsonLd(site, page, values) {
 /* sitemap.xml и robots.txt                                            */
 /* ------------------------------------------------------------------ */
 
+/* Страница требований — это wizalar/<виза>/<страна>.html: на уровень
+   глубже страницы визы. Больше такой глубины на сайте нигде нет. */
+const REQ_PAGE = /^wizalar\/[^/]+\/[^/]+\.html$/;
+
 function buildSitemap(site, pages) {
   const base = L.siteUrl(site);
   const set = new Set(pages.map(p => p.rel));
@@ -247,6 +251,10 @@ function buildSitemap(site, pages) {
 
   for (const page of pages) {
     if (page.bare === "404.html") continue;   /* страницу ошибки индексировать незачем */
+    /* Страницы требований пока в карту не идут: у них стоит noindex,
+       и звать на них поиск, пока специалист не прошёлся, нечестно.
+       Снимается вместе с noindex в scripts/requirements.js. */
+    if (REQ_PAGE.test(page.bare)) continue;
     lines.push("  <url>");
     lines.push(`    <loc>${base + page.rel}</loc>`);
     for (const lang of L.LANGS) {

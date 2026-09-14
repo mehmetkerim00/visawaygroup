@@ -222,9 +222,8 @@
   }
 
   function matches(row) {
-    if (state.filter === "draft" && row.state !== "draft") return false;
-    if (state.filter === "verified" && row.state !== "verified") return false;
-    if (state.filter === "published" && row.state !== "published" && row.state !== "changed") return false;
+    if (state.filter === "changed" && row.state !== "changed") return false;
+    if (state.filter === "published" && row.state !== "published") return false;
     if (state.filter === "stale" && !row.stale) return false;
     if (!state.search) return true;
     var hay = (row.countryName + " " + row.visaName + " " + row.visa + " " + row.country).toLowerCase();
@@ -288,27 +287,23 @@
   /* Этап записи: где она сейчас и что это значит                     */
   /* --------------------------------------------------------------- */
 
-  var STATE_KEY = { draft: "stDraft", verified: "stVerified", published: "stPublished", changed: "stChanged" };
-  var STATE_WHAT = { draft: "expDraft", verified: "expVerified", published: "expPublished", changed: "expChanged" };
+  /* Состояния два: либо на сайте лежит то же, что в панели, либо нет. */
+  var STATE_KEY = { published: "stPublished", changed: "stChanged" };
+  var STATE_WHAT = { published: "expPublished", changed: "expChanged" };
 
-  function stateName(st) { return t(STATE_KEY[st] || "stDraft"); }
-  function stateWhat(st) { return t(STATE_WHAT[st] || "expDraft"); }
+  function stateName(st) { return t(STATE_KEY[st] || "stChanged"); }
+  function stateWhat(st) { return t(STATE_WHAT[st] || "expChanged"); }
 
   function renderCounts() {
     var c = state.counts || {};
     var box = $("counts");
     box.textContent = "";
-    [[t("cDrafts"), c.draft], [t("cVerified"), c.verified],
-     [t("cPublished"), c.published], [t("cStale"), c.stale]].forEach(function (pair, i) {
+    [[t("cChanged"), c.changed], [t("cPublished"), c.published],
+     [t("cStale"), c.stale]].forEach(function (pair, i) {
       if (i) box.appendChild(document.createTextNode(" · "));
       box.appendChild(document.createTextNode(pair[0] + " "));
       box.appendChild(el("b", "", String(pair[1] || 0)));
     });
-    if (c.changed) {
-      box.appendChild(document.createTextNode(" · "));
-      box.appendChild(document.createTextNode(t("stChanged") + " "));
-      box.appendChild(el("b", "", String(c.changed)));
-    }
   }
 
   /* Полоса состояния в редакторе: где запись сейчас, увидит ли её клиент
@@ -327,7 +322,10 @@
     где.textContent = "";
     if (!адрес) { где.hidden = true; return; }
 
-    var живая = st === "published" || st === "changed";
+    /* Лежит ли страница на сайте — это про публикацию, а не про состояние
+       записи. Пара, заведённая после последней сборки, ещё не выложена:
+       ей показываем будущий адрес, а не ссылку в никуда. */
+    var живая = !!(state.entry && state.entry.publishedAt);
     где.className = "stage__where" + (живая ? "" : " stage__where--future");
     где.appendChild(document.createTextNode(t(живая ? "liveAddress" : "willBeAt") + " "));
 
@@ -360,8 +358,11 @@
      показывала бы старый этап до перезагрузки списка. */
   function records_state() {
     var e = state.entry;
-    if (!e || e.status !== "verified") return "draft";
-    if (!e.publishedAt) return "verified";
+    /* Напечатанное, но не сохранённое — это тоже «на сайте этого нет»:
+       для человека разницы никакой, а состояний было бы три вместо двух. */
+    /* Напечатанное и не сохранённое — это тоже «на сайте этого нет». */
+    if (state.dirty) return "changed";
+    if (!e || !e.publishedAt) return "changed";
     if (e.updatedAt && e.updatedAt > e.publishedAt) return "changed";
     return "published";
   }
@@ -882,14 +883,13 @@
   /* Сообщение после сохранения. Сказать «сохранено» мало: человек правит
      текст и хочет знать, увидит ли это клиент. Поэтому в каждом состоянии
      своя фраза, и в ней сразу написано, что делать дальше. */
-  var СООБЩЕНИЕ = { draft: "savedDraft", verified: "savedVerified",
-                    published: "savedLive", changed: "savedLive" };
+  var СООБЩЕНИЕ = { published: "savedLive", changed: "savedChanged" };
   var тостТаймер = null;
 
   function сказать(st) {
     var box = $("toast");
     box.className = "toast toast--" + st;
-    box.textContent = t(СООБЩЕНИЕ[st] || "savedDraft");
+    box.textContent = t(СООБЩЕНИЕ[st] || "savedChanged");
     box.hidden = false;
     clearTimeout(тостТаймер);
     тостТаймер = setTimeout(function () { box.hidden = true; }, 7000);
@@ -933,8 +933,6 @@
   }
 
   $("btn-save").addEventListener("click", function () { save(); });
-  $("btn-verify").addEventListener("click", function () { save({ status: "verified" }); });
-  $("btn-draft").addEventListener("click", function () { save({ status: "draft" }); });
 
   /* Черновик сохраняется сам раз в полминуты: правка текста — долгая
      работа, и терять её из-за закрытой вкладки нельзя. */
@@ -957,16 +955,12 @@
     var bar = $("issuebar");
     var n = state.issues.length;
     bar.classList.toggle("is-ready", n === 0);
+    /* Замечания больше не мешают публикации: пустое поле и метка
+       УТОЧНИТЬ на страницу не выходят вовсе. Здесь они остались как
+       список того, что стоит дозаполнить. */
     $("issues-summary").textContent = n
-      ? t("notReady") + ": " + n + " " + t("issuesN")
-      : t("readyToPublish");
-    /* Кнопку не прячем, а делаем недоступной: спрятанная кнопка выглядит
-       так, будто такой возможности нет вовсе, и человек её ищет. */
-    var verify = $("btn-verify");
-    verify.hidden = !!(state.entry && state.entry.status === "verified");
-    verify.disabled = n > 0;
-    verify.title = n > 0 ? t("closeFirst") : "";
-    $("btn-draft").hidden = !(state.entry && state.entry.status === "verified");
+      ? t("toFill") + ": " + n
+      : t("allFilled");
 
     var ul = $("issues-list");
     ul.textContent = "";
@@ -1082,7 +1076,7 @@
   $("pub-close").addEventListener("click", function () { $("pub-overlay").hidden = true; });
 
   $("btn-publish").addEventListener("click", function () {
-    var waiting = state.rows.filter(function (r) { return r.state === "verified" || r.state === "changed"; });
+    var waiting = state.rows.filter(function (r) { return r.state === "changed"; });
     dialog(t("publishWhat"), function (body) {
       var ul = el("ul", "dialog__list");
       waiting.forEach(function (r) {

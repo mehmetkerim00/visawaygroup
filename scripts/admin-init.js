@@ -99,6 +99,41 @@ async function cmdImport() {
   say(`Перенесено записей: ${n}. Подписей: ${Object.keys(data.labels || {}).length}.`);
 }
 
+/* Отметить в базе, что собранное уехало на сайт.
+ *
+ * Раньше отметку ставила кнопка «Опубликовать» в панели. Но сайт
+ * пересобирается и просто от правки в репозитории — и тогда страницы
+ * на сайте новые, а панель считала бы, что публикации не было, и вечно
+ * показывала бы «есть неопубликованные правки».
+ *
+ * Поэтому отметку ставит сама сборка, и только после того, как preflight
+ * её пропустил. Дата публикации приравнивается к дате той правки, которую
+ * собрали. Если специалист успел что-то поменять, пока шла сборка, его
+ * правка останется новее отметки — и панель честно скажет, что она ещё
+ * не на сайте.
+ *
+ * Ошибка здесь сборку не валит: страницы уже собраны, и ронять выкладку
+ * из-за неудачной отметки было бы хуже, чем отметку потерять. */
+async function cmdStamp() {
+  const снимок = JSON.parse(fs.readFileSync(REQ_FILE, "utf8")).entries || [];
+  const было = new Map(снимок.map(e => [e.visa + "|" + e.country, e]));
+
+  const list = await records.listRecords();
+  let отмечено = 0, пропущено = 0;
+  for (const e of list) {
+    if (!было.has(e.visa + "|" + e.country)) { пропущено++; continue; }
+    const дата = String(e.updatedAt || "").trim();
+    if (!дата) { пропущено++; continue; }
+    if (e.publishedAt === дата) continue;          /* уже отмечено */
+    /* Пишем в обход putRecord: тот проставляет свежую дату правки, и
+       отметка о публикации оказалась бы старше самой записи — то есть
+       устаревала бы ровно в момент, когда её ставят. */
+    await kv.setJson(records.recKey(e.visa, e.country), Object.assign({}, e, { publishedAt: дата }));
+    отмечено++;
+  }
+  say(`Отмечено как опубликованное: ${отмечено}` + (пропущено ? `, пропущено ${пропущено}` : ""));
+}
+
 async function cmdExport() {
   const list = await records.listRecords();
   if (!list.length) { say("В базе пусто — выгружать нечего."); process.exit(1); }
@@ -190,6 +225,7 @@ async function main() {
   const [cmd, a, b] = process.argv.slice(2);
   if (cmd === "import") return cmdImport();
   if (cmd === "export") return cmdExport();
+  if (cmd === "stamp") return cmdStamp();
   if (cmd === "user") return cmdUser(a, b);
   if (cmd === "check") return cmdCheck();
   say("Команды: import | export | user <почта> <owner|editor> | check");

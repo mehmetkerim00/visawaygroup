@@ -86,35 +86,15 @@ window.VW_I18N = {
     "tk": "Jemi",
     "tr": "Toplam"
   },
-  "stDraft": {
-    "ru": "Черновик",
-    "tk": "Taslama",
-    "tr": "Taslak"
-  },
-  "stVerified": {
-    "ru": "Проверено специалистом",
-    "tk": "Hünärmen barlady",
-    "tr": "Uzman kontrol etti"
-  },
   "stPublished": {
     "ru": "Опубликовано",
     "tk": "Saýtda çap edildi",
     "tr": "Sitede yayında"
   },
   "stChanged": {
-    "ru": "Опубликовано, есть новые правки",
-    "tk": "Çap edildi, täze düzedişler bar",
-    "tr": "Yayında, yeni değişiklikler var"
-  },
-  "cDrafts": {
-    "ru": "Черновиков",
-    "tk": "Taslama",
-    "tr": "Taslak"
-  },
-  "cVerified": {
-    "ru": "Проверено",
-    "tk": "Barlanan",
-    "tr": "Kontrol edilen"
+    "ru": "Есть неопубликованные правки",
+    "tk": "Çap edilmedik düzedişler bar",
+    "tr": "Yayınlanmamış değişiklikler var"
   },
   "cPublished": {
     "ru": "Опубликовано",
@@ -130,16 +110,6 @@ window.VW_I18N = {
     "ru": "Все",
     "tk": "Ählisi",
     "tr": "Tümü"
-  },
-  "fDraft": {
-    "ru": "Черновики",
-    "tk": "Taslamalar",
-    "tr": "Taslaklar"
-  },
-  "fVerified": {
-    "ru": "Проверены",
-    "tk": "Barlanan",
-    "tr": "Kontrol edilen"
   },
   "fPublished": {
     "ru": "Опубликованы",
@@ -171,30 +141,15 @@ window.VW_I18N = {
     "tk": "barlandy",
     "tr": "kontrol edildi"
   },
-  "issuesN": {
-    "ru": "замечаний",
-    "tk": "bellikler",
-    "tr": "not"
-  },
-  "expDraft": {
-    "ru": "Эти правки видите только вы. На сайте этой страницы нет.",
-    "tk": "Bu düzedişleri diňe siz görýärsiňiz. Saýtda beýle sahypa ýok.",
-    "tr": "Bu değişiklikleri yalnızca siz görüyorsunuz. Sitede böyle bir sayfa yok."
-  },
-  "expVerified": {
-    "ru": "Готово к публикации. На сайте появится после нажатия кнопки «Опубликовать» в списке записей.",
-    "tk": "Çap etmäge taýýar. Sanaw sahypasyndaky «Çap etmek» düwmesine basylandan soň saýtda peýda bolar.",
-    "tr": "Yayına hazır. Kayıt listesindeki «Yayınla» düğmesine basıldıktan sonra sitede görünecek."
-  },
   "expPublished": {
-    "ru": "Страница на сайте — её видят посетители.",
-    "tk": "Sahypa saýtda — ony girýänler görýär.",
-    "tr": "Sayfa sitede — ziyaretçiler görüyor."
+    "ru": "На сайте лежит ровно то, что вы видите здесь.",
+    "tk": "Saýtda edil şu ýerde görýäniňiz dur.",
+    "tr": "Sitede tam olarak burada gördüğünüz şey var."
   },
   "expChanged": {
-    "ru": "На сайте лежит прежняя версия. Ваши правки появятся после публикации.",
-    "tk": "Saýtda öňki nusga dur. Düzedişleriňiz çap edilenden soň peýda bolar.",
-    "tr": "Sitede önceki sürüm duruyor. Değişiklikleriniz yayınlandıktan sonra görünecek."
+    "ru": "Этих правок на сайте пока нет. Они появятся после нажатия кнопки «Опубликовать» в списке записей.",
+    "tk": "Bu düzedişler saýtda entek ýok. Sanaw sahypasyndaky «Çap etmek» düwmesine basylandan soň peýda bolar.",
+    "tr": "Bu değişiklikler sitede henüz yok. Kayıt listesindeki «Yayınla» düğmesine basıldıktan sonra görünecek."
   },
   "openOnSite": {
     "ru": "Открыть на сайте",
@@ -216,26 +171,6 @@ window.VW_I18N = {
     "tk": "Ýatda saklamak",
     "tr": "Kaydet"
   },
-  "markVerified": {
-    "ru": "Пометить проверенной",
-    "tk": "Barlandy diýip bellemek",
-    "tr": "Kontrol edildi olarak işaretle"
-  },
-  "backToWork": {
-    "ru": "Вернуть в работу",
-    "tk": "Işe gaýtarmak",
-    "tr": "Çalışmaya geri al"
-  },
-  "notReady": {
-    "ru": "Не готово к публикации",
-    "tk": "Çap etmäge taýýar däl",
-    "tr": "Yayına hazır değil"
-  },
-  "readyToPublish": {
-    "ru": "Готово к публикации",
-    "tk": "Çap etmäge taýýar",
-    "tr": "Yayına hazır"
-  },
   "savedAt": {
     "ru": "сохранено в",
     "tk": "ýatda saklandy",
@@ -245,11 +180,6 @@ window.VW_I18N = {
     "ru": "есть несохранённые правки",
     "tk": "ýatda saklanmadyk düzedişler bar",
     "tr": "kaydedilmemiş değişiklikler var"
-  },
-  "closeFirst": {
-    "ru": "Сначала закройте замечания",
-    "tk": "Ilki bellikleri ýapyň",
-    "tr": "Önce notları kapatın"
   },
   "required": {
     "ru": "— обязательно",
@@ -641,20 +571,10 @@ window.VW_I18N = {
     "tk": "Çap edilenden soň sahypa şu ýerde bolar:",
     "tr": "Yayınlandıktan sonra sayfa burada olacak:"
   },
-  "savedDraft": {
-    "ru": "Сохранено. На сайте пока не видно — это черновик.",
-    "tk": "Ýatda saklandy. Saýtda entek görünmeýär — bu taslama.",
-    "tr": "Kaydedildi. Sitede henüz görünmüyor — bu bir taslak."
-  },
-  "savedVerified": {
-    "ru": "Сохранено. На сайте появится после публикации.",
-    "tk": "Ýatda saklandy. Çap edilenden soň saýtda peýda bolar.",
-    "tr": "Kaydedildi. Yayınlandıktan sonra sitede görünecek."
-  },
   "savedLive": {
-    "ru": "Сохранено. Чтобы обновить страницу на сайте, нажмите «Опубликовать».",
-    "tk": "Ýatda saklandy. Saýtdaky sahypany täzelemek üçin «Çap etmek» düwmesine basyň.",
-    "tr": "Kaydedildi. Sitedeki sayfayı güncellemek için «Yayınla» düğmesine basın."
+    "ru": "Сохранено. На сайте уже лежит эта версия.",
+    "tk": "Ýatda saklandy. Saýtda eýýäm şu nusga dur.",
+    "tr": "Kaydedildi. Sitede zaten bu sürüm var."
   },
   "pathTitle": {
     "ru": "Как текст попадает на сайт",
@@ -662,19 +582,19 @@ window.VW_I18N = {
     "tr": "Metin siteye nasıl ulaşır"
   },
   "pathStep1": {
-    "ru": "Правите текст и сохраняете — это черновик, его видите только вы.",
-    "tk": "Teksti düzedýärsiňiz we ýatda saklaýarsyňyz — bu taslama, ony diňe siz görýärsiňiz.",
-    "tr": "Metni düzenleyip kaydedersiniz — bu bir taslaktır, yalnızca siz görürsünüz."
+    "ru": "Правите текст и сохраняете — на сайте пока прежняя версия.",
+    "tk": "Teksti düzedýärsiňiz we ýatda saklaýarsyňyz — saýtda entek öňki nusga.",
+    "tr": "Metni düzenleyip kaydedersiniz — sitede şimdilik önceki sürüm var."
   },
   "pathStep2": {
-    "ru": "Помечаете проверенной — запись встаёт в очередь на публикацию.",
-    "tk": "«Barlandy» diýip belleýärsiňiz — ýazgy çap nobatyna durýar.",
-    "tr": "«Kontrol edildi» olarak işaretlersiniz — kayıt yayın sırasına girer."
+    "ru": "Нажимаете «Опубликовать» — сайт пересобирается.",
+    "tk": "«Çap etmek» düwmesine basýarsyňyz — saýt täzeden ýygnalýar.",
+    "tr": "«Yayınla» düğmesine basarsınız — site yeniden derlenir."
   },
   "pathStep3": {
-    "ru": "Нажимаете «Опубликовать» — сайт пересобирается, и страница появляется у посетителей.",
-    "tk": "«Çap etmek» düwmesine basýarsyňyz — saýt täzeden ýygnalýar we sahypa girýänlere görünýär.",
-    "tr": "«Yayınla» düğmesine basarsınız — site yeniden derlenir ve sayfa ziyaretçilere görünür."
+    "ru": "Через пару минут страница на сайте — та же, что у вас в панели.",
+    "tk": "Birki minutdan saýtdaky sahypa paneldäki bilen deň bolar.",
+    "tr": "Birkaç dakika sonra sitedeki sayfa panelinizdekiyle aynı olur."
   },
   "pathHide": {
     "ru": "Свернуть",
@@ -695,5 +615,30 @@ window.VW_I18N = {
     "ru": "Состояние",
     "tk": "Ýagdaýy",
     "tr": "Durumu"
+  },
+  "cChanged": {
+    "ru": "Ждут публикации",
+    "tk": "Çap edilmegine garaşýar",
+    "tr": "Yayın bekliyor"
+  },
+  "fChanged": {
+    "ru": "Ждут публикации",
+    "tk": "Çap garaşýar",
+    "tr": "Yayın bekliyor"
+  },
+  "toFill": {
+    "ru": "Стоит дозаполнить",
+    "tk": "Doldurmaly ýerler",
+    "tr": "Doldurulacak yerler"
+  },
+  "allFilled": {
+    "ru": "Всё заполнено",
+    "tk": "Ählisi doldurylan",
+    "tr": "Her şey dolu"
+  },
+  "savedChanged": {
+    "ru": "Сохранено. На сайте пока прежняя версия — нажмите «Опубликовать».",
+    "tk": "Ýatda saklandy. Saýtda entek öňki nusga — «Çap etmek» düwmesine basyň.",
+    "tr": "Kaydedildi. Sitede şimdilik önceki sürüm var — «Yayınla» düğmesine basın."
   }
 };

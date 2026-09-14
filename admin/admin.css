@@ -208,8 +208,6 @@ input:focus, textarea:focus { border-color: var(--accent); }
 .row__tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; }
 
 .tag { padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
-.tag--draft { background-color: #EFEEEC; color: var(--muted); }
-.tag--verified { background-color: #E9F3EC; color: #1E4A2E; }
 .tag--stale { background-color: var(--warn-bg); color: var(--warn); }
 .tag--todo { background-color: var(--warn-bg); color: var(--warn); }
 
@@ -547,14 +545,6 @@ input:focus, textarea:focus { border-color: var(--accent); }
 .stage__where--future { opacity: .85; }
 
 /* Цвет — чтобы состояние читалось раньше текста */
-.stage--draft { border-left-color: var(--muted); background-color: #F4F3F1; }
-.stage--draft .stage__name { color: var(--ink); }
-.stage--draft .stage__what { color: var(--muted); }
-
-.stage--verified { border-left-color: var(--warn-line); background-color: var(--warn-bg); }
-.stage--verified .stage__name { color: var(--warn); }
-.stage--verified .stage__what { color: var(--warn); }
-
 .stage--published { border-left-color: var(--ok); background-color: #EFF6F1; }
 .stage--published .stage__name { color: var(--ok); }
 .stage--published .stage__what { color: #2A5C3B; }
@@ -596,7 +586,6 @@ input:focus, textarea:focus { border-color: var(--accent); }
   vertical-align: baseline;
   background-color: var(--muted);
 }
-.dot--verified { background-color: var(--warn-line); }
 .dot--published { background-color: var(--ok); }
 .dot--changed { background-color: var(--accent); }
 
@@ -610,7 +599,6 @@ input:focus, textarea:focus { border-color: var(--accent); }
 }
 
 /* Метки этапа в списке */
-.tag--verified { background-color: var(--warn-bg); color: var(--warn); }
 .tag--published { background-color: #E9F3EC; color: #1E4A2E; }
 .tag--changed { background-color: #FBF3EE; color: var(--accent-dark); }
 
@@ -654,7 +642,5 @@ input:focus, textarea:focus { border-color: var(--accent); }
   box-shadow: 0 6px 24px rgba(31, 35, 41, .16);
   font-size: 14px;
 }
-.toast--draft { border-left-color: var(--muted); }
-.toast--verified { border-left-color: var(--warn-line); background-color: var(--warn-bg); color: var(--warn); }
 .toast--published { border-left-color: var(--ok); background-color: #EFF6F1; color: #2A5C3B; }
 .toast--changed { border-left-color: var(--accent); background-color: #FBF3EE; color: var(--accent-dark); }

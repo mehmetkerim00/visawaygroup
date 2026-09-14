@@ -147,23 +147,30 @@ const EXTERNAL = /^(#|mailto:|tel:|https?:|\/\/|data:)/i;
 
 
 /* --------------------------------------------------------------------- */
-/* Черновики требований                                                   */
+/* Страницы требований                                                    */
 /* --------------------------------------------------------------------- */
 
-/* Записи со статусом draft на сайт попадать не должны вовсе. Проверяем
-   двумя независимыми способами, потому что цена ошибки высокая: человек
-   принимает решения по визе, читая непроверенные требования.
+/* Раньше здесь проверялось, что черновики не просочились на сайт. Теперь
+   выкладываются все записи, и проверять надо другое — то, на чём эта
+   выкладка держится:
 
-   Первый способ — по данным: для каждой записи draft смотрим, не лежит ли
-   её страница на диске. Второй — по самим файлам: ищем в собранных
-   страницах красную полосу черновика. Второй ловит и то, чего нет в
-   data/requirements.json: например, страницу, оставшуюся от старой записи. */
-function checkDrafts() {
-  let requirements;
+     1. страница есть у каждой записи на всех трёх языках;
+     2. на каждой стоит предупреждение, что сведения общие;
+     3. каждая закрыта от поиска;
+     4. ни одна не попала в карту сайта;
+     5. наружу не вышло ни одной заметки специалиста.
+
+   Пятое — самое важное. Метка УТОЧНИТЬ на живой странице читается как
+   записка, случайно попавшая на сайт, а «НЕ ЗАПОЛНЕНО» — как недоделка.
+   Правила отсева живут в api/_lib/core.js; здесь проверяется результат,
+   а не намерение. */
+function checkRequirements() {
+  let requirements, core;
   try {
     requirements = require("./requirements");
+    core = require("../api/_lib/core.js");
   } catch (e) {
-    block("Черновики", "не читается scripts/requirements.js: " + e.message, "");
+    block("Требования", "не читается сборщик требований: " + e.message, "");
     return;
   }
 
@@ -171,64 +178,77 @@ function checkDrafts() {
   try {
     data = requirements.load();
   } catch (e) {
-    block("Черновики", e.message, "data/requirements.json");
+    block("Требования", e.message, "data/requirements.json");
     return;
   }
 
   const entries = data.req.entries || [];
-  let leaked = 0;
-
+  const ждём = [];
   for (const e of entries) {
-    if (e.status === "verified") continue;
-    for (const lang of L.LANGS) {
-      const rel = requirements.pagePath(e, lang, data);
-      if (fs.existsSync(path.join(ROOT, rel))) {
-        leaked++;
-        block("Черновики", "черновик попал в сборку — пересоберите: node scripts/build.js", rel);
-      }
+    for (const lang of L.LANGS) ждём.push(requirements.pagePath(e, lang, data));
+  }
+
+  let плохо = 0;
+  const нет = ждём.filter(rel => !fs.existsSync(path.join(ROOT, rel)));
+  if (нет.length) {
+    плохо += нет.length;
+    block("Требования", `страниц не собрано: ${нет.length} — пересоберите: node scripts/build.js`, нет[0]);
+  }
+
+  const набор = new Set(ждём);
+  const карта = path.join(ROOT, "sitemap.xml");
+  const картаТекст = fs.existsSync(карта) ? fs.readFileSync(карта, "utf8") : "";
+
+  for (const rel of ждём) {
+    const file = path.join(ROOT, rel);
+    if (!fs.existsSync(file)) continue;
+    const html = fs.readFileSync(file, "utf8");
+
+    if (!/<meta name="robots" content="noindex/.test(html)) {
+      плохо++; block("Требования", "страница открыта поиску, а должна быть закрыта (noindex)", rel);
+    }
+    if (!html.includes('class="notice"')) {
+      плохо++; block("Требования", "нет предупреждения вверху страницы", rel);
+    }
+    if (html.includes(core.TODO_MARK)) {
+      плохо++; block("Требования", "на страницу попала метка " + core.TODO_MARK, rel);
+    }
+    if (html.includes("НЕ ЗАПОЛНЕНО") || html.includes("is-missing")) {
+      плохо++; block("Требования", "на страницу попала пометка о незаполненном", rel);
+    }
+    if (html.includes('class="draftbar"')) {
+      плохо++; block("Требования", "осталась полоса черновика — пересоберите", rel);
+    }
+    if (картаТекст.includes("/" + rel + "<")) {
+      плохо++; block("Требования", "страница попала в карту сайта, а пока не должна", rel);
     }
   }
 
+  /* Страницы, оставшиеся от удалённых или переименованных записей. */
   for (const rel of pages()) {
-    const html = fs.readFileSync(path.join(ROOT, rel), "utf8");
-    if (html.includes("class=\"draftbar\"")) {
-      leaked++;
-      block("Черновики", "на странице стоит полоса черновика", rel);
-    }
+    if (!/^(?:ru\/|en\/)?wizalar\/[^/]+\/[^/]+\.html$/.test(rel)) continue;
+    if (набор.has(rel)) continue;
+    плохо++;
+    block("Требования", "лишняя страница — такой записи нет; пересоберите", rel);
   }
 
-  /* Обратная сторона: verified с незакрытыми вопросами или пустыми
-     сроками — это тоже нельзя публиковать, только беда тут другая.
-     Пустое поле на живой странице выглядит как недоделка, а метка
-     УТОЧНИТЬ — как записка специалисту, случайно попавшая на сайт. */
-  for (const e of entries) {
-    if (e.status !== "verified") continue;
-    const id = `${e.visa}/${e.country}`;
-    const t = requirements.todos(e);
-    if (t.length) {
-      block("Черновики", `в проверенной записи осталось меток УТОЧНИТЬ: ${t.length}`, "data/requirements.json: " + id);
-    }
-    const empty = requirements.emptyFields(e);
-    if (empty.length) {
-      block("Черновики", "в проверенной записи пустые поля: " + empty.join(", "), "data/requirements.json: " + id);
-    }
-    if (!String(e.checkedOn || "").trim()) {
-      block("Черновики", "в проверенной записи нет даты проверки", "data/requirements.json: " + id);
-    }
-    /* Сумма без даты — хуже, чем отсутствие суммы: через полгода она
-       будет врать, и никто не поймёт, когда её последний раз видели.
-       У визы это консульский сбор, у консультации — стоимость обучения. */
-    const money = requirements.amountNeedsDate(e);
-    if (money) {
-      block("Черновики", `вписана ${money.ru}, но не сказано, когда проверяли сумму (${money.date})`,
-            "data/requirements.json: " + id);
-    }
+  if (!плохо) {
+    ok(`Страницы требований собраны и закрыты от поиска (${ждём.length} шт., ${entries.length} пар)`);
+    ok("Заметки специалиста на страницы не попали: ни меток, ни пустых полей");
   }
 
-  if (!leaked) {
-    const drafts = entries.filter(e => e.status !== "verified").length;
-    const verified = entries.length - drafts;
-    ok(`Черновиков требований в сборке нет (проверено ${verified}, в работе ${drafts})`);
+  /* Не мешает публикации, но знать стоит: сумма без даты через полгода
+     врёт с уверенным видом. Раньше это блокировало проверенные записи —
+     теперь проверенных нет, и блокировать нечего, а сказать надо. */
+  const безДаты = entries.filter(e => core.amountNeedsDate(e));
+  if (безДаты.length) {
+    notice(`Сумм без даты проверки: ${безДаты.length}. Видно в панели, на страницу сумма выходит как есть.`,
+           "data/requirements.json");
+  }
+  const сМетками = entries.filter(e => core.todos(e).length).length;
+  if (сМетками) {
+    notice(`Записей с метками ${core.TODO_MARK}: ${сМетками} из ${entries.length}. ` +
+           "На сайт такие пункты не выходят — их видно в панели.", "data/requirements.json");
   }
 }
 
@@ -676,7 +696,7 @@ function main() {
   checkTeam();
   checkAssets();
   checkPhotoCredits();
-  checkDrafts();
+  checkRequirements();
   checkBackup();
 
   process.exitCode = printReport();

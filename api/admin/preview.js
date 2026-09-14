@@ -70,8 +70,10 @@ module.exports = http.handler(async (req, res) => {
   const prefix = lang === "tk" ? "/" : `/${lang}/`;
 
   const main = core.mainContent(entry, lang, {
-    /* Стили здесь приходят файлом, встроенных быть не должно */
-    inlineStyles: false,
+    /* Предпросмотр — рабочее окно специалиста, а не страница сайта.
+       Здесь незаполненное подсвечивается, чтобы было видно, что дозаполнить.
+       На сайте те же места просто не выводятся. */
+    forPanel: true,
     labels,
     country,
     visaName,

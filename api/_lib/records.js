@@ -74,8 +74,8 @@ async function listRecords() {
 
 /* Три состояния, которые видит человек:
  *
- *   draft      черновик — виден только в панели, на сайте его нет;
- *   verified   проверено специалистом — готово, но на сайте ещё нет;
+ *   draft / verified — прежняя пометка специалиста. Сохраняется в записи,
+ *   но на то, попадёт ли страница на сайт, больше не влияет;
  *   published  опубликовано — страница есть на сайте.
  *
  * И одно четвёртое, без которого было бы вранье: changed — страница на
@@ -84,17 +84,19 @@ async function listRecords() {
  * «Опубликовано» ставится не по факту нажатия кнопки, а после того как
  * страницу удалось открыть на живом сайте. Нажатие кнопки — это ещё не
  * публикация: сборка может не дойти до конца. */
+/* Где запись относительно сайта. Состояния теперь два, и оба про одно:
+   лежит ли на сайте ровно то, что в панели.
+     published — да, последняя правка уже выложена;
+     changed   — нет, в панели есть что-то, чего на сайте ещё нет.
+   Поле status и дата проверки в записи остаются, но на видимость больше
+   не влияют: страницы собираются для всех пар. */
 function stateOf(entry) {
-  if (entry.status !== "verified") return "draft";
   const pub = String(entry.publishedAt || "");
-  if (!pub) return "verified";
+  if (!pub) return "changed";
   if (entry.updatedAt && entry.updatedAt > pub) return "changed";
   return "published";
 }
 
-const STATE_ORDER = ["draft", "verified", "published", "changed"];
-
-/* Адрес страницы на сайте — тот же, что строит сборка */
 function livePath(entry, lang) {
   const slug = (BY_CODE.get(entry.country) || {}).slug;
   const prefix = lang === "tk" ? "" : lang + "/";
@@ -191,6 +193,6 @@ const FIELD_TITLES = {
 module.exports = {
   VISAS, VISA_NAMES, BY_CODE, countriesData,
   validPair, getRecord, putRecord, listRecords, summarize, blockersFor, FIELD_TITLES,
-  stateOf, livePath, STATE_ORDER,
+  stateOf, livePath,
   getLabels, setLabels, recKey
 };

@@ -2,13 +2,10 @@
  * publish.js — кнопка «Опубликовать».
  *
  * Что происходит при нажатии:
- *   1. собираем все записи, помеченные «проверено специалистом»;
- *   2. прогоняем по ним те же правила, что и preflight при сборке.
- *      Не прошло — публикация не идёт, а человек видит, что именно
- *      не так и в какой записи;
- *   3. дёргаем у Vercel ссылку пересборки. Он собирает сайт заново,
+ *   1. собираем записи, которых на сайте ещё нет в нынешнем виде;
+ *   2. дёргаем у Vercel ссылку пересборки. Он собирает сайт заново,
  *      уже беря требования из базы (см. scripts/build-vercel.js);
- *   4. владельцу уходит письмо.
+ *   3. владельцу уходит письмо.
  *
  * Если сборка упадёт — Vercel не заменит сайт, и посетители продолжат
  * видеть прежнюю версию. Это его обычное поведение, специально ничего
@@ -38,10 +35,7 @@ function siteUrl(req) {
 
 async function waiting() {
   const all = await records.listRecords();
-  return all.filter(e => {
-    const st = records.stateOf(e);
-    return st === "verified" || st === "changed";
-  });
+  return all.filter(e => records.stateOf(e) === "changed");
 }
 
 module.exports = http.handler(async (req, res) => {
@@ -93,27 +87,13 @@ module.exports = http.handler(async (req, res) => {
 
   const pending = await waiting();
   if (!pending.length) {
-    http.fail(422, "Публиковать нечего: ни одна запись не помечена проверенной.");
+    http.fail(422, "Публиковать нечего: на сайте уже лежит то же, что в панели.");
   }
 
-  /* Те же правила, что у preflight. Если тут пропустить — сборка всё
-     равно не пройдёт, но человек узнает об этом позже и не поймёт, чем
-     он провинился. */
-  const problems = [];
-  for (const e of pending) {
-    const bad = records.blockersFor(e);
-    if (!bad.length) continue;
-    const c = records.BY_CODE.get(e.country);
-    problems.push({
-      visa: e.visa,
-      country: e.country,
-      title: (c.country || {}).ru + " — " + ((records.VISA_NAMES[e.visa] || {}).ru || e.visa).toLowerCase(),
-      issues: bad.map(b => b.text)
-    });
-  }
-  if (problems.length) {
-    http.fail(422, "Публикация не пошла: в записях есть незакрытые замечания.", { problems });
-  }
+  /* Незакрытые замечания публикацию больше не останавливают. Пустые поля
+     и пункты с меткой УТОЧНИТЬ на страницу не выходят вовсе (правила в
+     api/_lib/core.js), так что недоделку они показать не могут. В панели
+     эти места по-прежнему подсвечены — там они и нужны. */
 
   const hook = process.env.VERCEL_DEPLOY_HOOK;
   if (!hook) {
