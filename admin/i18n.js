@@ -177,24 +177,24 @@ window.VW_I18N = {
     "tr": "not"
   },
   "expDraft": {
-    "ru": "Виден только в панели. На сайте этой страницы нет. Чтобы она появилась — закройте замечания и нажмите «Пометить проверенной».",
-    "tk": "Diňe panelde görünýär. Saýtda beýle sahypa ýok. Peýda bolmagy üçin bellikleri ýapyň we «Hünärmen barlady» düwmesine basyň.",
-    "tr": "Yalnızca panelde görünür. Sitede böyle bir sayfa yok. Görünmesi için notları kapatın ve «Uzman kontrol etti» düğmesine basın."
+    "ru": "Эти правки видите только вы. На сайте этой страницы нет.",
+    "tk": "Bu düzedişleri diňe siz görýärsiňiz. Saýtda beýle sahypa ýok.",
+    "tr": "Bu değişiklikleri yalnızca siz görüyorsunuz. Sitede böyle bir sayfa yok."
   },
   "expVerified": {
-    "ru": "Готово к публикации, но на сайте ещё нет. Нажмите «Опубликовать» на странице списка — сайт пересоберётся, и страница появится.",
-    "tk": "Çap etmäge taýýar, ýöne saýtda entek ýok. Sanaw sahypasynda «Çap etmek» düwmesine basyň — saýt täzeden ýygnalar we sahypa peýda bolar.",
-    "tr": "Yayına hazır ama sitede henüz yok. Liste sayfasında «Yayınla» düğmesine basın — site yeniden derlenir ve sayfa görünür."
+    "ru": "Готово к публикации. На сайте появится после нажатия кнопки «Опубликовать» в списке записей.",
+    "tk": "Çap etmäge taýýar. Sanaw sahypasyndaky «Çap etmek» düwmesine basylandan soň saýtda peýda bolar.",
+    "tr": "Yayına hazır. Kayıt listesindeki «Yayınla» düğmesine basıldıktan sonra sitede görünecek."
   },
   "expPublished": {
-    "ru": "Страница есть на сайте — её видят посетители.",
-    "tk": "Sahypa saýtda bar — ony girýänler görýär.",
-    "tr": "Sayfa sitede var — ziyaretçiler görüyor."
+    "ru": "Страница на сайте — её видят посетители.",
+    "tk": "Sahypa saýtda — ony girýänler görýär.",
+    "tr": "Sayfa sitede — ziyaretçiler görüyor."
   },
   "expChanged": {
-    "ru": "Страница на сайте есть, но с тех пор текст правили. На сайте лежит старый вариант. Нажмите «Опубликовать», чтобы обновить.",
-    "tk": "Sahypa saýtda bar, ýöne şondan bäri tekst üýtgedildi. Saýtda köne nusga dur. Täzelemek üçin «Çap etmek» düwmesine basyň.",
-    "tr": "Sayfa sitede var ama o zamandan beri metin değişti. Sitede eski sürüm duruyor. Güncellemek için «Yayınla» düğmesine basın."
+    "ru": "На сайте лежит прежняя версия. Ваши правки появятся после публикации.",
+    "tk": "Saýtda öňki nusga dur. Düzedişleriňiz çap edilenden soň peýda bolar.",
+    "tr": "Sitede önceki sürüm duruyor. Değişiklikleriniz yayınlandıktan sonra görünecek."
   },
   "openOnSite": {
     "ru": "Открыть на сайте",
@@ -630,5 +630,70 @@ window.VW_I18N = {
     "ru": "Стоимость обучения меняется чаще всего. Без даты запись не опубликуется.",
     "tk": "Okuwyň bahasy iň ýygy üýtgeýär. Senesiz ýazgy çap edilmez.",
     "tr": "Öğrenim ücreti en sık değişen şeydir. Tarihsiz kayıt yayınlanmaz."
+  },
+  "liveAddress": {
+    "ru": "Адрес страницы на сайте:",
+    "tk": "Sahypanyň saýtdaky salgysy:",
+    "tr": "Sayfanın sitedeki adresi:"
+  },
+  "willBeAt": {
+    "ru": "После публикации страница будет здесь:",
+    "tk": "Çap edilenden soň sahypa şu ýerde bolar:",
+    "tr": "Yayınlandıktan sonra sayfa burada olacak:"
+  },
+  "savedDraft": {
+    "ru": "Сохранено. На сайте пока не видно — это черновик.",
+    "tk": "Ýatda saklandy. Saýtda entek görünmeýär — bu taslama.",
+    "tr": "Kaydedildi. Sitede henüz görünmüyor — bu bir taslak."
+  },
+  "savedVerified": {
+    "ru": "Сохранено. На сайте появится после публикации.",
+    "tk": "Ýatda saklandy. Çap edilenden soň saýtda peýda bolar.",
+    "tr": "Kaydedildi. Yayınlandıktan sonra sitede görünecek."
+  },
+  "savedLive": {
+    "ru": "Сохранено. Чтобы обновить страницу на сайте, нажмите «Опубликовать».",
+    "tk": "Ýatda saklandy. Saýtdaky sahypany täzelemek üçin «Çap etmek» düwmesine basyň.",
+    "tr": "Kaydedildi. Sitedeki sayfayı güncellemek için «Yayınla» düğmesine basın."
+  },
+  "pathTitle": {
+    "ru": "Как текст попадает на сайт",
+    "tk": "Tekst saýta nähili düşýär",
+    "tr": "Metin siteye nasıl ulaşır"
+  },
+  "pathStep1": {
+    "ru": "Правите текст и сохраняете — это черновик, его видите только вы.",
+    "tk": "Teksti düzedýärsiňiz we ýatda saklaýarsyňyz — bu taslama, ony diňe siz görýärsiňiz.",
+    "tr": "Metni düzenleyip kaydedersiniz — bu bir taslaktır, yalnızca siz görürsünüz."
+  },
+  "pathStep2": {
+    "ru": "Помечаете проверенной — запись встаёт в очередь на публикацию.",
+    "tk": "«Barlandy» diýip belleýärsiňiz — ýazgy çap nobatyna durýar.",
+    "tr": "«Kontrol edildi» olarak işaretlersiniz — kayıt yayın sırasına girer."
+  },
+  "pathStep3": {
+    "ru": "Нажимаете «Опубликовать» — сайт пересобирается, и страница появляется у посетителей.",
+    "tk": "«Çap etmek» düwmesine basýarsyňyz — saýt täzeden ýygnalýar we sahypa girýänlere görünýär.",
+    "tr": "«Yayınla» düğmesine basarsınız — site yeniden derlenir ve sayfa ziyaretçilere görünür."
+  },
+  "pathHide": {
+    "ru": "Свернуть",
+    "tk": "Ýygnamak",
+    "tr": "Gizle"
+  },
+  "pathShow": {
+    "ru": "Показать",
+    "tk": "Görkezmek",
+    "tr": "Göster"
+  },
+  "openLive": {
+    "ru": "Открыть",
+    "tk": "Açmak",
+    "tr": "Aç"
+  },
+  "stateOf": {
+    "ru": "Состояние",
+    "tk": "Ýagdaýy",
+    "tr": "Durumu"
   }
 };

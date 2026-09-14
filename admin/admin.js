@@ -210,9 +210,11 @@
         ? state.me.email + " · " + t(state.me.role === "owner" ? "owner" : "editor")
         : "";
       state.counts = data.counts;
+      state.siteBase = data.siteBase || "";
       renderCounts();
       renderPublishButton();
       renderList();
+      renderPath();
       show("list");
     }).catch(function (err) {
       if (err.message !== "нет входа") setAlert("list-error", err.message);
@@ -236,20 +238,50 @@
     $("list-empty").hidden = shown.length > 0;
 
     shown.forEach(function (row) {
-      var b = el("button", "row");
+      /* Строка — не кнопка, а рамка вокруг кнопки: у опубликованных
+         записей рядом стоит ссылка на живую страницу, а ссылку внутрь
+         кнопки класть нельзя. */
+      var строка = el("div", "row row--" + row.state);
+
+      var b = el("button", "row__open");
       b.type = "button";
-      b.appendChild(el("span", "row__name", row.countryName + " — " + row.visaName.toLowerCase()));
+      var имя = el("span", "row__name");
+      имя.appendChild(значок(row.state));
+      имя.appendChild(document.createTextNode(row.countryName + " — " + row.visaName.toLowerCase()));
+      b.appendChild(имя);
       b.appendChild(el("span", "row__meta", row.checkedOn
         ? t("checkedOnShort") + " " + row.checkedOn + (row.checkedBy ? " · " + row.checkedBy : "")
         : t("neverChecked")));
+      b.addEventListener("click", function () { openEditor(row.visa, row.country); });
+      строка.appendChild(b);
+
       var tags = el("span", "row__tags");
       tags.appendChild(tag(stateName(row.state), row.state));
       if (row.stale) tags.appendChild(tag(t("cStale"), "stale"));
       if (row.blockers) tags.appendChild(tag(t("partIssues") + " " + row.blockers, "todo"));
-      b.appendChild(tags);
-      b.addEventListener("click", function () { openEditor(row.visa, row.country); });
-      box.appendChild(b);
+
+      if ((row.state === "published" || row.state === "changed") && row.liveUrl) {
+        var a = document.createElement("a");
+        a.className = "row__live";
+        a.href = (state.siteBase || "") + row.liveUrl;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = t("openLive") + " ↗";
+        a.title = t("openOnSite");
+        tags.appendChild(a);
+      }
+      строка.appendChild(tags);
+      box.appendChild(строка);
     });
+  }
+
+  /* Кружок цвета этапа перед названием: состояние видно, не читая подпись. */
+  function значок(st) {
+    var n = el("span", "dot dot--" + st);
+    n.setAttribute("role", "img");
+    n.setAttribute("aria-label", t("stateOf") + ": " + stateName(st));
+    n.title = stateName(st);
+    return n;
   }
 
   /* --------------------------------------------------------------- */
@@ -279,27 +311,50 @@
     }
   }
 
-  /* Карточка этапа в редакторе: крупно, где запись, и что сделать,
-     чтобы текст оказался на сайте. */
+  /* Полоса состояния в редакторе: где запись сейчас, увидит ли её клиент
+     и по какому адресу. Адрес показываем и у черновика — приглушённо, как
+     будущий: так видно, что именно создаётся. Он зависит от языка, который
+     специалист сейчас заполняет, поэтому полоса перерисовывается вместе с
+     формой при переключении языка. */
   function renderStage() {
     var st = records_state();
     $("stage").className = "stage stage--" + st;
     $("stage-name").textContent = stateName(st);
     $("stage-what").textContent = stateWhat(st);
-    var link = $("stage-link");
-    if ((st === "published" || st === "changed") && state.meta && state.meta.liveUrl) {
-      link.textContent = "";
+
+    var где = $("stage-where");
+    var адрес = адресСтраницы();
+    где.textContent = "";
+    if (!адрес) { где.hidden = true; return; }
+
+    var живая = st === "published" || st === "changed";
+    где.className = "stage__where" + (живая ? "" : " stage__where--future");
+    где.appendChild(document.createTextNode(t(живая ? "liveAddress" : "willBeAt") + " "));
+
+    if (живая) {
       var a = document.createElement("a");
-      a.href = state.meta.liveUrl;
+      a.href = адрес;
       a.target = "_blank";
       a.rel = "noopener";
-      a.textContent = t("openOnSite") + " ↗";
-      link.appendChild(a);
-      link.hidden = false;
+      a.textContent = короткийАдрес(адрес);
+      a.title = t("openOnSite");
+      где.appendChild(a);
+      где.appendChild(document.createTextNode(" ↗"));
     } else {
-      link.hidden = true;
+      где.appendChild(el("span", "stage__url", короткийАдрес(адрес)));
     }
+    где.hidden = false;
   }
+
+  /* Адрес страницы на том языке, который сейчас открыт в форме. */
+  function адресСтраницы() {
+    var m = state.meta;
+    if (!m) return "";
+    return (m.liveUrls && m.liveUrls[state.lang]) || m.liveUrl || "";
+  }
+
+  /* Без «https://» адрес читается как адрес, а не как строка кода. */
+  function короткийАдрес(url) { return String(url).replace(/^https?:\/\//, ""); }
 
   /* Тот же расчёт, что на сервере: иначе после сохранения карточка
      показывала бы старый этап до перезагрузки списка. */
@@ -802,6 +857,9 @@
     state.lang = btn.dataset.lang;
     [].forEach.call(this.querySelectorAll(".chip"), function (c) { c.classList.toggle("is-on", c === btn); });
     renderEditor();
+    /* Адрес страницы у каждого языка свой — полоса состояния должна
+       показать адрес того языка, который открыт сейчас. */
+    renderStage();
   });
 
   /* --------------------------------------------------------------- */
@@ -819,6 +877,22 @@
     box.classList.toggle("is-dirty", state.dirty);
     if (state.dirty) { box.textContent = t("unsaved"); return; }
     box.textContent = state.savedAt ? t("savedAt") + " " + state.savedAt : "";
+  }
+
+  /* Сообщение после сохранения. Сказать «сохранено» мало: человек правит
+     текст и хочет знать, увидит ли это клиент. Поэтому в каждом состоянии
+     своя фраза, и в ней сразу написано, что делать дальше. */
+  var СООБЩЕНИЕ = { draft: "savedDraft", verified: "savedVerified",
+                    published: "savedLive", changed: "savedLive" };
+  var тостТаймер = null;
+
+  function сказать(st) {
+    var box = $("toast");
+    box.className = "toast toast--" + st;
+    box.textContent = t(СООБЩЕНИЕ[st] || "savedDraft");
+    box.hidden = false;
+    clearTimeout(тостТаймер);
+    тостТаймер = setTimeout(function () { box.hidden = true; }, 7000);
   }
 
   function timeNow() {
@@ -849,7 +923,7 @@
         state.savedAt = timeNow();
         setIssues(data.blockers);
         showSaved();
-        if (!silent) { renderEditor(); }
+        if (!silent) { renderEditor(); сказать(records_state()); }
       })
       .catch(function (err) {
         if (err.message === "нет входа") return;
@@ -1076,6 +1150,33 @@
   }
 
   /* --------------------------------------------------------------- */
+  /* Объяснение пути текста на сайт                                   */
+  /* --------------------------------------------------------------- */
+
+  /* Три строки над списком: правка → проверено → опубликовано → на сайте.
+     Сворачивается и запоминается: в первый день это нужно, через месяц
+     только занимает место. */
+  var ПУТЬ_КЛЮЧ = "vw-path-hidden";
+
+  function путьСвёрнут() {
+    try { return localStorage.getItem(ПУТЬ_КЛЮЧ) === "1"; } catch (e) { return false; }
+  }
+
+  function renderPath() {
+    var свёрнут = путьСвёрнут();
+    $("path-body").hidden = свёрнут;
+    $("path").classList.toggle("is-folded", свёрнут);
+    var кн = $("path-toggle");
+    кн.textContent = t(свёрнут ? "pathShow" : "pathHide");
+    кн.setAttribute("aria-expanded", свёрнут ? "false" : "true");
+  }
+
+  $("path-toggle").addEventListener("click", function () {
+    try { localStorage.setItem(ПУТЬ_КЛЮЧ, путьСвёрнут() ? "0" : "1"); } catch (e) {}
+    renderPath();
+  });
+
+  /* --------------------------------------------------------------- */
   /* Запуск                                                           */
   /* --------------------------------------------------------------- */
 
@@ -1089,6 +1190,7 @@
       renderCounts();
       renderPublishButton();
       renderList();
+      renderPath();
       if (state.entry) { renderEditor(); setIssues(state.issues); }
       showSaved();
     });
@@ -1096,6 +1198,7 @@
 
   loadUiLang("");
   applyStatic();
+  renderPath();
 
   api("me", { quiet401: true }).then(function (me) {
     state.csrf = me.csrf;

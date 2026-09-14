@@ -189,14 +189,23 @@ input:focus, textarea:focus { border-color: var(--accent); }
   background-color: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
+}
+.row:hover { border-color: var(--accent); }
+/* Кнопка занимает всю строку слева: нажать можно куда угодно, кроме ссылки */
+.row__open {
+  display: grid;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
   font: inherit;
   text-align: left;
   cursor: pointer;
 }
-.row:hover { border-color: var(--accent); }
+.row__open:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 .row__name { font-weight: 600; }
-.row__meta { grid-column: 1; font-size: 13px; color: var(--muted); }
-.row__tags { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.row__meta { font-size: 13px; color: var(--muted); }
+.row__tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; }
 
 .tag { padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
 .tag--draft { background-color: #EFEEEC; color: var(--muted); }
@@ -509,26 +518,96 @@ input:focus, textarea:focus { border-color: var(--accent); }
 
 /* --- Этап записи ---------------------------------------------------------- */
 
+/* --- Полоса состояния записи ---------------------------------------------
+   Главный ответ на вопрос «увидит ли это клиент». Поэтому она закреплена
+   вверху: форма длинная, и при прокрутке ответ не должен уезжать. */
+/* Шапка, языки и полоса состояния — одна закреплённая группа.
+   Раньше каждая липла сама по себе, и при прокрутке шапка просто
+   накрывала полосу: проверка по разметке говорила «видна», а на экране
+   её не было. Вместе они уезжают и останавливаются как одно целое. */
+.editbar {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+}
+.editbar .topbar,
+.editbar .langbar { position: static; }
+
 .stage {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--line);
+  border-left: 6px solid var(--muted);
+  background-color: var(--card);
+}
+.stage__name { display: block; font-size: 16px; }
+.stage__what { margin: 4px 0 0; font-size: 14px; }
+.stage__where { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+.stage__where a { color: var(--accent-dark); font-weight: 600; }
+.stage__url { font-weight: 600; color: var(--ink); opacity: .75; }
+.stage__where--future { opacity: .85; }
+
+/* Цвет — чтобы состояние читалось раньше текста */
+.stage--draft { border-left-color: var(--muted); background-color: #F4F3F1; }
+.stage--draft .stage__name { color: var(--ink); }
+.stage--draft .stage__what { color: var(--muted); }
+
+.stage--verified { border-left-color: var(--warn-line); background-color: var(--warn-bg); }
+.stage--verified .stage__name { color: var(--warn); }
+.stage--verified .stage__what { color: var(--warn); }
+
+.stage--published { border-left-color: var(--ok); background-color: #EFF6F1; }
+.stage--published .stage__name { color: var(--ok); }
+.stage--published .stage__what { color: #2A5C3B; }
+
+.stage--changed { border-left-color: var(--accent); background-color: #FBF3EE; }
+.stage--changed .stage__name { color: var(--accent-dark); }
+.stage--changed .stage__what { color: var(--accent-dark); }
+
+/* --- Путь текста на сайт: три строки над списком -------------------------- */
+.path {
   margin-bottom: var(--gap);
   padding: 14px 18px;
   border: 1px solid var(--line);
-  border-left: 5px solid var(--muted);
   border-radius: var(--radius);
   background-color: var(--card);
 }
-.stage__name { display: block; font-size: 18px; }
-.stage__what { margin: 6px 0 0; font-size: 14px; color: var(--muted); }
-.stage__link { margin: 8px 0 0; font-size: 14px; }
-.stage__link a { color: var(--accent-dark); font-weight: 600; }
+.path__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--gap); }
+.path__toggle {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  color: var(--accent-dark);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.path__steps { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14px; color: var(--muted); }
+.path__steps li::marker { color: var(--accent); font-weight: 700; }
+.path.is-folded .path__head { align-items: center; }
 
-.stage--draft { border-left-color: var(--muted); }
-.stage--verified { border-left-color: var(--warn-line); background-color: var(--warn-bg); }
-.stage--verified .stage__name { color: var(--warn); }
-.stage--published { border-left-color: var(--ok); background-color: #EFF6F1; }
-.stage--published .stage__name { color: var(--ok); }
-.stage--changed { border-left-color: var(--accent); background-color: #FBF3EE; }
-.stage--changed .stage__name { color: var(--accent-dark); }
+/* --- Кружок состояния в списке ------------------------------------------- */
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 8px;
+  border-radius: 50%;
+  vertical-align: baseline;
+  background-color: var(--muted);
+}
+.dot--verified { background-color: var(--warn-line); }
+.dot--published { background-color: var(--ok); }
+.dot--changed { background-color: var(--accent); }
+
+/* Ссылка на живую страницу прямо из списка */
+.row__live {
+  align-self: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-dark);
+  white-space: nowrap;
+}
 
 /* Метки этапа в списке */
 .tag--verified { background-color: var(--warn-bg); color: var(--warn); }
@@ -555,3 +634,27 @@ input:focus, textarea:focus { border-color: var(--accent); }
 .dialog__list { margin: 0 0 16px; padding-left: 20px; display: grid; gap: 6px; font-size: 15px; }
 .dialog__list ul { margin: 4px 0 0; padding-left: 18px; color: var(--warn); font-size: 14px; }
 .dialog__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* --- Сообщение после сохранения ------------------------------------------
+   Висит над полосой замечаний несколько секунд и само уходит: это ответ на
+   вопрос «а клиент это увидит?», а не то, что нужно закрывать руками. */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--bar-h) + 18px);
+  z-index: 6;
+  transform: translateX(-50%);
+  max-width: min(560px, calc(100vw - 2 * var(--gap)));
+  margin: 0;
+  padding: 12px 18px;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--muted);
+  border-radius: var(--radius);
+  background-color: var(--card);
+  box-shadow: 0 6px 24px rgba(31, 35, 41, .16);
+  font-size: 14px;
+}
+.toast--draft { border-left-color: var(--muted); }
+.toast--verified { border-left-color: var(--warn-line); background-color: var(--warn-bg); color: var(--warn); }
+.toast--published { border-left-color: var(--ok); background-color: #EFF6F1; color: #2A5C3B; }
+.toast--changed { border-left-color: var(--accent); background-color: #FBF3EE; color: var(--accent-dark); }

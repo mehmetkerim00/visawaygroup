@@ -156,7 +156,21 @@ function handler(fn, { methods = ["GET"], frame, frameAncestors } = {}) {
   };
 }
 
+/* Адрес сайта, каким его видит посетитель.
+ *
+ * Нужен, чтобы панель могла показать специалисту, где именно окажется
+ * его текст. Берём PUBLIC_SITE_URL, если он задан; иначе — тот хост, по
+ * которому открыта сама панель: она живёт на том же домене, что и сайт. */
+function siteBase(req) {
+  if (process.env.PUBLIC_SITE_URL) {
+    return String(process.env.PUBLIC_SITE_URL).replace(/\/+$/, "");
+  }
+  const host = req.headers["x-forwarded-host"] || req.headers.host || "";
+  const proto = req.headers["x-forwarded-proto"] || (SECURE ? "https" : "http");
+  return host ? proto + "://" + host : "";
+}
+
 module.exports = {
-  Fail, fail, handler, send, readBody, clientIp,
+  Fail, fail, handler, send, readBody, clientIp, siteBase,
   requireSession, requireRole, requireCsrf, secureHeaders, SECURE, CSP
 };

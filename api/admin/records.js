@@ -20,5 +20,7 @@ module.exports = http.handler(async (req, res) => {
        после публикации. Это же число стоит на кнопке «Опубликовать». */
     ждут: by("verified") + by("changed")
   };
-  http.send(res, 200, { list, counts, visas: records.VISA_NAMES });
+  /* Адрес сайта — чтобы в списке у опубликованных записей была живая
+     ссылка. Сам путь приходит в каждой строке из summarize. */
+  http.send(res, 200, { list, counts, visas: records.VISA_NAMES, siteBase: http.siteBase(req) });
 }, { methods: ["GET"] });
