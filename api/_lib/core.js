@@ -186,6 +186,153 @@ function factRow(label, value, forPanel, lang) {
   ].join("\n");
 }
 
+/* Содержимое по одной стране: документы, сроки, деньги, особенности.
+ *
+ * Отдельно от mainContent, потому что печатается в двух местах: на
+ * собственной странице страны и в блоке выбора на странице визы, где
+ * рядом лежат все двенадцать. Держать это в двух копиях нельзя —
+ * разойдутся, и разойдутся молча.
+ *
+ * opts.level  — каким заголовком набирать разделы (h2 или h3);
+ * opts.reveal — нужен ли data-reveal. В блоке выбора не нужен: панель и
+ *               так показывается по нажатию, а наблюдатель появления
+ *               оставил бы скрытую панель невидимой навсегда.
+ */
+function countrySections(entry, lang, ctx, opts) {
+  const o = opts || {};
+  const H = o.level === "h3" ? "h3" : "h2";
+  const R = o.reveal === false ? "" : " data-reveal";
+  const RG = o.reveal === false ? "" : " data-reveal-group";
+  const L = k => pick(ctx.labels[k], lang);
+  const data = { labels: ctx.labels };
+  const forPanel = ctx.forPanel === true;
+  const contacts = (ctx.links || {}).contacts || "";
+  const out = [];
+
+  const documents = (entry.documents || [])
+    .filter(d => forPanel || shown(d.text, lang));
+  if (documents.length) {
+    out.push(`
+        <section class="page-section"${R}>
+          <${H}>${esc(L("documents"))}</${H}>
+          <ul class="doclist"${RG}>`);
+    for (const d of documents) {
+      const note = d.note ? (forPanel ? pick(d.note, lang) : shown(d.note, lang)) : "";
+      const extra = d.required === false ? L("optional") : "";
+      const sub = [note, extra].filter(Boolean).join(" &middot; ");
+      const текст = forPanel ? String(pick(d.text, lang) || "") : shown(d.text, lang);
+      out.push(`            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg>` +
+               `<span>${esc(текст)}` + (sub ? `<span>${sub}</span>` : "") + `</span></li>`);
+    }
+    out.push(`          </ul>
+        </section>`);
+  }
+
+  /* Признание диплома в Туркменистане вынесено отдельным блоком и стоит
+     до всего остального про сроки и деньги. Для родителей это главный
+     вопрос — «а что этот диплом будет значить дома», — и ответа на него
+     почти нигде нет. Прятать его строкой в таблице было бы нечестно. */
+  const kind = kindOf(entry);
+  const recognition = shown(entry.recognition, lang);
+  if (kind === "education" && (recognition || forPanel)) {
+    const текст = recognition || (forPanel ? "НЕ ЗАПОЛНЕНО" : "");
+    out.push(`
+        <section class="page-section"${R}>
+          <${H}>${esc(L("recognition"))}</${H}>
+          <div class="callout">
+            <p${recognition ? "" : ' class="is-missing"'}>${esc(текст)}</p>
+          </div>
+        </section>`);
+  }
+
+  const factTitle = kind === "education" ? L("studyTerms") : L("termsAndFee");
+  out.push(`
+        <section class="page-section"${R}>
+          <${H}>${esc(factTitle)}</${H}>
+          <div class="pricing">
+            <ul class="pricing__list">`);
+  if (kind === "education") {
+    out.push(factRow(L("admissionDates"), entry.admissionDates, forPanel, lang));
+    out.push(factRow(L("language"), entry.language, forPanel, lang));
+  } else {
+    out.push(factRow(L("where"), entry.where, forPanel, lang));
+    out.push(factRow(L("prepDays"), entry.prepDays, forPanel, lang));
+    out.push(factRow(L("reviewDays"), entry.reviewDays, forPanel, lang));
+  }
+  /* Деньги — особый случай. Пустое поле это не недоделка, а осознанный
+     выбор: ставим честную строку. Вписанная сумма живёт вместе с датой,
+     когда её проверяли, иначе через полгода она врёт с уверенным видом.
+     У визы это консульский сбор, у консультации — стоимость обучения. */
+  const money = MONEY[kind];
+  const moneyLabel = kind === "education" ? L("tuition") : L("fee");
+  const moneyDefault = kind === "education" ? L("tuitionDefault") : L("feeDefault");
+  /* Метка УТОЧНИТЬ — это вопрос специалисту, а не сумма. На сайте вместо
+     неё встаёт честная строка «уточняем на консультации»: она верна в
+     любом случае и не выглядит недоделкой. */
+  const сырое = String(pick(entry[money.field], lang) || "").trim();
+  const feeText = forPanel ? сырое : shown(entry[money.field], lang);
+  const isAmount = feeText && !feeText.includes(TODO_MARK);
+  if (feeText) {
+    const asOf = formatDate(entry[money.date], lang, data, L("feeAsOf"));
+    const tail = asOf
+      ? ` <span class="fact-note">&middot; ${esc(asOf)}</span>`
+      : (forPanel && isAmount ? ` <span class="is-missing">· БЕЗ ДАТЫ ПРОВЕРКИ</span>` : "");
+    out.push([
+      `            <li class="pricing__row">`,
+      `              <span class="pricing__label">${esc(moneyLabel)}</span>`,
+      `              <span class="pricing__value">${esc(feeText)}${tail}</span>`,
+      `            </li>`
+    ].join("\n"));
+  } else {
+    out.push([
+      `            <li class="pricing__row">`,
+      `              <span class="pricing__label">${esc(moneyLabel)}</span>`,
+      `              <span class="pricing__value">${esc(moneyDefault)}</span>`,
+      `            </li>`
+    ].join("\n"));
+  }
+  if (kind === "education") {
+    out.push(factRow(L("scholarships"), entry.scholarships, forPanel, lang));
+  }
+  out.push(`            </ul>
+            <a class="btn btn--primary pricing__cta" href="${contacts}">${esc(L("askUs"))}</a>
+          </div>
+        </section>`);
+
+  for (const [key, raw] of [["notes", entry.notes], ["refusals", entry.refusals]]) {
+    const list = forPanel ? (raw || []).map(x => pick(x, lang)) : shownList(raw, lang);
+    if (!list.length) continue;
+    out.push(`
+        <section class="page-section"${R}>
+          <${H}>${esc(L(key))}</${H}>
+          <ul class="checklist">`);
+    for (const n of list) out.push(`            <li>${esc(n)}</li>`);
+    out.push(`          </ul>
+        </section>`);
+  }
+
+  /* Дата проверки и оговорка. Они про страну, а не про страницу, поэтому
+     печатаются рядом с её сведениями — и на отдельной странице, и в блоке
+     выбора, где страна меняется по нажатию. */
+  const checkedOn = String(entry.checkedOn || "").trim();
+  const checkedBy = String(entry.checkedBy || "").trim() || L("notChecked");
+  const dateLine = formatDate(checkedOn, lang, data, L("verifiedOn"))
+    || (forPanel ? "НЕ ЗАПОЛНЕНО" : L("notVerifiedYet"));
+  out.push(`
+        <section class="page-section"${R}>
+          <div class="warn">
+            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
+            <div>
+              <p><strong>${esc(dateLine)}</strong></p>
+              <p>${esc(L("disclaimer"))}</p>
+            </div>
+          </div>
+          <p class="note-line">${esc(L("checked"))}: ${esc(checkedBy)}</p>
+        </section>`);
+
+  return out;
+}
+
 /* Содержимое страницы требований.
  *
  * Всё, что снаружи, приходит в ctx: подписи, страна, название визы и
@@ -257,125 +404,10 @@ function mainContent(entry, lang, ctx) {
         </section>`);
   }
 
-  const documents = (entry.documents || [])
-    .filter(d => forPanel || shown(d.text, lang));
-  if (documents.length) {
-    out.push(`
-        <section class="page-section" data-reveal>
-          <h2>${esc(L("documents"))}</h2>
-          <ul class="doclist" data-reveal-group>`);
-    for (const d of documents) {
-      const note = d.note ? (forPanel ? pick(d.note, lang) : shown(d.note, lang)) : "";
-      const extra = d.required === false ? L("optional") : "";
-      const sub = [note, extra].filter(Boolean).join(" &middot; ");
-      const текст = forPanel ? String(pick(d.text, lang) || "") : shown(d.text, lang);
-      out.push(`            <li><svg class="icon doclist__icon" aria-hidden="true"><use href="#i-doc"/></svg>` +
-               `<span>${esc(текст)}` + (sub ? `<span>${sub}</span>` : "") + `</span></li>`);
-    }
-    out.push(`          </ul>
-        </section>`);
-  }
+  out.push(...countrySections(entry, lang, ctx, { level: "h2" }));
 
-  /* Признание диплома в Туркменистане вынесено отдельным блоком и стоит
-     до всего остального про сроки и деньги. Для родителей это главный
-     вопрос — «а что этот диплом будет значить дома», — и ответа на него
-     почти нигде нет. Прятать его строкой в таблице было бы нечестно. */
-  const kind = kindOf(entry);
-  const recognition = shown(entry.recognition, lang);
-  if (kind === "education" && (recognition || forPanel)) {
-    const текст = recognition || (forPanel ? "НЕ ЗАПОЛНЕНО" : "");
-    out.push(`
-        <section class="page-section" data-reveal>
-          <h2>${esc(L("recognition"))}</h2>
-          <div class="callout">
-            <p${recognition ? "" : ' class="is-missing"'}>${esc(текст)}</p>
-          </div>
-        </section>`);
-  }
-
-  const factTitle = kind === "education" ? L("studyTerms") : L("termsAndFee");
   out.push(`
         <section class="page-section" data-reveal>
-          <h2>${esc(factTitle)}</h2>
-          <div class="pricing">
-            <ul class="pricing__list">`);
-  if (kind === "education") {
-    out.push(factRow(L("admissionDates"), entry.admissionDates, forPanel, lang));
-    out.push(factRow(L("language"), entry.language, forPanel, lang));
-  } else {
-    out.push(factRow(L("where"), entry.where, forPanel, lang));
-    out.push(factRow(L("prepDays"), entry.prepDays, forPanel, lang));
-    out.push(factRow(L("reviewDays"), entry.reviewDays, forPanel, lang));
-  }
-  /* Деньги — особый случай. Пустое поле это не недоделка, а осознанный
-     выбор: ставим честную строку. Вписанная сумма живёт вместе с датой,
-     когда её проверяли, иначе через полгода она врёт с уверенным видом.
-     У визы это консульский сбор, у консультации — стоимость обучения. */
-  const money = MONEY[kind];
-  const moneyLabel = kind === "education" ? L("tuition") : L("fee");
-  const moneyDefault = kind === "education" ? L("tuitionDefault") : L("feeDefault");
-  /* Метка УТОЧНИТЬ — это вопрос специалисту, а не сумма. На сайте вместо
-     неё встаёт честная строка «уточняем на консультации»: она верна в
-     любом случае и не выглядит недоделкой. */
-  const сырое = String(pick(entry[money.field], lang) || "").trim();
-  const feeText = forPanel ? сырое : shown(entry[money.field], lang);
-  const isAmount = feeText && !feeText.includes(TODO_MARK);
-  if (feeText) {
-    const asOf = formatDate(entry[money.date], lang, data, L("feeAsOf"));
-    const tail = asOf
-      ? ` <span class="fact-note">&middot; ${esc(asOf)}</span>`
-      : (forPanel && isAmount ? ` <span class="is-missing">· БЕЗ ДАТЫ ПРОВЕРКИ</span>` : "");
-    out.push([
-      `            <li class="pricing__row">`,
-      `              <span class="pricing__label">${esc(moneyLabel)}</span>`,
-      `              <span class="pricing__value">${esc(feeText)}${tail}</span>`,
-      `            </li>`
-    ].join("\n"));
-  } else {
-    out.push([
-      `            <li class="pricing__row">`,
-      `              <span class="pricing__label">${esc(moneyLabel)}</span>`,
-      `              <span class="pricing__value">${esc(moneyDefault)}</span>`,
-      `            </li>`
-    ].join("\n"));
-  }
-  if (kind === "education") {
-    out.push(factRow(L("scholarships"), entry.scholarships, forPanel, lang));
-  }
-  out.push(`            </ul>
-            <a class="btn btn--primary pricing__cta" href="${contacts}">${esc(L("askUs"))}</a>
-          </div>
-        </section>`);
-
-  for (const [key, raw] of [["notes", entry.notes], ["refusals", entry.refusals]]) {
-    const list = forPanel ? (raw || []).map(x => pick(x, lang)) : shownList(raw, lang);
-    if (!list.length) continue;
-    out.push(`
-        <section class="page-section" data-reveal>
-          <h2>${esc(L(key))}</h2>
-          <ul class="checklist">`);
-    for (const n of list) out.push(`            <li>${esc(n)}</li>`);
-    out.push(`          </ul>
-        </section>`);
-  }
-
-  /* Дата актуальности и оговорка — последнее, что человек читает перед
-     призывом. Оговорка набрана так же, как предупреждение о документах
-     на странице контактов: это не мелкий шрифт внизу, а часть сведений. */
-  const checkedOn = String(entry.checkedOn || "").trim();
-  const checkedBy = String(entry.checkedBy || "").trim() || L("notChecked");
-  const dateLine = formatDate(checkedOn, lang, data, L("verifiedOn"))
-    || (forPanel ? "НЕ ЗАПОЛНЕНО" : L("notVerifiedYet"));
-  out.push(`
-        <section class="page-section" data-reveal>
-          <div class="warn">
-            <svg class="icon icon--sm" aria-hidden="true"><use href="#i-shield"/></svg>
-            <div>
-              <p><strong>${esc(dateLine)}</strong></p>
-              <p>${esc(L("disclaimer"))}</p>
-            </div>
-          </div>
-          <p class="note-line">${esc(L("checked"))}: ${esc(checkedBy)}</p>
           <a class="backlink" href="${visaPage}">
             <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-left"/></svg>
             ${esc(L("backToVisa"))}
@@ -405,5 +437,6 @@ module.exports = {
   LANGS, DEFAULT_LANG, TODO_MARK, pick,
   todos, KIND_FIELDS, kindOf, mustFill, MONEY, amountNeedsDate, feeNeedsDate,
   monthsSince, STALE_MONTHS, isStale, emptyFields,
-  esc, escAttr, formatDate, factRow, mainContent, noticeBlock, shown, shownList, TOP_NOTICE
+  esc, escAttr, formatDate, factRow, mainContent, countrySections,
+  noticeBlock, shown, shownList, TOP_NOTICE
 };

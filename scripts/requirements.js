@@ -205,14 +205,6 @@ function renderPage(entry, lang, data) {
 /* Те же карточки, что на главной, только проверенные страны и каждая —
    ссылка. Когда проверенных ещё нет, вместо сетки честная строка и
    кнопка на контакты: обещать несуществующие страницы нельзя. */
-/* Сколько стран в списке. Раньше подпись говорила «проверено стран» —
-   теперь проверка на видимость не влияет, и обещать проверку нельзя. */
-const COUNTRY_COUNT = {
-  tk: "Ýurt: {{n}}",
-  ru: "Стран: {{n}}",
-  en: "Countries: {{n}}"
-};
-
 function pickerBlock(lang, visa, indent, relPosix, prefix) {
   const data = load();
   const L = k => pick(data.labels[k], lang);
@@ -221,7 +213,7 @@ function pickerBlock(lang, visa, indent, relPosix, prefix) {
   const out = [];
   const contacts = relLink(relPosix, joinLang("habarlasmak.html", lang));
 
-  out.push(`${i}<section class="page-section" data-reveal>`);
+  out.push(`${i}<section class="page-section picker" data-reveal>`);
   out.push(`${i}  <h2>${esc(L("pickCountry"))}</h2>`);
 
   if (!list.length) {
@@ -231,52 +223,63 @@ function pickerBlock(lang, visa, indent, relPosix, prefix) {
     return out.join("\n");
   }
 
-  out.push(`${i}  <p class="countries__count">${esc(COUNTRY_COUNT[lang].replace("{{n}}", String(list.length)))}</p>`);
-  out.push(`${i}  <div class="countries countries--plain">`);
-  /* На телефоне сетка превращается в ленту с прокруткой пальцем, поэтому
-     ей нужен и способ прокрутки с клавиатуры: tabindex делает её точкой
-     фокуса, и стрелки начинают листать карточки. */
-  out.push(`${i}    <ul class="countries__grid" tabindex="0" role="group"` +
-           ` aria-label="${escAttr(L("pickCountry"))}">`);
-  for (const e of list) {
+  /* Кнопки стран. Каждая — настоящая ссылка на отдельную страницу этой
+     страны: без JavaScript нажатие просто уведёт туда, и выбор работает.
+     С JavaScript переход перехватывается, и содержимое подменяется на
+     месте. Так один и тот же набор кнопок годится в обоих случаях. */
+  out.push(`${i}  <div class="picker__bar" role="tablist" aria-label="${escAttr(L("pickCountry"))}">`);
+  list.forEach((e, n) => {
     const c = data.byCode.get(e.country);
-    const name = pick(c.country, lang);
-    const city = pick(c.city, lang);
-    const alt = pick((data.req.labels.photoOf || {}), lang) || "";
+    const slug = c.slug;
     const href = relLink(relPosix, pagePath(e, lang, data));
-    const photo = c.photo ? path.join(ROOT, "assets", "photos", c.photo + ".webp") : null;
-    const big = c.photo ? path.join(ROOT, "assets", "photos", c.photo + "@2x.webp") : null;
-
-    out.push(`${i}      <li class="country">`);
-    out.push(`${i}        <a class="country__link" href="${href}">`);
-    out.push(`${i}          <div class="country__photo">`);
-    if (photo && fs.existsSync(photo)) {
-      out.push(`${i}            <picture>`);
-      if (fs.existsSync(big)) {
-        out.push(`${i}              <source media="(min-width: 64em)"` +
-                 ` srcset="${prefix}assets/photos/${c.photo}.webp 480w, ${prefix}assets/photos/${c.photo}@2x.webp 960w"` +
-                 ` sizes="300px">`);
-      }
-      out.push(`${i}              <img src="${prefix}assets/photos/${c.photo}.webp" alt=""` +
-               ` width="480" height="320" loading="lazy" decoding="async">`);
-      out.push(`${i}            </picture>`);
-    }
-    out.push(`${i}          </div>`);
-    out.push(`${i}          <div class="country__label">`);
-    out.push(`${i}            <img class="country__flag" src="${prefix}assets/flags/${c.flag}.svg"` +
-             ` alt="" width="24" height="18" loading="lazy" decoding="async">`);
-    out.push(`${i}            <span class="country__name">${esc(name)}</span>`);
-    out.push(`${i}            <span class="country__city">${esc(city)}</span>`);
-    out.push(`${i}          </div>`);
-    out.push(`${i}        </a>`);
-    out.push(`${i}      </li>`);
-  }
-  out.push(`${i}    </ul>`);
+    const first = n === 0;
+    out.push(`${i}    <a class="picker__chip${first ? " is-on" : ""}" role="tab" href="${href}"` +
+             ` id="tab-${slug}" data-country="${slug}" aria-controls="panel-${slug}"` +
+             ` aria-selected="${first ? "true" : "false"}" tabindex="${first ? "0" : "-1"}">` +
+             `<img class="picker__flag" src="${prefix}assets/flags/${c.flag}.svg" alt=""` +
+             ` width="20" height="15" loading="lazy" decoding="async">` +
+             `<span>${esc(pick(c.country, lang))}</span></a>`);
+  });
   out.push(`${i}  </div>`);
+
+  /* Оговорка стоит один раз над панелями, а не в каждой из двенадцати:
+     она про весь раздел, и при переключении страны меняться ей незачем. */
+  out.push(reindent(core.noticeBlock(lang), i + "  "));
+
+  out.push(`${i}  <div class="picker__panels">`);
+  list.forEach((e, n) => {
+    const c = data.byCode.get(e.country);
+    const ctx = {
+      labels: data.labels,
+      country: c,
+      visaName: visaTitle(visa, lang),
+      links: { contacts }
+    };
+    /* Первая страна открыта сразу: пустой блок не объясняет, что кнопки
+       вообще можно нажимать. Остальные лежат рядом скрытыми — данные всех
+       двенадцати уже в разметке, и переключение не ходит на сервер. */
+    out.push(`${i}    <div class="picker__panel" id="panel-${c.slug}" role="tabpanel"` +
+             ` aria-labelledby="tab-${c.slug}" data-country="${c.slug}"${n === 0 ? "" : " hidden"}>`);
+    const секции = core.countrySections(e, lang, ctx, { level: "h3", reveal: false });
+    for (const строка of секции) {
+      if (строка !== "") out.push(reindent(строка, i + "      "));
+    }
+    out.push(`${i}    </div>`);
+  });
+  out.push(`${i}  </div>`);
+
   out.push(`${i}  <p class="countries__more"><span>${esc(L("notListed"))}</span>` +
            ` <a href="${contacts}">${esc(L("askUs"))}</a></p>`);
   out.push(`${i}</section>`);
   return out.join("\n");
+}
+
+/* Отступ у общей отрисовки свой, а в блоке выбора глубина другая.
+   Сдвигаем целиком, сохраняя внутреннюю лесенку. */
+function reindent(text, indent) {
+  return String(text).split("\n")
+    .map(строка => строка.trim() ? indent + строка.replace(/^ {0,10}/, "") : строка)
+    .join("\n");
 }
 
 /* ==================================================================== */

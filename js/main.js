@@ -381,4 +381,97 @@
     yearEl.textContent = String(new Date().getFullYear());
   }
 
+
+  /* ------------------------------------------------------------------------
+     8. ВЫБОР СТРАНЫ НА СТРАНИЦЕ ВИЗЫ
+
+     Кнопки стран — настоящие ссылки на отдельные страницы этих стран.
+     Без скриптов нажатие туда и уводит, и выбор работает. Здесь мы этот
+     переход перехватываем и подменяем содержимое на месте: данные всех
+     двенадцати уже лежат в разметке, поэтому на сервер идти не за чем.
+
+     Адрес при этом меняется на #страна — чтобы ссылкой можно было
+     поделиться и чтобы «назад» возвращала к прежней стране, а не уносила
+     со страницы.
+     ---------------------------------------------------------------------- */
+
+  var picker = document.querySelector(".picker");
+  if (picker) {
+    var bar = picker.querySelector(".picker__bar");
+    var chips = [].slice.call(picker.querySelectorAll(".picker__chip"));
+    var panels = [].slice.call(picker.querySelectorAll(".picker__panel"));
+
+    var показать = function (slug, сдвигать) {
+      var есть = false;
+      chips.forEach(function (chip) {
+        var свой = chip.dataset.country === slug;
+        if (свой) есть = true;
+        chip.classList.toggle("is-on", свой);
+        chip.setAttribute("aria-selected", свой ? "true" : "false");
+        chip.tabIndex = свой ? 0 : -1;
+      });
+      if (!есть) return false;
+      panels.forEach(function (panel) {
+        var свой = panel.dataset.country === slug;
+        if (свой && panel.hidden) {
+          /* Перезапуск проявления: без этого панель, показанная второй
+             раз, появлялась бы рывком — анимация уже отыграна. */
+          panel.style.animation = "none";
+          panel.hidden = false;
+          void panel.offsetWidth;
+          panel.style.animation = "";
+        } else if (!свой) {
+          panel.hidden = true;
+        }
+      });
+      /* Выбранную кнопку подтягиваем в видимую часть ленты: на телефоне
+         двенадцатая страна иначе осталась бы за краем экрана. */
+      var выбранная = picker.querySelector('.picker__chip[aria-selected="true"]');
+      if (выбранная && bar && bar.scrollWidth > bar.clientWidth) {
+        var л = выбранная.offsetLeft, ш = выбранная.offsetWidth;
+        if (л < bar.scrollLeft || л + ш > bar.scrollLeft + bar.clientWidth) {
+          bar.scrollLeft = Math.max(0, л - (bar.clientWidth - ш) / 2);
+        }
+      }
+      if (сдвигать) выбранная.focus();
+      return true;
+    };
+
+    bar.addEventListener("click", function (event) {
+      var chip = event.target.closest(".picker__chip");
+      if (!chip) return;
+      /* Открыть в новой вкладке — это переход на отдельную страницу
+         страны, и мешать ему нельзя. */
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+      var slug = chip.dataset.country;
+      if (!показать(slug, false)) return;
+      event.preventDefault();
+      if (history.pushState) history.pushState({ country: slug }, "", "#" + slug);
+      else location.hash = slug;
+    });
+
+    /* Стрелками по ленте — так же, как это принято у вкладок. */
+    bar.addEventListener("keydown", function (event) {
+      var шаг = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+      if (!шаг) return;
+      var сейчас = chips.findIndex(function (c) { return c.getAttribute("aria-selected") === "true"; });
+      var следующий = chips[(сейчас + шаг + chips.length) % chips.length];
+      if (!следующий) return;
+      event.preventDefault();
+      показать(следующий.dataset.country, true);
+      if (history.replaceState) history.replaceState(null, "", "#" + следующий.dataset.country);
+    });
+
+    var изАдреса = function () {
+      var slug = decodeURIComponent(String(location.hash || "").replace(/^#/, ""));
+      /* Пустой адрес — это начало пути: «назад» с последнего выбора
+         должна вернуть первую страну, а не оставить показанной ту,
+         от которой человек только что ушёл. */
+      if (!slug && chips.length) slug = chips[0].dataset.country;
+      if (slug) показать(slug, false);
+    };
+    window.addEventListener("popstate", изАдреса);
+    изАдреса();
+  }
+
 })();

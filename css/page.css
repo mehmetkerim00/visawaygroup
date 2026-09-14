@@ -1571,3 +1571,114 @@ a
 .notfound :focus-visible {
   outline-color: var(--copper-on-dark);
 }
+
+/* ==========================================================================
+   ВЫБОР СТРАНЫ НА СТРАНИЦЕ ВИЗЫ
+
+   Здесь это не витрина, а инструмент: человек пришёл за конкретной
+   страной и хочет переключиться, а не рассматривать снимки. Поэтому
+   кнопки того же размера, что фильтр на главной, флаг вместо фотографии,
+   и содержимое меняется на месте, без перехода на другую страницу.
+   ========================================================================== */
+
+.picker__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.picker__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap);
+  padding: 0 var(--space-4);
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-full);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+/* Флаг не должен растягиваться и не должен подпрыгивать при загрузке.
+   Размер ровно 4:3, как сами файлы флагов: при 21×15 аудит справедливо
+   ругался, что картинку растянули. */
+.picker__flag {
+  flex: none;
+  width: 20px;
+  height: 15px;
+  border-radius: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .picker__chip:hover {
+    border-color: var(--copper);
+    background-color: var(--copper-tint);
+    color: var(--copper-dark);
+  }
+}
+
+/* Выбранная страна. Признак — aria-selected: так состояние слышно
+   в программе чтения с экрана, а не только видно глазом. */
+.picker__chip[aria-selected="true"],
+.picker__chip.is-on {
+  background-color: var(--copper);
+  border-color: var(--copper);
+  color: #FFFFFF;
+  font-weight: var(--weight-semibold);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .picker__chip[aria-selected="true"]:hover {
+    background-color: var(--copper-dark);
+    border-color: var(--copper-dark);
+    color: #FFFFFF;
+  }
+}
+
+/* Панели стран. Первая в разметке открыта, остальные лежат скрытыми —
+   без скриптов человек видит первую страну, а не пустоту. */
+.picker__panel > .page-section:first-child {
+  margin-top: 0;
+}
+
+/* Смена содержимого. Гасим и зажигаем только прозрачностью: высота
+   меняется сразу, поэтому макет не дёргается в такт анимации. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .picker__panel {
+    animation: picker-in 220ms ease-out both;
+  }
+
+  @keyframes picker-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+}
+
+/* На телефоне кнопки идут одной строкой с прокруткой пальцем: двенадцать
+   штук в две-три строки съедали бы весь первый экран. */
+@media (max-width: 47.999em) {
+  .picker__bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    margin-inline: calc(var(--container-pad) * -1);
+    padding-inline: var(--container-pad);
+    scrollbar-width: none;
+  }
+
+  .picker__bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .picker__chip {
+    flex: none;
+  }
+}
