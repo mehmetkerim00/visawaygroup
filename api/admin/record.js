@@ -69,8 +69,18 @@ module.exports = http.handler(async (req, res) => {
   if (req.method === "GET") {
     const entry = await records.getRecord(visa, country);
     if (!entry) http.fail(404, "Запись не найдена.");
+    /* Адрес живой страницы — чтобы из карточки можно было сразу
+       открыть то, что видит посетитель. */
+    const host = req.headers["x-forwarded-host"] || req.headers.host || "";
+    const proto = req.headers["x-forwarded-proto"] || (http.SECURE ? "https" : "http");
+    const base = process.env.PUBLIC_SITE_URL
+      ? String(process.env.PUBLIC_SITE_URL).replace(/\/+$/, "")
+      : (host ? proto + "://" + host : "");
+
     http.send(res, 200, {
       entry,
+      state: records.stateOf(entry),
+      liveUrl: base + records.livePath(entry, "tk"),
       blockers: records.blockersFor(entry),
       kind: core.kindOf(entry),
       fields: {

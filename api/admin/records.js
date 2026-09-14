@@ -8,11 +8,17 @@ module.exports = http.handler(async (req, res) => {
   const all = await records.listRecords();
   const list = all.map(records.summarize);
 
+  const by = st => list.filter(r => r.state === st).length;
   const counts = {
     всего: list.length,
-    черновики: list.filter(r => r.status !== "verified").length,
-    проверено: list.filter(r => r.status === "verified").length,
-    устарело: list.filter(r => r.stale).length
+    draft: by("draft"),
+    verified: by("verified"),
+    published: by("published"),
+    changed: by("changed"),
+    stale: list.filter(r => r.stale).length,
+    /* Сколько записей ждёт публикации: проверенные и те, что правили
+       после публикации. Это же число стоит на кнопке «Опубликовать». */
+    ждут: by("verified") + by("changed")
   };
   http.send(res, 200, { list, counts, visas: records.VISA_NAMES });
 }, { methods: ["GET"] });

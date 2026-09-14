@@ -68,6 +68,39 @@ async function listRecords() {
   return values.filter(Boolean);
 }
 
+/* ==================================================================== */
+/* Этап записи                                                          */
+/* ==================================================================== */
+
+/* Три состояния, которые видит человек:
+ *
+ *   draft      черновик — виден только в панели, на сайте его нет;
+ *   verified   проверено специалистом — готово, но на сайте ещё нет;
+ *   published  опубликовано — страница есть на сайте.
+ *
+ * И одно четвёртое, без которого было бы вранье: changed — страница на
+ * сайте есть, но с тех пор текст правили, и на сайте лежит старое.
+ *
+ * «Опубликовано» ставится не по факту нажатия кнопки, а после того как
+ * страницу удалось открыть на живом сайте. Нажатие кнопки — это ещё не
+ * публикация: сборка может не дойти до конца. */
+function stateOf(entry) {
+  if (entry.status !== "verified") return "draft";
+  const pub = String(entry.publishedAt || "");
+  if (!pub) return "verified";
+  if (entry.updatedAt && entry.updatedAt > pub) return "changed";
+  return "published";
+}
+
+const STATE_ORDER = ["draft", "verified", "published", "changed"];
+
+/* Адрес страницы на сайте — тот же, что строит сборка */
+function livePath(entry, lang) {
+  const slug = (BY_CODE.get(entry.country) || {}).slug;
+  const prefix = lang === "tk" ? "" : lang + "/";
+  return `/${prefix}wizalar/${entry.visa}/${slug}.html`;
+}
+
 /* Короткая выжимка для списка в панели: всё, по чему там фильтруют
    и ищут, и ничего лишнего — список из 72 строк должен приходить одним
    лёгким ответом. */
@@ -80,6 +113,9 @@ function summarize(entry) {
   return {
     visa: entry.visa,
     country: entry.country,
+    state: stateOf(entry),
+    publishedAt: entry.publishedAt || "",
+    liveUrl: livePath(entry, "tk"),
     visaName: (VISA_NAMES[entry.visa] || {}).ru || entry.visa,
     countryName: (c.country || {}).ru || entry.country,
     kind: core.kindOf(entry),
@@ -93,26 +129,68 @@ function summarize(entry) {
     updatedAt: entry.updatedAt || "",
     updatedBy: entry.updatedBy || "",
     /* Готово ли к публикации — считается теми же правилами, что у preflight */
-    blockers: blockersFor(entry)
+    blockers: blockersFor(entry).length
   };
 }
 
-/* Что мешает поставить «проверено». Один список на всю панель: и кнопка
-   публикации, и preflight при сборке спрашивают одно и то же. */
+/* Что мешает поставить «Проверено специалистом». Один список на всю
+   панель: и кнопка публикации, и preflight при сборке спрашивают одно
+   и то же.
+
+   У каждого замечания сказано, к какому полю оно относится, — чтобы в
+   панели по нему можно было прыгнуть прямо к этому полю, а не искать
+   его глазами по длинной форме. */
 function blockersFor(entry) {
   const out = [];
-  const todo = core.todos(entry);
-  if (todo.length) out.push(`Осталось меток УТОЧНИТЬ: ${todo.length}.`);
-  const empty = core.emptyFields(entry);
-  if (empty.length) out.push("Не заполнены поля: " + empty.join(", ") + ".");
-  if (!String(entry.checkedOn || "").trim()) out.push("Не поставлена дата проверки.");
+  const kind = core.kindOf(entry);
+
+  for (const t of core.todos(entry)) {
+    /* where[0].ru -> where ; documents[2].text.ru -> documents */
+    const field = String(t.where || "").split(/[.[]/)[0] || "";
+    out.push({ field, text: "Остался вопрос от разработчика: " + shorten(t.text) });
+  }
+  for (const f of core.emptyFields(entry)) {
+    out.push({ field: f, text: "Не заполнено поле «" + (FIELD_TITLES[f] || f) + "»" });
+  }
+  if (!String(entry.checkedOn || "").trim()) {
+    out.push({ field: "checkedOn", text: "Не поставлена дата проверки" });
+  }
   const money = core.amountNeedsDate(entry);
-  if (money) out.push(`Вписана ${money.ru}, но не сказано, когда проверяли сумму.`);
+  if (money) {
+    out.push({ field: money.date,
+               text: "Вписана " + money.ru + ", но не сказано, когда сумму проверяли" });
+  }
   return out;
 }
 
+function shorten(text) {
+  const clean = String(text).replace(/^УТОЧНИТЬ:\s*/, "").replace(/\s+/g, " ").trim();
+  return clean.length > 70 ? clean.slice(0, 70) + "…" : clean;
+}
+
+/* Названия полей по-русски — те же, что человек видит в форме */
+const FIELD_TITLES = {
+  summary: "Краткое описание",
+  where: "Куда подаётся",
+  prepDays: "Сколько мы готовим документы",
+  reviewDays: "Сколько рассматривает консульство",
+  fee: "Консульский сбор",
+  recognition: "Признание диплома в Туркменистане",
+  admissionDates: "Сроки поступления",
+  language: "Языковые требования",
+  tuition: "Примерная стоимость обучения",
+  scholarships: "Стипендии и квоты",
+  audience: "Кому подходит",
+  documents: "Документы",
+  notes: "Особенности",
+  refusals: "Частые причины отказа",
+  checkedOn: "Дата проверки",
+  checkedBy: "Кто проверил"
+};
+
 module.exports = {
   VISAS, VISA_NAMES, BY_CODE, countriesData,
-  validPair, getRecord, putRecord, listRecords, summarize, blockersFor,
+  validPair, getRecord, putRecord, listRecords, summarize, blockersFor, FIELD_TITLES,
+  stateOf, livePath, STATE_ORDER,
   getLabels, setLabels, recKey
 };

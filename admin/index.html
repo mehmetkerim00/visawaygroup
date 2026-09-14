@@ -13,42 +13,43 @@
 <!-- ВХОД -->
 <section class="screen" id="screen-login" hidden>
   <form class="card login" id="form-login" autocomplete="on">
-    <h1>Панель требований</h1>
-    <p class="muted">Вход только для сотрудников VisaWay&nbsp;Group.</p>
+    <h1 data-t="panel"></h1>
+    <p class="muted" data-t="loginNote"></p>
 
     <label class="field">
-      <span>Почта</span>
+      <span data-t="email"></span>
       <input type="email" name="email" id="in-email" autocomplete="username"
              required autocapitalize="none" spellcheck="false">
     </label>
 
     <label class="field">
-      <span>Пароль</span>
+      <span data-t="password"></span>
       <input type="password" name="password" id="in-password"
              autocomplete="current-password" required>
     </label>
 
-    <label class="field">
-      <span>Код из приложения</span>
-      <input type="text" name="code" id="in-code" inputmode="numeric"
-             autocomplete="one-time-code" pattern="[0-9]*" maxlength="6"
-             required placeholder="6 цифр">
-      <small class="muted">Шестизначный код меняется каждые 30 секунд.</small>
-    </label>
-
     <p class="alert" id="login-error" hidden></p>
-    <button class="btn btn--main" type="submit" id="btn-login">Войти</button>
+    <button class="btn btn--main" type="submit" id="btn-login" data-t="signIn"></button>
   </form>
 </section>
 
-<!-- СПИСОК -->
+<!-- СПИСОК ЗАПИСЕЙ -->
 <section class="screen" id="screen-list" hidden>
   <header class="topbar">
     <div class="topbar__title">
-      <strong>Требования по странам</strong>
+      <strong data-t="listTitle"></strong>
       <span class="muted" id="who"></span>
     </div>
-    <button class="btn btn--quiet" type="button" id="btn-logout">Выйти</button>
+    <button class="btn btn--main" type="button" id="btn-publish"></button>
+      <label class="uipick">
+        <span class="visually-hidden" data-t="uiLang"></span>
+        <select class="uipick__select" data-uilang>
+          <option value="ru">Русский</option>
+          <option value="tk">Türkmen</option>
+          <option value="tr">Türkçe</option>
+        </select>
+      </label>
+    <button class="btn btn--quiet" type="button" id="btn-logout" data-t="signOut"></button>
   </header>
 
   <div class="wrap">
@@ -56,76 +57,121 @@
 
     <div class="tools">
       <div class="chips" id="filters" role="group" aria-label="Отбор записей">
-        <button class="chip is-on" type="button" data-filter="all">Все</button>
-        <button class="chip" type="button" data-filter="draft">Черновики</button>
-        <button class="chip" type="button" data-filter="verified">Проверено</button>
-        <button class="chip" type="button" data-filter="stale">Пора перепроверить</button>
+        <button class="chip is-on" type="button" data-filter="all" data-t="fAll"></button>
+        <button class="chip" type="button" data-filter="draft" data-t="fDraft"></button>
+        <button class="chip" type="button" data-filter="verified" data-t="fVerified"></button>
+        <button class="chip" type="button" data-filter="published" data-t="fPublished"></button>
+        <button class="chip" type="button" data-filter="stale" data-t="fStale"></button>
       </div>
       <label class="search">
         <span class="visually-hidden">Поиск по стране или типу визы</span>
-        <input type="search" id="search" placeholder="Страна или тип визы" autocomplete="off">
+        <input type="search" id="search" data-t-ph="searchPh" autocomplete="off">
       </label>
     </div>
 
     <p class="alert" id="list-error" hidden></p>
     <div id="list" class="list"></div>
-    <p class="muted" id="list-empty" hidden>Ничего не нашлось. Попробуйте другое слово.</p>
+    <p class="muted" id="list-empty" hidden data-t="nothingFound"></p>
   </div>
 </section>
 
 <!-- РЕДАКТОР -->
 <section class="screen" id="screen-edit" hidden>
   <header class="topbar">
-    <button class="btn btn--quiet" type="button" id="btn-back">← К списку</button>
+    <button class="btn btn--quiet" type="button" id="btn-back" data-t="backToList"></button>
     <div class="topbar__title">
       <strong id="edit-title"></strong>
       <span class="muted" id="edit-sub"></span>
     </div>
-    <button class="btn btn--quiet" type="button" id="btn-logout-2">Выйти</button>
+    <span class="saved" id="saved-state"></span>
+    <button class="btn" type="button" id="btn-preview" data-t="previewBtn"></button>
+      <label class="uipick">
+        <span class="visually-hidden" data-t="uiLang"></span>
+        <select class="uipick__select" data-uilang>
+          <option value="ru">Русский</option>
+          <option value="tk">Türkmen</option>
+          <option value="tr">Türkçe</option>
+        </select>
+      </label>
+    <button class="btn btn--quiet" type="button" id="btn-logout-2" data-t="signOut"></button>
   </header>
 
+  <div class="langbar">
+    <div class="chips" id="lang-switch" role="group" aria-label="Язык, который вы сейчас заполняете">
+      <button class="chip is-on" type="button" data-lang="tk">Türkmen</button>
+      <button class="chip" type="button" data-lang="ru">Русский</button>
+      <button class="chip" type="button" data-lang="en">English</button>
+    </div>
+    <p class="langfill" id="lang-fill"></p>
+  </div>
+
   <div class="wrap edit">
+    <nav class="toc" aria-label="Части страницы">
+      <ul id="toc"></ul>
+    </nav>
     <div class="edit__form">
       <p class="alert" id="edit-error" hidden></p>
-      <p class="ok" id="edit-ok" hidden></p>
-
-      <div class="blockers" id="blockers" hidden>
-        <strong>Пока нельзя пометить проверенным:</strong>
-        <ul id="blockers-list"></ul>
+      <div class="stage" id="stage">
+        <b class="stage__name" id="stage-name"></b>
+        <p class="stage__what" id="stage-what"></p>
+        <p class="stage__link" id="stage-link" hidden></p>
       </div>
-
       <div id="fields"></div>
+    </div>
+  </div>
 
-      <div class="actions">
-        <button class="btn btn--main" type="button" id="btn-save">Сохранить</button>
-        <button class="btn" type="button" id="btn-verify">Пометить проверенным</button>
-        <button class="btn btn--quiet" type="button" id="btn-draft" hidden>Вернуть в черновики</button>
+  <!-- Полоса с замечаниями: всегда внизу окна, не уезжает -->
+  <div class="issuebar" id="issuebar" hidden>
+    <div class="issuebar__row">
+      <button class="issuebar__toggle" type="button" id="issues-toggle" aria-expanded="false">
+        <span id="issues-summary"></span>
+      </button>
+      <div class="issuebar__actions">
+        <button class="btn btn--main" type="button" id="btn-save" data-t="save"></button>
+        <button class="btn" type="button" id="btn-verify" data-t="markVerified"></button>
+        <button class="btn btn--quiet" type="button" id="btn-draft" hidden data-t="backToWork"></button>
       </div>
     </div>
-
-    <aside class="edit__preview">
-      <div class="preview-tools">
-        <div class="chips" id="preview-langs" role="group" aria-label="Язык предпросмотра">
-          <button class="chip is-on" type="button" data-lang="tk">Türkmen</button>
-          <button class="chip" type="button" data-lang="ru">Русский</button>
-          <button class="chip" type="button" data-lang="en">English</button>
-        </div>
-        <div class="chips" id="preview-size" role="group" aria-label="Размер экрана">
-          <button class="chip is-on" type="button" data-size="phone">Телефон</button>
-          <button class="chip" type="button" data-size="wide">Монитор</button>
-        </div>
-      </div>
-      <div class="preview-frame" id="preview-frame">
-        <iframe id="preview" title="Предпросмотр страницы"></iframe>
-      </div>
-      <p class="muted preview-note">
-        Так страница будет выглядеть на сайте. Шапка и подвал не показаны —
-        они одинаковы на всех страницах и от этих правок не зависят.
-      </p>
-    </aside>
+    <ul class="issuebar__list" id="issues-list" hidden></ul>
   </div>
 </section>
 
+<!-- ПРЕДПРОСМОТР ВО ВСЮ ШИРИНУ -->
+<div class="overlay" id="overlay" hidden>
+  <header class="overlay__bar">
+    <strong data-t="previewTitle"></strong>
+    <div class="chips" id="preview-langs" role="group" aria-label="Язык страницы">
+      <button class="chip is-on" type="button" data-lang="tk">Türkmen</button>
+      <button class="chip" type="button" data-lang="ru">Русский</button>
+      <button class="chip" type="button" data-lang="en">English</button>
+    </div>
+    <div class="chips" id="preview-size" role="group" aria-label="Размер экрана">
+      <button class="chip is-on" type="button" data-size="wide" data-t="wide"></button>
+      <button class="chip" type="button" data-size="phone" data-t="phone"></button>
+    </div>
+    <button class="btn btn--quiet" type="button" id="btn-close-preview" data-t="close"></button>
+  </header>
+  <div class="overlay__frame" id="overlay-frame">
+    <iframe id="preview" title="Предпросмотр страницы"></iframe>
+  </div>
+  <p class="overlay__note muted">
+<span data-t="previewNote"></span>
+  </p>
+</div>
+
+<!-- ПУБЛИКАЦИЯ -->
+<div class="overlay overlay--dialog" id="pub-overlay" hidden>
+  <div class="dialog">
+    <h2 id="pub-title"></h2>
+    <div id="pub-body"></div>
+    <div class="dialog__actions">
+      <button class="btn btn--main" type="button" id="pub-go"></button>
+      <button class="btn btn--quiet" type="button" id="pub-close" data-t="close"></button>
+    </div>
+  </div>
+</div>
+
+<script src="/admin/i18n.js"></script>
 <script src="/admin/admin.js"></script>
 </body>
 </html>

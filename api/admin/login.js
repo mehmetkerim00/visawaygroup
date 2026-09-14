@@ -1,4 +1,4 @@
-/* Вход в панель: почта, пароль и код из приложения. Все три обязательны. */
+/* Вход в панель: почта и пароль. */
 "use strict";
 const http = require("../_lib/http.js");
 const auth = require("../_lib/auth.js");
@@ -11,7 +11,6 @@ module.exports = http.handler(async (req, res) => {
   const result = await auth.login({
     email: body.email,
     plainPassword: body.password,
-    code: body.code,
     ip
   });
 
@@ -22,8 +21,6 @@ module.exports = http.handler(async (req, res) => {
          нужно в обоих случаях. */
       await notify.lockedOut({ email: result.email, ip });
     }
-    /* Одинаковый ответ на «нет такого пользователя» и «неверный пароль»:
-       иначе по ответу можно собрать список заведённых адресов. */
     http.fail(result.locked ? 429 : 401, result.error);
   }
 

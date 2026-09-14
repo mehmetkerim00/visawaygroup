@@ -21,6 +21,15 @@ const path = require("path");
 const zlib = require("zlib");
 
 const ROOT = path.resolve(__dirname, "..");
+
+/* Ключи хранилища лежат в .env.local — его кладёт сюда `vercel env pull`.
+   На сервере переменные приходят от самого Vercel, и файла там нет. */
+try {
+  if (require("fs").existsSync(require("path").join(__dirname, "..", ".env.local"))) {
+    process.loadEnvFile(require("path").join(__dirname, "..", ".env.local"));
+  }
+} catch (e) { /* старый Node — значит, переменные задаются вручную */ }
+
 const PORT = Number(process.argv[2] || process.env.PORT || 8787);
 
 const TYPES = {

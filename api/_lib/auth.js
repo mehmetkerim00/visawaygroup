@@ -2,10 +2,9 @@
  * auth.js — вход, сессии, роли и защита от перебора.
  *
  * Устройство короче, чем кажется:
- *   пользователь            user:<почта>        — хеш пароля, секрет TOTP, роль
- *   сессия                  sess:<хеш токена>   — живёт 12 часов, дальше пропадает сама
- *   счётчик неудач          fail:<ключ>         — живёт 15 минут
- *   уже использованный код  used:<почта>:<окно> — чтобы один код не прошёл дважды
+ *   пользователь     user:<почта>       — хеш пароля и роль
+ *   сессия           sess:<хеш токена>  — живёт 12 часов, дальше пропадает сама
+ *   счётчик неудач   fail:<ключ>        — живёт 15 минут
  *
  * Срок жизни у всего перечисленного ставит хранилище, а не наш код.
  * Просроченная сессия не «считается недействительной» — её физически
@@ -16,7 +15,6 @@
 
 const crypto = require("crypto");
 const kv = require("./kv.js");
-const totp = require("./totp.js");
 const password = require("./password.js");
 
 const SESSION_HOURS = 12;
@@ -53,17 +51,14 @@ async function createUser({ email, plainPassword, role = "editor" }) {
   if (problems.length) throw new Error(problems.join(" "));
   if (await getUser(clean)) throw new Error("Такой пользователь уже есть.");
 
-  const secret = totp.newSecret();
   const user = {
     email: clean,
     role,
     passwordHash: password.hash(plainPassword),
-    totpSecret: secret,
-    totpConfirmed: false,
     createdAt: new Date().toISOString()
   };
   await putUser(user);
-  return { user, otpauth: totp.otpauthUrl(secret, clean), secret };
+  return { user };
 }
 
 /* --------------------------------------------------------------- */
@@ -167,7 +162,7 @@ function clearCookies(secure) {
 /* Вход                                                             */
 /* --------------------------------------------------------------- */
 
-async function login({ email, plainPassword, code, ip }) {
+async function login({ email, plainPassword, ip }) {
   const clean = String(email || "").trim().toLowerCase();
 
   const lock = await lockState(clean, ip);
@@ -177,24 +172,17 @@ async function login({ email, plainPassword, code, ip }) {
   }
 
   const user = await getUser(clean);
+  /* Хеш считается и тогда, когда пользователя нет: иначе по времени
+     ответа можно было бы понять, какие адреса заведены. */
   const passwordOk = password.check(String(plainPassword || ""), user && user.passwordHash);
 
-  /* Двухфакторная проверка обязательна. Пользователя без секрета TOTP
-     в базе быть не может: его заводит scripts/admin-user.js, и секрет
-     там создаётся всегда. Но если такой всё же появился — вход не
-     работает, а не «работает без второго фактора». */
-  if (!user || !user.totpSecret) {
-    await noteFailure(clean, ip);
-    return { ok: false, error: "Почта, пароль или код неверны." };
-  }
-
-  const window = passwordOk ? totp.verify(user.totpSecret, code) : null;
-
-  if (!passwordOk || window === null) {
+  if (!user || !passwordOk) {
     const fail = await noteFailure(clean, ip);
     return {
       ok: false,
-      error: "Почта, пароль или код неверны." +
+      /* Одинаковый ответ на «нет такого пользователя» и «неверный
+         пароль»: иначе по ответу собирается список заведённых адресов. */
+      error: "Почта или пароль неверны." +
              (fail.count >= 3 && fail.count < MAX_FAILS
                ? ` Осталось попыток: ${MAX_FAILS - fail.count}.` : ""),
       justLocked: fail.justLocked,
@@ -202,20 +190,7 @@ async function login({ email, plainPassword, code, ip }) {
     };
   }
 
-  /* Один код — один вход. Иначе подсмотренный через плечо код работал
-     бы ещё полминуты. */
-  const usedKey = `used:${clean}:${window}`;
-  if (await kv.getJson(usedKey)) {
-    await noteFailure(clean, ip);
-    return { ok: false, error: "Этот код уже использован. Дождитесь следующего." };
-  }
-  await kv.setJson(usedKey, 1, totp.STEP * 3);
-
   await clearFailures(clean, ip);
-  if (!user.totpConfirmed) {
-    user.totpConfirmed = true;
-    await putUser(user);
-  }
   const session = await startSession(user);
   return { ok: true, user: { email: user.email, role: user.role }, session };
 }

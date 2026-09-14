@@ -21,6 +21,15 @@ const path = require("path");
 const readline = require("readline");
 
 const ROOT = path.resolve(__dirname, "..");
+
+/* Ключи хранилища лежат в .env.local — его кладёт сюда `vercel env pull`.
+   На сервере переменные приходят от самого Vercel, и файла там нет. */
+try {
+  if (require("fs").existsSync(require("path").join(__dirname, "..", ".env.local"))) {
+    process.loadEnvFile(require("path").join(__dirname, "..", ".env.local"));
+  }
+} catch (e) { /* старый Node — значит, переменные задаются вручную */ }
+
 const REQ_FILE = path.join(ROOT, "data", "requirements.json");
 
 const kv = require(path.join(ROOT, "api", "_lib", "kv.js"));
@@ -119,12 +128,15 @@ async function cmdExport() {
   say("Дальше: node scripts/build.js && node scripts/preflight.js");
 }
 
+
 async function cmdUser(email, role) {
   if (!email) { say("Укажите почту: node scripts/admin-init.js user pochta@primer.ru owner"); process.exit(1); }
   role = role || "editor";
   say("");
   say(`Заводим пользователя: ${email}, роль «${auth.ROLES[role] || role}».`);
   say("Пароль: не короче 12 знаков, проверяется по базе утёкших паролей.");
+  say("Второго фактора нет — пароль это единственный ключ, берите такой,");
+  say("которого больше нигде нет.");
   say("");
   const p1 = await askHidden("Пароль: ");
   const p2 = await askHidden("Ещё раз: ");
@@ -138,27 +150,20 @@ async function cmdUser(email, role) {
     process.exit(1);
   }
 
-  const pretty = created.secret.replace(/(.{4})/g, "$1 ").trim();
   say("");
-  say("Готово. Теперь настройте приложение-аутентификатор.");
+  say("Готово. Пользователь заведён.");
   say(RULE);
   say("");
-  say("  Откройте Google Authenticator, Authy, 1Password или Aegis,");
-  say("  выберите «Добавить вручную» и введите этот ключ:");
+  say("  Почта:  " + email);
+  say("  Роль:   " + (auth.ROLES[role] || role));
   say("");
-  say("      " + pretty);
+  say("  Вход в панель — по этой почте и паролю, который вы только что");
+  say("  задали. Больше ничего не потребуется.");
   say("");
-  say("  Название: VisaWay Group");
-  say("  Тип: по времени (TOTP), 6 цифр, 30 секунд.");
-  say("");
-  say("  Либо вставьте в приложение целиком эту строку:");
-  say("");
-  say("      " + created.otpauth);
+  say("  Пароль нигде не сохранён в открытом виде: в базе лежит только");
+  say("  его отпечаток. Забудете — заводите себя заново другой почтой.");
   say("");
   say(RULE);
-  say("");
-  say("  Ключ показан один раз. Сохраните его, пока окно открыто:");
-  say("  без приложения вход не работает, и это не отключается.");
   say("");
 }
 
@@ -176,8 +181,7 @@ async function cmdCheck() {
   say(`  пользователей: ${users.length}`);
   for (const key of users) {
     const u = await kv.getJson(key);
-    say(`     ${u.email} — ${auth.ROLES[u.role] || u.role}` +
-        `, второй фактор ${u.totpConfirmed ? "подтверждён" : "ещё не подтверждён"}`);
+    say(`     ${u.email} — ${auth.ROLES[u.role] || u.role}, заведён ${String(u.createdAt || "").slice(0, 10)}`);
   }
   say("");
 }
