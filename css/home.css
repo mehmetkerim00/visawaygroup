@@ -663,7 +663,9 @@
 .steps {
   display: grid;
   gap: var(--space-6);
-  counter-reset: step;
+  /* Счётчика здесь нет нарочно: номера шагов стоят прямо в разметке.
+     Заведённый и неиспользуемый counter-reset только сбивал с толку —
+     по нему можно было решить, что нумерация считается стилями. */
 }
 
 .step {
@@ -1243,9 +1245,13 @@
   display: none;
 }
 
-/* Номер вопроса: тонкая медная цифра слева */
+/* Номер вопроса: тонкая медная цифра слева.
+
+   Без ведущего нуля: шаги в блоке «Как мы работаем» нумеруются
+   обычными цифрами, и держать рядом два разных вида нумерации —
+   1, 2, 3 в одном месте и 01, 02, 03 в другом — незачем. */
 .faq__q::before {
-  content: counter(faq, decimal-leading-zero);
+  content: counter(faq);
   align-self: start;
   /* Тёмная медь, а не обычная: цифра мелкая, ей нужен контраст повыше */
   color: var(--copper-dark);
@@ -1638,6 +1644,73 @@
       background-position-x: 0;
       opacity: var(--dash-opacity);
     }
+  }
+}
+
+
+/* --- Самолётик на разделителе ----------------------------------------------
+
+   По пунктирной линии между секциями раз в двенадцать секунд пролетает
+   самолётик из фирменного знака. Восемь секунд полёт, четыре — пауза:
+   если пустить без паузы, разделитель начинает мельтешить и отвлекать
+   ровно от того, что он должен разделять.
+
+   Самолёт нарисован в самом стиле картинкой-ссылкой, а не в разметке.
+   Разделители — это псевдоэлементы, детей у них не бывает; зато так
+   самолёт появляется сразу на всех разделителях всех страниц, и в
+   разметку не пришлось добавлять ни строчки.
+
+   Движется только transform. Полоса, по которой он летит, шириной во
+   весь контейнер, а самолёт нарисован у её правого края: тогда путь от
+   translateX(-100%) до translateX(0) проводит его ровно от левого края
+   до правого, и полоса при этом никогда не вылезает за правый край —
+   то есть не может добавить странице прокрутку вбок.
+
+   Цвет задан числом, а не переменной: внутри картинки-ссылки переменные
+   не работают. Это тот же медный, что у линии. */
+
+.section + .section > .container,
+.section + .section > .container--narrow {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .js .section[data-reveal="dash"] > .container::after,
+  .js .section[data-reveal="dash"] > .container--narrow::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 18px;
+    margin-top: -9px;
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-44 -44 88 88'><g transform='rotate(90)'><path fill='%23AF5F39' d='M0 -42 C4 -42 6 -37 6 -30 L6 -13 L40 9 L40 17 L6 6 L6 24 L15 32 L15 38 L0 33 L-15 38 L-15 32 L-6 24 L-6 6 L-40 17 L-40 9 L-6 -13 L-6 -30 C-6 -37 -4 -42 0 -42 Z'/></g></svg>");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 18px 18px;
+    /* Нажатия проходят сквозь: самолёт нарисован поверх содержимого */
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .js .section[data-reveal="dash"].is-visible > .container::after,
+  .js .section[data-reveal="dash"].is-visible > .container--narrow::after {
+    animation: divider-fly 12s linear 1200ms infinite;
+  }
+
+  /* Пока разделителя нет на экране или вкладка свёрнута, самолёт стоит.
+     Метку is-still ставит js/motion.js — тем же способом, что и у
+     маршрутов в первом экране. */
+  .js .section[data-reveal="dash"].is-still > .container::after,
+  .js .section[data-reveal="dash"].is-still > .container--narrow::after {
+    animation-play-state: paused;
+  }
+
+  @keyframes divider-fly {
+    0%          { transform: translateX(-100%); opacity: 0; }
+    4%          { opacity: 1; }
+    62%         { opacity: 1; }
+    66%, 100%   { transform: translateX(0); opacity: 0; }
   }
 }
 

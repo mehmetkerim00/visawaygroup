@@ -170,31 +170,46 @@
     }
   }
 
-  /* --- Вечное движение спит, пока на него не смотрят ----------------------- */
+  /* --- Вечное движение спит, пока на него не смотрят -----------------------
 
-  var hero = document.querySelector(".hero");
-  if (!hero) return;
+     Бесконечных анимаций на странице несколько: маршруты в первом экране
+     и самолётик на каждом разделителе между секциями. Разделителей пять,
+     и если каждый будет крутить своё движение всё время, пока открыта
+     вкладка, это заметно на слабом телефоне — при том что видно из них
+     от силы один.
 
-  var наГлазах = true;
+     Поэтому каждый такой блок следит за собой сам: ушёл с экрана —
+     движение замирает, вернулся — продолжается с того же места. И всё
+     разом останавливается, когда вкладку свернули. */
+
+  var живые = [].slice.call(document.querySelectorAll('.hero, .section[data-reveal="dash"]'));
+  if (!живые.length) return;
+
   var вкладкаАктивна = !document.hidden;
+  var наГлазах = new WeakMap();
+  живые.forEach(function (el) { наГлазах.set(el, true); });
 
-  function пересчитать() {
-    var идёт = наГлазах && вкладкаАктивна;
-    hero.classList.toggle("is-still", !идёт);
+  function пересчитать(el) {
+    var идёт = вкладкаАктивна && наГлазах.get(el) !== false;
+    el.classList.toggle("is-still", !идёт);
   }
+  function пересчитатьВсе() { живые.forEach(пересчитать); }
 
   if ("IntersectionObserver" in window) {
     /* Свой наблюдатель: этот следит постоянно, а не один раз */
-    new IntersectionObserver(function (entries) {
-      наГлазах = entries[0].isIntersecting;
-      пересчитать();
-    }, { threshold: 0 }).observe(hero);
+    var сторож = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        наГлазах.set(entry.target, entry.isIntersecting);
+        пересчитать(entry.target);
+      });
+    }, { threshold: 0 });
+    живые.forEach(function (el) { сторож.observe(el); });
   }
 
   document.addEventListener("visibilitychange", function () {
     вкладкаАктивна = !document.hidden;
-    пересчитать();
+    пересчитатьВсе();
   });
 
-  пересчитать();
+  пересчитатьВсе();
 })();
