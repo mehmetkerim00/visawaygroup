@@ -102,6 +102,17 @@
   ],
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.visawaytm.com"
+        }
+      ],
+      "destination": "https://visawaytm.com/:path*",
+      "permanent": true
+    },
+    {
       "source": "/admin",
       "destination": "/admin/",
       "permanent": false
