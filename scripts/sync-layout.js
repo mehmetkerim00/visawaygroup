@@ -1089,7 +1089,7 @@ function checkParity(existing) {
 /* Названия и слова, которые одинаковы во всех языках */
 const BRAND = new Set([
   "visaway", "group", "aşgabat", "türkmenistan", "türkiye",
-  "whatsapp", "telegram", "instagram", "portfolio", "visawaygroup",
+  "whatsapp", "telegram", "instagram", "portfolio", "visawaygroup", "visawaytm",
   "belarus",      /* пишется одинаково по-туркменски и по-английски */
   "javascript"    /* название технологии, не переводится */
 ]);

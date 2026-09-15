@@ -6,4 +6,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://visawaygroup.com/sitemap.xml
+Sitemap: https://visawaytm.com/sitemap.xml

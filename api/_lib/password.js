@@ -51,7 +51,8 @@ const PWNED_URL = "https://api.pwnedpasswords.com/range/";
 const OBVIOUS = new Set([
   "password", "passw0rd", "123456789012", "1234567890123", "qwertyuiop12",
   "administrator", "adminadmin12", "letmein12345", "welcome12345",
-  "visawaygroup", "visawaygroup1", "ashgabat12345", "turkmenistan",
+  "visawaygroup", "visawaygroup1", "visawaytm123", "visawaytm2026",
+  "ashgabat12345", "turkmenistan",
   "qwerty123456", "iloveyou1234", "monkey123456", "dragon123456",
   "password1234", "password123!", "123123123123", "111111111111",
   "aaaaaaaaaaaa", "abcdefghijkl", "zaq12wsxcde3", "1qaz2wsx3edc"
